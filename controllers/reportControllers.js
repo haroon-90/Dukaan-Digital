@@ -1,37 +1,89 @@
 import Sale from "../models/Sales.js";
 import Expense from "../models/Expense.js";
 import Udhaar from "../models/Udhaar.js";
+import Report from "../models/Report.js";
 
-import { FindDailyReport } from "../utils/DailyReport.js";
+import { FindReport } from "../utils/ReportGenerator.js";
 
-const getDailyReport = async (req, res) => {
+const getReport = async (req, res) => {
     try {
         const userId = req.user;
-        const createdAt = {
-            $gte: new Date(new Date().setHours(0, 0, 0, 0)),
-            $lte: new Date(new Date().setHours(23, 59, 59, 999))
-        };
+        const { date, month } = req.body;
+
+        let createdAt;
+        let type;
+        let period;
+
+        if (date) {
+            type = 'daily';
+            period = date;
+            const selectedDate = new Date(date);
+            if (isNaN(selectedDate.getTime())) {
+                return res.status(400).json({ msg: "Invalid date format, use YYYY-MM-DD" });
+            }
+            const startOfDay = new Date(selectedDate.setHours(0, 0, 0, 0));
+            const endOfDay = new Date(selectedDate.setHours(23, 59, 59, 999));
+            createdAt = { $gte: startOfDay, $lte: endOfDay };
+
+        } else if (month) {
+            type = 'monthly';
+            period = month;
+            const [year, mon] = month.split("-");
+            if (!year || !mon || isNaN(year) || isNaN(mon)) {
+                return res.status(400).json({ msg: "Invalid month format, use YYYY-MM" });
+            }
+            const startOfMonth = new Date(year, mon - 1, 1, 0, 0, 0, 0);
+            const endOfMonth = new Date(year, mon, 0, 23, 59, 59, 999);
+            createdAt = { $gte: startOfMonth, $lte: endOfMonth };
+
+        } else {
+            return res.status(400).json({ msg: "Please provide either 'date' (YYYY-MM-DD) or 'month' (YYYY-MM)" });
+        }
+
         const sale = await Sale.find({ userId, createdAt });
-        // console.log(sale)
         const expense = await Expense.find({ userId, createdAt });
-        // console.log(expense)
-        const udhaar = await Udhaar.find({ userId, createdAt });
-        // console.log(udhaar)
+        const udhaar = await Udhaar.find({
+            userId,
+            $or: [
+                { createdAt: createdAt },
+                { updatedAt: createdAt }
+            ]
+        });
 
-        const report = await FindDailyReport(sale, expense, udhaar);
+        if (!sale.length && !expense.length && !udhaar.length) {
+            return res.status(404).json({ msg: "No data found for this selection" });
+        }
 
-        res.status(200).json(report)
+        // Generate fresh report every time
+        const report = await FindReport(sale, expense, udhaar);
+
+        // Update if exists else create (upsert)
+        const updatedReport = await Report.findOneAndUpdate(
+            { type, period, userId },  // filter
+            {
+                userId,
+                type,
+                period,
+                totalSale: report.totalSale,
+                totalProfit: report.totalProfit,
+                totalExpense: report.totalExpense,
+                totalUdhaar: report.totalUdhaar,
+                netAmount: report.netAmount,
+                totalQuantitySold: report.totalQuantitySold,
+                numberOfSales: report.numberOfSales,
+                numberOfExpenses: report.numberOfExpenses,
+                numberOfUdhaar: report.numberOfUdhaar
+            },
+            { new: true, upsert: true } // return new doc and create if not exists
+        ).select('-userId -_id -type -period -createdAt -updatedAt -__v');
+
+        res.status(200).json(updatedReport);
     } catch (err) {
         console.log("Error:", err);
         res.status(500).json({ msg: "Internal server error" });
     }
 };
 
-const getMonthlyReport = async (req, res) => {
-    res.send("getMonthlyReport");
-};
-
 export {
-    getDailyReport,
-    getMonthlyReport
+    getReport
 };

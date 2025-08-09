@@ -1,24 +1,20 @@
 import mongoose from "mongoose";
 
 const reportSchema = new mongoose.Schema({
+    userId: {
+        type: String,
+        required: true
+    },
     type: {
         type: String,
-        enum: ["daily", "weekly", "monthly"],
+        enum: ["daily", "monthly"],
         required: true
     },
     period: {
-        type: String,
+        type: Date,
         required: true
     },
-    generatedAt: {
-        type: Date,
-        default: Date.now
-    },
-    totalSales: {
-        type: Number,
-        default: 0
-    },
-    totalUdhaar: {
+    totalSale: {
         type: Number,
         default: 0
     },
@@ -26,18 +22,36 @@ const reportSchema = new mongoose.Schema({
         type: Number,
         default: 0
     },
-    totalPurchase: {
+    totalExpense: {
         type: Number,
         default: 0
     },
-    lowStockItems: {
+    totalUdhaar: {
         type: Number,
         default: 0
     },
-    shopId: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "User"
+    netAmount: {
+        type: Number,
+        default: 0
+    },
+    totalQuantitySold: {
+        type: Number,
+        default: 0
+    },
+    numberOfSales: {
+        type: Number,
+        default: 0
+    },
+    numberOfExpenses: {
+        type: Number,
+        default: 0
+    },
+    numberOfUdhaar: {
+        type: Number,
+        default: 0
     }
+}, {
+    timestamps: true
 });
 
 const Report = mongoose.model("Report", reportSchema);
