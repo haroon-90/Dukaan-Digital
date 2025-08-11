@@ -1,5 +1,4 @@
 import User from "../models/User.js";
-import Shop from "../models/Shop.js";
 import bcrypt from 'bcrypt'
 
 const GetProfile = async (req, res) => {
@@ -59,6 +58,7 @@ const updateProfile = async (req, res) => {
     }
     catch (err) {
         res.status(500).json({ message: 'Server error', error: err.message });
+        console.log(err)
     }
 }
 

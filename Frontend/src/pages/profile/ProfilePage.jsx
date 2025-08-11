@@ -1,0 +1,71 @@
+import { useEffect, useState } from 'react';
+import { getProfile } from '../../Services/profileServices.js';
+import { User, Mail, Phone, Briefcase, Store, Calendar, Edit2 } from "lucide-react";
+import { useNavigate } from 'react-router-dom';
+
+const ProfilePage = () => {
+  const navigate = useNavigate();
+  const [profile, setProfile] = useState({});
+
+  const fetchProfile = async () => {
+    try {
+      const response = await getProfile();
+      console.log(response.data);
+      setProfile(response.data);
+    } catch (error) {
+      console.error('Error fetching profile:', error);
+    }
+  };
+
+  useEffect(() => {
+    fetchProfile();
+  }, []);
+
+  return (
+    <div className="p-6 font-sans bg-gray-50 min-h-screen">
+      <div className="max-w-lg mx-auto bg-white rounded-2xl shadow-xl overflow-hidden">
+        {/* Header */}
+        <div className="relative bg-gradient-to-r from-indigo-500 to-purple-600 p-6 text-center text-white">
+          <div className='absolute top-4 right-4 cursor-pointer text-indigo-600 bg-indigo-100 p-2 rounded-full'
+            onClick={() => navigate('/profile/edit')}
+          >{<Edit2 size={18} />}</div>
+          <div className="w-fit mx-auto mb-2 p-2 rounded-full bg-white flex items-center justify-center font-bold text-2xl shadow-lg">
+            <h1 className='text-black Logo-font'>{profile.shopname}</h1>
+            {/* <img src={Dukaan_Digital} alt="Dukaan_Digital" /> */}
+          </div>
+          <h2 className="text-xl font-semibold">{profile.name}</h2>
+          <p className="text-sm opacity-80">{profile.role}</p>
+        </div>
+
+        {/* Details */}
+        <div className="p-6 space-y-4">
+          <ProfileDetail icon={<Mail size={18} />} label="Email" value={profile.email} />
+          <ProfileDetail icon={<Phone size={18} />} label="Phone" value={profile.phone} />
+          <ProfileDetail icon={<Store size={18} />} label="Shop Name" value={profile.shopname} />
+          <ProfileDetail icon={<Briefcase size={18} />} label="Role" value={profile.role} />
+          <ProfileDetail
+            icon={<Calendar size={18} />}
+            label="Joined On"
+            value={new Date(profile.createdAt).toLocaleDateString()}
+          />
+        </div>
+      </div>
+    </div>
+  );
+};
+
+function ProfileDetail({ icon, label, value }) {
+  return (
+    <div className="flex items-center gap-3">
+      <div className="text-indigo-600 bg-indigo-100 p-2 rounded-full">
+        {icon}
+      </div>
+      <div>
+        <p className="text-xs text-gray-500">{label}</p>
+        <p className="text-gray-800 font-medium">{value || "Not Provided"}</p>
+      </div>
+    </div>
+  );
+}
+
+export default ProfilePage;

@@ -9,6 +9,7 @@ const Auth = (req, res, next) => {
 
     try {
         const decoded = jwt.verify(token, process.env.SECRET_KEY)
+        if (!decoded) return res.status(401).json({ msg: 'Access denied' });
         req.user = decoded.id
         next()
     } catch (err) {
