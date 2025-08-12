@@ -23,6 +23,9 @@ const saleSchema = new mongoose.Schema(
                     required: true,
                     min: 1
                 },
+                unit: {
+                    type: String,
+                },
                 price: {
                     type: Number,
                     required: true

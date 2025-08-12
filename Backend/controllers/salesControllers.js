@@ -15,6 +15,8 @@ const createSale = async (req, res) => {
                 return res.status(404).json({ msg: `Product not found with ID: ${item.productId}` });
             }
             item.productName = product.itemname;
+            item.unit = product.unit;
+            console.log(item.unit)
             if (type === 'sale') {
                 if (product.quantity < item.quantity) {
                     return res.status(400).json({ msg: `Not enough stock for ${product.itemname}` });
@@ -45,7 +47,8 @@ const createSale = async (req, res) => {
 
 const getSales = async (req, res) => {
     try {
-        const { type, startDate, endDate } = req.body;
+        console.log(req.body);
+        const { startDate, endDate, type } = req.body;
         const userId = req.user;
         const filter = { userId };
         if (type) {
@@ -76,11 +79,11 @@ const deleteSale = async (req, res) => {
     try {
         const id = req.params.id;
         const sale = await Sale.findById(id);
-        if(!sale){
-            return res.status(404).json({msg: "Sale not found"});
+        if (!sale) {
+            return res.status(404).json({ msg: "Sale not found" });
         }
         await Sale.findByIdAndDelete(id);
-        res.status(200).json({msg: "Sale deleted successfully!"})
+        res.status(200).json({ msg: "Sale deleted successfully!" })
     } catch (err) {
         console.log("Error:", err);
         res.status(500).json({ msg: "Internal server error" });

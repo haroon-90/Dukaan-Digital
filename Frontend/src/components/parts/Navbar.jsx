@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import Dukaan_Digital from '../../assets/Dukaan_Digital.svg';
+import { NavLink } from 'react-router-dom';
 
 const Navbar = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -8,28 +9,22 @@ const Navbar = () => {
         <nav className="bg-white shadow-md  w-full top-0 z-50">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex justify-between items-center h-16">
-                    {/* Logo */}
                     <div className="flex-shrink-0 p-2">
-                        {/* <h1 className="text-2xl font-bold text-blue-600">Dukaan Digital</h1> */}
                         <img className="h-18 p-2" src={Dukaan_Digital} alt="Dukaan_Digital" />
                     </div>
-
-                    {/* Desktop Menu */}
                     <div className="hidden md:flex items-center space-x-8">
-                        <a href="/" className="text-gray-700 hover:text-blue-600 transition-colors">Home</a>
-                        <a href="/products" className="text-gray-700 hover:text-blue-600 transition-colors">Products</a>
-                        <a href="/pricing" className="text-gray-700 hover:text-blue-600 transition-colors">Pricing</a>
-                        <a href="/contact" className="text-gray-700 hover:text-blue-600 transition-colors">Contact</a>
-                        <button className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors">
-                            Get Started
-                        </button>
+                        <NavLink to="/" className="text-black hover:text-blue-600 hover:border-b-2 transition-all">Home</NavLink>
+                        <NavLink to="/products" className="text-black hover:text-blue-600 hover:border-b-2 transition-all">Products</NavLink>
+                        <NavLink to="/sales" className="text-black hover:text-blue-600 hover:border-b-2 transition-all">Sales</NavLink>
+                        <NavLink to="/expenses" className="text-black hover:text-blue-600 hover:border-b-2 transition-all">Expenses</NavLink>
+                        <NavLink to="/udhaar" className="text-black hover:text-blue-600 hover:border-b-2 transition-all">Udhaar</NavLink>
+                        <NavLink to="/report" className="text-black hover:text-blue-600 hover:border-b-2 transition-all">Report</NavLink>
                     </div>
-
                     {/* Mobile menu button */}
                     <div className="md:hidden">
                         <button
                             onClick={() => setIsMenuOpen(!isMenuOpen)}
-                            className="text-gray-700 hover:text-blue-600 focus:outline-none"
+                            className="text-black hover:text-blue-600 focus:outline-none"
                         >
                             <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 {isMenuOpen ? (
@@ -41,18 +36,16 @@ const Navbar = () => {
                         </button>
                     </div>
                 </div>
-
                 {/* Mobile Menu */}
                 {isMenuOpen && (
                     <div className="md:hidden">
                         <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-                            <a href="/" className="block px-3 py-2 rounded-md text-gray-700 hover:text-blue-600 hover:bg-gray-50">Home</a>
-                            <a href="/products" className="block px-3 py-2 rounded-md text-gray-700 hover:text-blue-600 hover:bg-gray-50">Products</a>
-                            <a href="/pricing" className="block px-3 py-2 rounded-md text-gray-700 hover:text-blue-600 hover:bg-gray-50">Pricing</a>
-                            <a href="/contact" className="block px-3 py-2 rounded-md text-gray-700 hover:text-blue-600 hover:bg-gray-50">Contact</a>
-                            <button className="w-full mt-2 bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors">
-                                Get Started
-                            </button>
+                            <NavLink to="/" className="block px-3 py-2 rounded-md text-black hover:text-blue-600 hover:bg-black">Home</NavLink>
+                            <NavLink to="/products" className="block px-3 py-2 rounded-md text-black hover:text-blue-600 hover:bg-black">Products</NavLink>
+                            <NavLink to="/sales" className="block px-3 py-2 rounded-md text-black hover:text-blue-600 hover:bg-black">Sales</NavLink>
+                            <NavLink to="/expenses" className="block px-3 py-2 rounded-md text-black hover:text-blue-600 hover:bg-black">Expenses</NavLink>
+                            <NavLink to="/udhaar" className="block px-3 py-2 rounded-md text-black hover:text-blue-600 hover:bg-black">Udhaar</NavLink>
+                            <NavLink to="/report" className="block px-3 py-2 rounded-md text-black hover:text-blue-600 hover:bg-black">Report</NavLink>
                         </div>
                     </div>
                 )}

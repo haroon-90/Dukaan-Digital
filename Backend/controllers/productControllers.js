@@ -54,6 +54,21 @@ const getProducts = async (req, res) => {
     }
 };
 
+const getProductById = async (req, res) => {
+    try {
+        const userId = req.user;
+        const id = req.params.id;
+        const item = await Product.findById(id)
+        if (!item) {
+            return res.status(404).json({ msg: "Item not found" })
+        }
+        res.status(200).json(item)
+    } catch (err) {
+        console.log("Error:", err)
+        res.status(500).json({ msg: "Internal server error" })
+    }
+};
+
 const updateProduct = async (req, res) => {
     try {
         const { id } = req.params;
@@ -106,6 +121,7 @@ const deleteProduct = async (req, res) => {
 export {
     addProduct,
     getProducts,
+    getProductById,
     updateProduct,
     deleteProduct
 };

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
-import { getProfile } from '../../Services/profileServices.js';
-import { User, Mail, Phone, Briefcase, Store, Calendar, Edit2 } from "lucide-react";
+import { getProfile, deleteProfile } from '../../Services/profileServices.js';
+import { User, Mail, Phone, Briefcase, Store, Calendar, Edit2, Trash2 } from "lucide-react";
 import { useNavigate } from 'react-router-dom';
 
 const ProfilePage = () => {
@@ -17,18 +17,36 @@ const ProfilePage = () => {
     }
   };
 
+  const handleDelete = async () => {
+    try {
+      const deleted = await deleteProfile();
+      if(deleted){
+        console.log("Profile deleted seccessfully")
+        sessionStorage.clear();
+        navigate('/login')
+      }
+    } catch (err) {
+      console.error('Error fetching profile:', err);
+    }
+  }
+
   useEffect(() => {
     fetchProfile();
   }, []);
 
   return (
-    <div className="p-6 font-sans bg-gray-50 min-h-screen">
+    <div className="p-6 font-sans bg-gray-50">
       <div className="max-w-lg mx-auto bg-white rounded-2xl shadow-xl overflow-hidden">
         {/* Header */}
         <div className="relative bg-gradient-to-r from-indigo-500 to-purple-600 p-6 text-center text-white">
+          <div className='absolute top-25 right-4 cursor-pointer text-indigo-600 bg-indigo-100 p-2 rounded-full'
+            onClick={() => navigate('/profile/edit')}>
+            {<Edit2 size={18} />}
+          </div>
           <div className='absolute top-4 right-4 cursor-pointer text-indigo-600 bg-indigo-100 p-2 rounded-full'
-            onClick={() => navigate('/profile/edit')}
-          >{<Edit2 size={18} />}</div>
+            onClick={() => handleDelete()}>
+            {<Trash2 size={18} />}
+          </div>
           <div className="w-fit mx-auto mb-2 p-2 rounded-full bg-white flex items-center justify-center font-bold text-2xl shadow-lg">
             <h1 className='text-black Logo-font'>{profile.shopname}</h1>
             {/* <img src={Dukaan_Digital} alt="Dukaan_Digital" /> */}

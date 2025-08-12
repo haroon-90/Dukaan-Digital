@@ -4,8 +4,8 @@ import { updateProfile } from "../../Services/profileServices.js";
 const EditProfilePage = () => {
   const user = sessionStorage.getItem("user") ? JSON.parse(sessionStorage.getItem("user")) : null;
   const [form, setForm] = useState({
-    name: user?.name || "",
-    phone: user?.phone || "",
+    name: user.name || "",
+    phone: user.phone || "",
     password: "",
   });
   const [loading, setLoading] = useState(false);
@@ -28,7 +28,7 @@ const EditProfilePage = () => {
         setError("User ID not found");
         return;
       }
-      const res = await updateProfile(form, user.id);
+      const res = await updateProfile(form);
       if (res.data) {
         setSuccess("Profile updated successfully!");
       }
@@ -38,20 +38,6 @@ const EditProfilePage = () => {
       setLoading(false);
     }
   };
-
-  // Reusable Input Component
-  const InputField = ({ label, name, value, onChange, type = "text" }) => (
-    <div>
-      <label className="block text-gray-700 font-medium mb-1">{label}</label>
-      <input
-        type={type}
-        name={name}
-        value={value}
-        onChange={onChange}
-        className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-      />
-    </div>
-  );
 
   return (
     <div className="p-6 font-sans bg-gray-50 min-h-screen">
@@ -77,7 +63,7 @@ const EditProfilePage = () => {
               onChange={handleChange}
             />
             <InputField
-              label="Password"
+              label="password"
               name="password"
               type="password"
               value={form.password}
@@ -97,5 +83,19 @@ const EditProfilePage = () => {
     </div>
   );
 };
+
+// Reusable Input Component
+const InputField = ({ label, name, value, onChange, type = "text" }) => (
+  <div>
+    <label className="block text-gray-700 font-medium mb-1">{label}</label>
+    <input
+      type={type}
+      name={name}
+      value={value}
+      onChange={onChange}
+      className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+    />
+  </div>
+);
 
 export default EditProfilePage;
