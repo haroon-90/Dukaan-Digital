@@ -41,7 +41,7 @@ import MonthlyReportPage from "../pages/reports/MonthlyReportPage.jsx"
 import CustomReportPage from "../pages/reports/CustomReportPage.jsx"
 
 export default function AppRouter() {
-  
+
   return (
     <Routes>
 
@@ -74,8 +74,7 @@ export default function AppRouter() {
           {/* Sales */}
           <Route path="sales">
             <Route index element={<SalesListPage />} />
-            <Route path="new" element={<AddSalePage />} />
-            <Route path=":id" element={<SaleDetailPage />} />
+            <Route path="new" element={<ProductListPage />} />
           </Route>
 
           {/* Udhaar */}

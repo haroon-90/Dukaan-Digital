@@ -1,4 +1,4 @@
-import { Outlet, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { User, Package, ShoppingCart, BarChart2, HandCoins, FileText } from "lucide-react";
 
 const DashboardPage = () => {
@@ -14,7 +14,7 @@ const DashboardPage = () => {
     ];
 
     return (
-        <div className="p-6 bg-gray-100 md:min-h-[calc(100vh-192px)] min-h-[calc(100vh-228px)] font-sans">
+        <div className="p-6 md:min-h-[calc(100vh-192px)] min-h-[calc(100vh-228px)] font-sans"       >
             <div className="mb-8 text-center">
                 <h1 className="text-3xl font-bold text-gray-800">Dukaan Digital Dashboard</h1>
                 <p className="text-gray-500 mt-1">Manage your business smartly and easily</p>

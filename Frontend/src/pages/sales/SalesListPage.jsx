@@ -1,8 +1,10 @@
-import React, { useEffect, useState } from "react";
-import { getsales } from "../../Services/saleServices.js";
-import { Eye } from "lucide-react";
+import { useEffect, useState } from "react";
+import { getsales, deletesale } from "../../Services/saleServices.js";
+import { Eye, ShoppingCart, Trash2 } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 const SalesListPage = () => {
+  const navigate = useNavigate();
   const [sales, setSales] = useState([]);
   const [purchases, setPurchases] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -11,8 +13,10 @@ const SalesListPage = () => {
   const [showDetails, setShowDetails] = useState(false);
   const [selectedSale, setSelectedSale] = useState(null);
 
-  const [startDate, setStartDate] = useState("2025-08-08");
-  const [endDate, setEndDate] = useState("2025-08-13");
+  const formatDate = (date) => date.toISOString().split('T')[0];
+  const [startDate, setStartDate] = useState(formatDate(new Date(new Date().setMonth(new Date().getMonth(), 1))));
+  const [endDate, setEndDate] = useState(formatDate(new Date()));
+
   const [type, setType] = useState("sale");
 
   const fetchData = async () => {
@@ -64,6 +68,22 @@ const SalesListPage = () => {
     setSelectedSale(null);
   };
 
+  const handleDelete = async (item) => {
+    try {
+      if (confirm("Are you really want to delete this?")) {
+        const res = await deletesale(selectedSale?._id || item._id);
+        if (res.ok) {
+          console.log("deleted successfully")
+        }
+        fetchData();
+        setShowDetails(false);
+      }
+    } catch (err) {
+      console.log(err);
+      setError(err.response?.data?.msg || "Error deleting sale");
+    }
+  }
+
   const RenderTable = ({ title, data }) => (
     <div className="relative bg-white shadow-md rounded-lg p-4 border border-gray-200">
       <h2 className="text-xl font-semibold text-purple-700 mb-4">{title}</h2>
@@ -93,13 +113,18 @@ const SalesListPage = () => {
                   <td className="px-4 py-3 font-semibold text-green-600">
                     ₨ {item.totalAmount}
                   </td>
-                  <td className="px-4 py-3 flex justify-center">
+                  <td className="px-4 py-3 flex justify-around">
                     <button
                       onClick={() => handleViewDetails(item)}
                       className="flex items-center gap-1 text-purple-600 hover:text-purple-800 transition"
                     >
-                      <Eye size={16} />
-                      View
+                      <Eye size={18} />
+                    </button>
+                    <button
+                      onClick={() => handleDelete(item)}
+                      className="flex items-center gap-1 text-purple-600 hover:text-purple-800 transition"
+                    >
+                      <Trash2 size={18} />
                     </button>
                   </td>
                 </tr>
@@ -111,114 +136,125 @@ const SalesListPage = () => {
     </div>
   );
 
-return (
-  <div className="relative p-6 space-y-6 bg-gray-50 min-h-screen">
-    {/* Filter controls */}
-    <div className="flex items-center gap-4 mb-6">
-      <label className="font-semibold text-purple-700">Type:</label>
-      <select
-        value={type}
-        onChange={(e) => setType(e.target.value)}
-        className="border rounded px-2 py-1"
-      >
-        <option value="sale">Sale</option>
-        <option value="purchase">Purchase</option>
-      </select>
+  return (
+    <div className="relative p-6 space-y-6 bg-gray-50 ">
+      {/* Filter controls */}
+      <div className="flex justify-between items-center">
+        <div className="flex items-center gap-4 ">
+          <label className="font-semibold text-purple-700">Type:</label>
+          <select
+            value={type}
+            onChange={(e) => setType(e.target.value)}
+            className="border rounded px-2 py-1"
+          >
+            <option value="sale">Sale</option>
+            <option value="purchase">Purchase</option>
+          </select>
 
-      <label className="font-semibold text-purple-700">Start Date:</label>
-      <input
-        type="date"
-        value={startDate}
-        onChange={(e) => setStartDate(e.target.value)}
-        className="border rounded px-2 py-1"
-      />
+          <label className="font-semibold text-purple-700">Start Date:</label>
+          <input
+            type="date"
+            value={startDate}
+            onChange={(e) => setStartDate(e.target.value)}
+            className="border rounded px-2 py-1"
+          />
 
-      <label className="font-semibold text-purple-700">End Date:</label>
-      <input
-        type="date"
-        value={endDate}
-        onChange={(e) => setEndDate(e.target.value)}
-        className="border rounded px-2 py-1"
-      />
+          <label className="font-semibold text-purple-700">End Date:</label>
+          <input
+            type="date"
+            value={endDate}
+            onChange={(e) => setEndDate(e.target.value)}
+            className="border rounded px-2 py-1"
+          />
 
-      <button
-        onClick={fetchData}
-        className="bg-purple-600 text-white px-4 py-1 rounded hover:bg-purple-700 transition"
-      >
-        Filter
-      </button>
-    </div>
+          <button
+            onClick={fetchData}
+            className="bg-purple-600 text-white px-4 py-1 rounded hover:bg-purple-700 transition"
+          >
+            Filter
+          </button>
+        </div>
+        <button className="px-4 py-1 bg-purple-600 hover:bg-purple-700 transition text-white rounded flex items-center gap-2"
+          onClick={() => { navigate('/sales/new') }}
+        ><ShoppingCart size={16} /> sale</button>
+      </div>
 
-    {loading && <p className="text-center py-10">Loading...</p>}
-    {error && <p className="text-center text-red-500 py-10">{error}</p>}
+      {loading && <p className="text-center py-10">Loading...</p>}
+      {error && <p className="text-center text-red-500 py-10">{error}</p>}
 
-    {!loading && !error && (
-      <>
-        {/* Conditional rendering based on selected type */}
-        {type === "sale" && <RenderTable title="Sales Records" data={sales} />}
-        {type === "purchase" && (
-          <RenderTable title="Purchase Records" data={purchases} />
-        )}
-      </>
-    )}
+      {!loading && !error && (
+        <>
+          {/* Conditional rendering based on selected type */}
+          {type === "sale" && <RenderTable title="Sales Records" data={sales} />}
+          {type === "purchase" && (
+            <RenderTable title="Purchase Records" data={purchases} />
+          )}
+        </>
+      )}
 
-    {/* Sale details modal */}
-    {showDetails && selectedSale && (
-      <div className="absolute inset-0 flex items-center justify-center bg-black/70 bg-opacity-40 z-50">
-        <div className="bg-white p-6 rounded-lg shadow-lg w-[500px] max-h-[80vh] overflow-auto">
-          <h2 className="text-xl font-bold mb-4">Sale Details</h2>
-          <p>
-            <span className="font-semibold">Customer:</span>{" "}
-            {selectedSale.customerName}
-          </p>
-          <p>
-            <span className="font-semibold">Date:</span>{" "}
-            {new Date(selectedSale.createdAt).toLocaleDateString()}
-          </p>
-          <p className="text-red-500">
-            <span className="font-semibold text-black">Total Amount:</span>{" "}
-            {selectedSale.totalAmount} PKR
-          </p>
-          <h3 className="mt-4 font-semibold">Items</h3>
-          <ul className="list-disc pl-6">
-            {selectedSale.items.map((it) => (
-              <li
-                key={it._id}
-                className="flex justify-between items-center bg-gray-50 rounded-lg p-3 mb-2 shadow-sm hover:shadow-md transition"
+      {/* Sale details modal */}
+      {showDetails && selectedSale && (
+        <div className="absolute inset-0 flex items-center justify-center bg-black/70 z-50 backdrop-blur-sm">
+          <div className="bg-white p-6 rounded-lg shadow-lg w-[500px] max-h-[80vh] overflow-auto">
+            <h2 className="text-xl font-bold mb-4">Sale Details</h2>
+            <p>
+              <span className="font-semibold">Customer:</span>{" "}
+              {selectedSale.customerName}
+            </p>
+            <p>
+              <span className="font-semibold">Date:</span>{" "}
+              {new Date(selectedSale.createdAt).toLocaleDateString()}
+            </p>
+            <p className="text-red-500">
+              <span className="font-semibold text-black">Total Amount:</span>{" "}
+              {selectedSale.totalAmount} PKR
+            </p>
+            <h3 className="mt-4 font-semibold">Items</h3>
+            <ul className="list-disc pl-6">
+              {selectedSale.items.map((it) => (
+                <li
+                  key={it._id}
+                  className="flex justify-between items-center bg-gray-50 rounded-lg p-3 mb-2 shadow-sm hover:shadow-md transition"
+                >
+                  <div>
+                    <p className="font-semibold text-gray-800">{it.productName}</p>
+                    <p className="text-sm text-gray-500">
+                      Quantity: {it.quantity} {it.unit || "unit"}
+                    </p>
+                    <p className="text-sm text-gray-500">
+                      Price per item: {it.price} PKR
+                    </p>
+                  </div>
+
+                  <div className="text-right">
+                    <p className="font-bold text-green-600">
+                      ₨ {it.quantity * it.price}
+                    </p>
+                    <p className="text-xs text-gray-400">Total</p>
+                  </div>
+                </li>
+              ))}
+            </ul>
+
+            <div className="mt-4 flex justify-between">
+              <button
+                onClick={handleDelete}
+                className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700"
               >
-                <div>
-                  <p className="font-semibold text-gray-800">{it.productName}</p>
-                  <p className="text-sm text-gray-500">
-                    Quantity: {it.quantity} {it.unit || "unit"}
-                  </p>
-                  <p className="text-sm text-gray-500">
-                    Price per item: {it.price} PKR
-                  </p>
-                </div>
-
-                <div className="text-right">
-                  <p className="font-bold text-green-600">
-                    ₨ {it.quantity * it.price}
-                  </p>
-                  <p className="text-xs text-gray-400">Total</p>
-                </div>
-              </li>
-            ))}
-          </ul>
-
-          <div className="mt-4 text-right">
-            <button
-              onClick={handleClose}
-              className="bg-gray-300 px-4 py-2 rounded hover:bg-gray-400"
-            >
-              Close
-            </button>
+                Delete
+              </button>
+              <button
+                onClick={handleClose}
+                className="bg-gray-300 px-4 py-2 rounded hover:bg-gray-400"
+              >
+                Close
+              </button>
+            </div>
           </div>
         </div>
-      </div>
-    )}
-  </div>
-);
+      )}
+    </div>
+  );
 };
 
-export default SalesListPage;
+export default SalesListPage;
