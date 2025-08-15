@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { getUdhaarlist, deleteUdhaar } from "../../Services/udhaarServices.js";
 import { Trash2, Edit2, HandCoins } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 
 const UdhaarListPage = () => {
   const navigate = useNavigate();
@@ -14,10 +15,13 @@ const UdhaarListPage = () => {
       const res = await getUdhaarlist();
       if (res.data && res.data.length > 0) {
         setUdhaarList(res.data);
+        toast.success("Data Refreshed")
       } else {
+        toast.error("Failed to refresh Credit record");
         setUdhaarList([]);
       }
     } catch (err) {
+      toast.error("Failed to refresh Credit record");
       console.error("Error fetching udhaar list", err);
     }
   };
@@ -28,15 +32,16 @@ const UdhaarListPage = () => {
 
   const handleDelete = async (e) => {
     try {
-      if (confirm("Are you really want to delete this?")) {
+      if (confirm("Are you really want to delete this credit record?")) {
         const res = await deleteUdhaar(e._id);
-        if (res.ok) {
-          console.log("Deleted successfully")
+        if (res.status == 200 || res.status == 201) {
+          toast.success("Deleted successfully");
         }
         getUdhaar();
       }
     } catch (err) {
-      console.error("Error fetching udhaar list", err);
+      toast.error("Failed to delete Credit record");
+      console.error("Error deleting: ", err);
     }
   }
 
@@ -44,7 +49,6 @@ const UdhaarListPage = () => {
     navigate(`/udhaar/edit/${e._id}`)
   }
 
-  // Filter logic
   const filteredData = udhaarList.filter((item) => {
     const matchSearch =
       item.customerName.toLowerCase().includes(search.toLowerCase()) ||

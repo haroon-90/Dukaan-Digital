@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { addProduct, getProductById, updateProduct } from '../../Services/productServices.js'
 import { useParams, useNavigate } from "react-router-dom";
+import toast from 'react-hot-toast';
 
 const ProductFormPage = () => {
   const { id } = useParams();
@@ -14,8 +15,6 @@ const ProductFormPage = () => {
     quantity: '',
     unit: ''
   });
-  const [error, setError] = useState('');
-  const [success, setsuccess] = useState('');
 
   useEffect(() => {
     if (id) {
@@ -24,7 +23,8 @@ const ProductFormPage = () => {
           const res = await getProductById(id);
           setProduct(res.data);
         } catch (err) {
-          setError("Error fetching product");
+          toast.error("Failed to edit product")
+          navigate('/products')
         }
       };
       fetchProduct();
@@ -40,10 +40,10 @@ const ProductFormPage = () => {
     try {
       if (id) {
         await updateProduct(id, product);
-        setsuccess("Product updated successfully");
+        toast.success("Product updated successfully");
       } else {
         await addProduct(product);
-        setsuccess("Product added successfully");
+        toast.success('Product added successfully!')
         setProduct({
           itemname: '',
           category: '',
@@ -54,32 +54,19 @@ const ProductFormPage = () => {
         });
       }
       setTimeout(() => {
-        setsuccess("");
         navigate('/products');
       }, 1500);
     } catch (err) {
-      setError(err.response?.data?.msg || 'Error saving product');
-      setTimeout(() => setError(''), 3000);
+      toast.error(err.response?.data?.msg || "Failed to add product!")
     }
   };
 
   return (
-    <div className="flex items-center justify-center bg-gradient-to-br from-purple-50 to-purple-100 p-6">
+    <div className="flex items-center justify-center p-6">
       <div className="w-full max-w-lg bg-white rounded-2xl shadow-2xl p-8 border border-gray-100">
         <h2 className="text-3xl font-extrabold text-center text-purple-700 mb-6 tracking-tight">
           {id ? "Edit Product" : "Add New Product"}
         </h2>
-
-        {error && (
-          <div className="mb-4 text-sm text-red-700 bg-red-100 p-3 rounded-lg border border-red-200">
-            {error}
-          </div>
-        )}
-        {success && (
-          <div className="mb-4 text-sm text-green-700 bg-green-100 p-3 rounded-lg border border-green-200">
-            {success}
-          </div>
-        )}
 
         <form onSubmit={handleSubmit} className="space-y-5">
           <div>

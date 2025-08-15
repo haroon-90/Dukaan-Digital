@@ -1,79 +1,111 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { updateProfile } from "../../Services/profileServices.js";
+import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 
 const EditProfilePage = () => {
+  const navigate = useNavigate();
   const user = sessionStorage.getItem("user") ? JSON.parse(sessionStorage.getItem("user")) : null;
+
   const [form, setForm] = useState({
-    name: user.name || "",
-    phone: user.phone || "",
+    name: user?.name || "",
+    phone: user?.phone || "",
     password: "",
   });
   const [loading, setLoading] = useState(false);
-  const [success, setSuccess] = useState("");
-  const [error, setError] = useState("");
 
-  // Handle input changes
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  // Handle form submit
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    setSuccess("");
-    setError("");
+
     try {
       if (!user?.id) {
-        setError("User ID not found");
+        toast.error("User ID not found");
         return;
       }
-      const res = await updateProfile(form);
+
+      const formDataToSend = {};
+      if (form.name !== user?.name) formDataToSend.name = form.name;
+      if (form.phone !== user?.phone) formDataToSend.phone = form.phone;
+      if (form.password) formDataToSend.password = form.password;
+
+      if (Object.keys(formDataToSend).length === 0) {
+        toast("No changes to save.", { icon: 'ℹ️' });
+        setLoading(false);
+        return;
+      }
+
+      const res = await updateProfile(formDataToSend);
       if (res.data) {
-        setSuccess("Profile updated successfully!");
+        toast.success("Profile updated successfully!");
+
+        const updatedUser = { ...user, ...formDataToSend };
+        if (formDataToSend.password) delete updatedUser.password;
+        sessionStorage.setItem("user", JSON.stringify(updatedUser));
+
+        setTimeout(() => {
+          navigate('/profile');
+        }, 2000);
       }
     } catch (err) {
-      setError(err.response?.data?.message || "Failed to update profile");
+      toast.error(err.response?.data?.message || "Failed to update profile");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="p-6 font-sans bg-gray-50 min-h-screen">
-      <h1 className="text-center text-2xl font-bold mb-6">Edit Profile</h1>
-
-      <div className="max-w-lg mx-auto bg-white rounded-xl shadow-lg p-6">
-        {loading && <p className="text-center text-gray-500">Loading...</p>}
-        {error && <p className="text-center text-red-500">{error}</p>}
-        {success && <p className="text-center text-green-500">{success}</p>}
-
+    <div className="p-6 font-sans bg-gray-100 min-h-screen">
+      <div className="max-w-lg mx-auto bg-white rounded-2xl shadow-xl p-8 border border-purple-200">
+        <h1 className="text-center text-3xl font-bold text-purple-700 mb-6">Edit Profile</h1>
+        {loading &&
+          <div className="flex justify-center items-center py-6">
+            <div className="w-12 h-12 border-4 border-t-4 border-gray-200 border-t-purple-500 rounded-full animate-spin"></div>
+          </div>
+        }
         {!loading && (
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <InputField
-              label="Name"
-              name="name"
-              value={form.name}
-              onChange={handleChange}
-            />
-            <InputField
-              label="Phone"
-              name="phone"
-              value={form.phone}
-              onChange={handleChange}
-            />
-            <InputField
-              label="password"
-              name="password"
-              type="password"
-              value={form.password}
-              onChange={handleChange}
-            />
-
+          <form onSubmit={handleSubmit} className="space-y-6">
+            <div>
+              <label className="block text-purple-800 font-semibold mb-1">Name</label>
+              <input
+                type="text"
+                name="name"
+                value={form.name}
+                onChange={handleChange}
+                className="w-full border-2 border-purple-200 rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-purple-400 transition-colors"
+                placeholder="Enter your name"
+              />
+            </div>
+            <div>
+              <label className="block text-purple-800 font-semibold mb-1">Phone</label>
+              <input
+                type="text"
+                name="phone"
+                value={form.phone}
+                onChange={handleChange}
+                className="w-full border-2 border-purple-200 rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-purple-400 transition-colors"
+                placeholder="Enter your phone number"
+              />
+            </div>
+            <div>
+              <label className="block text-purple-800 font-semibold mb-1">New Password</label>
+              <input
+                type="password"
+                name="password"
+                value={form.password}
+                onChange={handleChange}
+                className="w-full border-2 border-purple-200 rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-purple-400 transition-colors"
+                placeholder="Leave blank to keep current password"
+              />
+            </div>
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-2 rounded-lg transition duration-200"
+              className="w-full bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 rounded-xl transition duration-300 transform hover:scale-105 disabled:bg-purple-400 disabled:scale-100 disabled:cursor-not-allowed"
             >
               {loading ? "Saving..." : "Save Changes"}
             </button>
@@ -83,19 +115,5 @@ const EditProfilePage = () => {
     </div>
   );
 };
-
-// Reusable Input Component
-const InputField = ({ label, name, value, onChange, type = "text" }) => (
-  <div>
-    <label className="block text-gray-700 font-medium mb-1">{label}</label>
-    <input
-      type={type}
-      name={name}
-      value={value}
-      onChange={onChange}
-      className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-    />
-  </div>
-);
 
 export default EditProfilePage;

@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { register } from '../../Services/authService.js';
 import { useNavigate } from 'react-router-dom';
 import DukaanDigital from '../../assets/Dukaan_Digital.svg'
+import toast from 'react-hot-toast';
 
 const RegisterPage = () => {
   const navigate = useNavigate();
@@ -9,7 +10,7 @@ const RegisterPage = () => {
     name: '',
     email: '',
     password: '',
-    role: 'manager', // default role
+    role: 'manager',
     phone: '',
     shopname: '',
     city: ''
@@ -30,10 +31,13 @@ const RegisterPage = () => {
       const response = await register(formData);
       console.log(response)
       if (response.data) {
-        // sessionStorage.setItem('token', response.data.token)
-        navigate('/login');
+        toast.success("Account registered successfully!");
+        setTimeout(() => {
+          navigate('/login');
+        }, 2000);
       }
     } catch (err) {
+      toast.error("Registration failed!")
       setError(err.response?.data?.message || 'Registration failed');
     } finally {
       setLoading(false);
@@ -41,24 +45,22 @@ const RegisterPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-r from-purple-400 to-indigo-500 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
-      <div className="sm:mx-auto sm:w-full sm:max-w-4xl">
-        <div className="flex justify-center mb-6">
-          <img className='h-14' src={DukaanDigital} alt="DukaanDigital" />
-        </div>
-        <h2 className="mt-2 text-center text-xl font-extrabold text-white">
-          Start your journey with us today!
-        </h2>
-      </div>
-
+    <div className="min-h-screen bg-linear-60 from-purple-400 via-purple-100 to-purple-400 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-4xl">
         <div className="bg-white py-8 px-6 shadow-lg rounded-3xl sm:px-10">
+          <div className="sm:mx-auto sm:w-full sm:max-w-4xl">
+            <div className="flex justify-center mb-4">
+              <img className='h-14' src={DukaanDigital} alt="DukaanDigital" />
+            </div>
+            <h2 className="mt-2 mb-6 text-center text-xl font-extrabold text-purple-500">
+              Start your journey with us today!
+            </h2>
+          </div>
           {error && (
             <div className="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded-lg">
               {error}
             </div>
           )}
-
           <form className="space-y-6" onSubmit={handleSubmit}>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               <div>
@@ -74,7 +76,6 @@ const RegisterPage = () => {
                   onChange={handleChange}
                 />
               </div>
-
               <div>
                 <label htmlFor="email" className="block text-sm font-medium text-gray-700">
                   Email
@@ -88,7 +89,6 @@ const RegisterPage = () => {
                   onChange={handleChange}
                 />
               </div>
-
               <div>
                 <label htmlFor="password" className="block text-sm font-medium text-gray-700">
                   Password
@@ -102,7 +102,6 @@ const RegisterPage = () => {
                   onChange={handleChange}
                 />
               </div>
-
               <div>
                 <label htmlFor="phone" className="block text-sm font-medium text-gray-700">
                   Phone Number
@@ -116,7 +115,6 @@ const RegisterPage = () => {
                   onChange={handleChange}
                 />
               </div>
-
               <div>
                 <label htmlFor="shopname" className="block text-sm font-medium text-gray-700">
                   Shop Name
@@ -129,7 +127,6 @@ const RegisterPage = () => {
                   onChange={handleChange}
                 />
               </div>
-
               <div>
                 <label htmlFor="city" className="block text-sm font-medium text-gray-700">
                   City
@@ -143,7 +140,37 @@ const RegisterPage = () => {
                   onChange={handleChange}
                 />
               </div>
-
+              {/* <div className="col-span-1 md:col-span-2 lg:col-span-3 flex items-center justify-center accent-purple-600">
+                <div className="mt-1 flex items-center space-x-4">
+                  <div className="flex items-center">
+                    <input
+                      id="manager"
+                      name="role"
+                      type="radio"
+                      value="manager"
+                      defaultChecked
+                      onChange={handleChange}
+                      className="focus:ring-purple-500 h-4 w-4 text-purple-600 border-gray-300"
+                    />
+                    <label htmlFor="manager" className="ml-2 block text-sm font-medium text-gray-700">
+                      Manager
+                    </label>
+                  </div>
+                  <div className="flex items-center">
+                    <input
+                      id="admin"
+                      name="role"
+                      type="radio"
+                      value="admin"
+                      onChange={handleChange}
+                      className="focus:ring-purple-500 h-4 w-4 text-purple-600 border-gray-300"
+                    />
+                    <label htmlFor="admin" className="ml-2 block text-sm font-medium text-gray-700">
+                      Admin
+                    </label>
+                  </div>
+                </div>
+              </div> */}
               <div className="col-span-1 md:col-span-2 lg:col-span-3">
                 <label htmlFor="role" className="block text-sm font-medium text-gray-700">
                   Role
@@ -159,12 +186,11 @@ const RegisterPage = () => {
                 </select>
               </div>
             </div>
-
-            <div className="mt-8">
+            <div className="mt-8 flex justify-center">
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 disabled:opacity-50 transition-colors"
+                className="flex justify-center py-3 px-8 border border-transparent rounded-full shadow-sm text-sm font-medium text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 disabled:opacity-50 transition-colors"
               >
                 {loading ? 'Registering...' : 'Register'}
               </button>

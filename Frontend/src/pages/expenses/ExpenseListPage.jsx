@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { getExpense, deleteExpense } from '../../Services/expenseServices.js';
 import { Trash2, FileText } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import toast from 'react-hot-toast';
 
 const ExpenseListPage = () => {
   const navigate = useNavigate();
@@ -13,11 +14,13 @@ const ExpenseListPage = () => {
       const res = await getExpense();
       if (res.data && res.data.length > 0) {
         setExpenseList(res.data.reverse());
+        toast.success("Data refreshed!");
       } else {
         setExpenseList([]);
       }
     } catch (err) {
-      console.error("Error fetching expenses", err);
+      toast.error("Failed to refresh expenses")
+      console.error("Failed to refresh expenses", err);
     }
     setLoading(false);
   };
@@ -31,12 +34,13 @@ const ExpenseListPage = () => {
       if (confirm("Are you really want to delete this?")) {
         const res = await deleteExpense(e._id);
         if (res.status == 200) {
-          console.log("Expense deleted successfully")
+          toast.success("Expense deleted successfully!")
         }
         fetchExpenses();
       }
     } catch (err) {
-      console.error("Error deleting expenses", err);
+      toast.error("Failed to delete expense")
+      console.error("Failed to delete expense", err);
     }
   }
 
@@ -46,9 +50,9 @@ const ExpenseListPage = () => {
         <h1 className="text-3xl font-bold text-purple-700 text-center">
           Expense List
         </h1>
-        <button className='bg-purple-600 hover:bg-purple-700 flex gap-1 items-center text-white rounded-lg px-4 py-1' onClick={()=> navigate('/expenses/new')}>
-          <FileText size={20}/> Add Expense
-          </button>
+        <button className='bg-purple-600 hover:bg-purple-700 flex gap-1 items-center text-white rounded-lg px-4 py-1' onClick={() => navigate('/expenses/new')}>
+          <FileText size={20} /> Add Expense
+        </button>
       </div>
 
       {loading ? (

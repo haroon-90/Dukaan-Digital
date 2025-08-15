@@ -3,15 +3,15 @@ import { login } from '../../Services/authService.js';
 import { useNavigate } from 'react-router-dom';
 import { useUserContext } from '../../components/Context/UserContext.jsx';
 import DukaanDigital from '../../assets/Dukaan_Digital.svg'
+import { toast } from 'react-hot-toast';
 
 const LoginPage = () => {
   const navigate = useNavigate();
-  const { user, setUser } = useUserContext()
+  const { setUser } = useUserContext()
 
   const [form, setForm] = useState({ email: '', password: '' })
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
-  const [success, setSuccess] = useState('')
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value })
@@ -19,33 +19,30 @@ const LoginPage = () => {
     setSuccess('')
   }
 
-  useEffect(() => {
-    console.log("user from context", user)
-  }, [user])
-
   const handleSubmit = async (e) => {
     e.preventDefault()
     setLoading(true)
     setError('')
-    setSuccess('')
     try {
       const response = await login(form)
       console.log(response.data);
       if (response.data && response.data.token) {
         sessionStorage.setItem('token', response.data.token)
-        setSuccess('Login successful!')
+        toast.success('Login successfully!');
         const USER = response.data.user;
-        console.log("user from login", USER);
-        setUser(USER)
-        console.log("user from context", user);
+        setUser(USER);
         navigate('/');
       } else {
         setError('Invalid login response')
       }
     } catch (err) {
+      toast.error('Login failed!');
       setError(err.response?.data?.message || 'An error occurred during login')
     } finally {
       setLoading(false)
+      setTimeout(() => {
+        setError('');
+      }, 2000);
     }
   }
 
@@ -57,7 +54,7 @@ const LoginPage = () => {
           <img src={DukaanDigital} alt="Dukaan Digital" className="h-14" />
         </div>
 
-        <h2 className="text-2xl font-bold text-center text-gray-800 mb-2">
+        <h2 className="text-2xl font-bold text-center text-purple-600 mb-2">
           Welcome Back
         </h2>
         <p className="text-gray-500 text-center text-sm mb-6">
@@ -91,15 +88,16 @@ const LoginPage = () => {
               placeholder="••••••••"
             />
           </div>
-          {error && <div className="text-red-500 text-sm">{error}</div>}
-          {success && <div className="text-green-500 text-sm">{success}</div>}
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full bg-purple-600 text-white py-2 rounded-lg font-semibold hover:bg-purple-700 transition text-sm"
-          >
-            {loading ? 'Logging in...' : 'Login'}
-          </button>
+          {error && <div className="text-red-500 text-sm text-center py-2 rounded-lg bg-red-100">{error}</div>}
+          <div className='flex justify-center'>
+            <button
+              type="submit"
+              disabled={loading}
+              className="bg-purple-600 text-white py-2 px-8 rounded-full font-semibold hover:bg-purple-700 transition text-sm"
+            >
+              {loading ? 'Logging in...' : 'Login'}
+            </button>
+          </div>
           <p className="text-center text-gray-600 text-sm mt-4">
             Don't have an account?{" "}
             <span

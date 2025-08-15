@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { addExpense } from '../../Services/expenseServices.js';
 import { useNavigate } from 'react-router-dom';
+import toast from 'react-hot-toast';
 
 const ExpenseFormPage = () => {
   const navigate = useNavigate();
@@ -10,7 +11,6 @@ const ExpenseFormPage = () => {
     amount: ''
   });
   const [loading, setLoading] = useState(false);
-  const [message, setMessage] = useState('');
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -23,13 +23,12 @@ const ExpenseFormPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    setMessage('');
 
     try {
       console.log(formData)
       const res = await addExpense(formData);
       if (res.status === 200 || res.status === 201) {
-        setMessage('Expense added successfully!');
+        toast.success("Expense added successfully!")
         setFormData({
           title: '',
           description: '',
@@ -39,11 +38,11 @@ const ExpenseFormPage = () => {
           navigate('/expenses')
         }, 2000);
       } else {
-        setMessage('Error: Failed to add expense!');
+        toast.error("Failed to add expense!")
       }
     } catch (err) {
       console.error(err);
-      setMessage('Error: Something went wrong!');
+      toast.error("Something went wrong!")
     }
     setLoading(false);
   };
@@ -57,15 +56,6 @@ const ExpenseFormPage = () => {
         <h2 className="text-2xl font-bold text-purple-700 mb-4 text-center">
           Add New Expense
         </h2>
-
-        {message && (
-          <p
-            className={`mb-4 text-center font-medium ${message.includes('successfully') ? 'text-green-600' : 'text-red-600'
-              }`}
-          >
-            {message}
-          </p>
-        )}
 
         <div className="mb-4">
           <label className="block text-purple-700 font-medium mb-1">

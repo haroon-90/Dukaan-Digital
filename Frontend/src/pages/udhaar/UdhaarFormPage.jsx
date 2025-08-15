@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { addUdhaar, getUdhaarById, updateUdhaar } from "../../Services/udhaarServices.js";
 import { useNavigate, useParams } from "react-router-dom";
+import toast from "react-hot-toast";
 
 const UdhaarFormPage = () => {
   const navigate = useNavigate();
@@ -16,14 +17,18 @@ const UdhaarFormPage = () => {
   });
 
   const [loading, setLoading] = useState(false);
-  const [message, setMessage] = useState("");
 
-  // Fetch record in edit mode
   useEffect(() => {
     if (isEdit) {
       (async () => {
         try {
           const res = await getUdhaarById(id);
+          if (!res) {
+            toast.error("Failed to edit credit")
+            setTimeout(() => {
+              navigate('/udhaar')
+            }, 1500);
+          }
           setFormData(res.data);
         } catch (err) {
           console.log(err);
@@ -40,7 +45,6 @@ const UdhaarFormPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    setMessage("");
 
     try {
       let res;
@@ -54,15 +58,15 @@ const UdhaarFormPage = () => {
       }
 
       if (res.status === 200 || res.status === 201) {
-        setMessage(isEdit ? "Udhaar updated successfully!" : "Udhaar added successfully!");
+        toast.success(isEdit ? "Credit updated successfully!" : "Credit added successfully!");
         setTimeout(() => {
           navigate('/udhaar');
         }, 1500);
       } else {
-        setMessage("❌ Failed, try again.");
+        toast.error('Failed');
       }
     } catch (error) {
-      setMessage("❌ Something went wrong.");
+      toast.error('Something went wrong!');
       console.log(error);
     }
     setLoading(false);
@@ -75,10 +79,7 @@ const UdhaarFormPage = () => {
           {isEdit ? "Edit Credit" : "Add Credit"}
         </h2>
 
-        {message && <p className="mb-4 text-center text-sm">{message}</p>}
-
         <form onSubmit={handleSubmit} className="space-y-4">
-          {/* Customer Name */}
           <div>
             <label className="block text-sm font-medium text-purple-700">Customer Name</label>
             <input
@@ -93,7 +94,6 @@ const UdhaarFormPage = () => {
             />
           </div>
 
-          {/* Contact */}
           <div>
             <label className="block text-sm font-medium text-purple-700">Contact Number</label>
             <input
@@ -108,7 +108,6 @@ const UdhaarFormPage = () => {
             />
           </div>
 
-          {/* Amount */}
           <div>
             <label className="block text-sm font-medium text-purple-700">Amount</label>
             <input
@@ -122,7 +121,6 @@ const UdhaarFormPage = () => {
             />
           </div>
 
-          {/* Reason */}
           <div>
             <label className="block text-sm font-medium text-purple-700">Reason</label>
             <textarea
@@ -137,7 +135,6 @@ const UdhaarFormPage = () => {
             ></textarea>
           </div>
 
-          {/* Status */}
           <div>
             <label className="block text-sm font-medium text-purple-700">Status</label>
             <select

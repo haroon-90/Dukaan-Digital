@@ -18,6 +18,10 @@ const reportSchema = new mongoose.Schema({
         type: Number,
         default: 0
     },
+    totalPurchase: {
+        type: Number,
+        default: 0
+    },
     totalProfit: {
         type: Number,
         default: 0
@@ -39,6 +43,10 @@ const reportSchema = new mongoose.Schema({
         default: 0
     },
     numberOfSales: {
+        type: Number,
+        default: 0
+    },
+    numberOfPurchase: {
         type: Number,
         default: 0
     },

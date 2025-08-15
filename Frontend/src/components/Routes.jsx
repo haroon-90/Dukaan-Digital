@@ -36,9 +36,6 @@ import ExpenseFormPage from "../pages/expenses/ExpenseFormPage.jsx"
 
 // Reports
 import Reporthomepage from "../pages/reports/Reporthomepage.jsx"
-import DailyReportPage from "../pages/reports/DailyReportPage.jsx"
-import MonthlyReportPage from "../pages/reports/MonthlyReportPage.jsx"
-import CustomReportPage from "../pages/reports/CustomReportPage.jsx"
 
 export default function AppRouter() {
 
@@ -75,6 +72,7 @@ export default function AppRouter() {
           <Route path="sales">
             <Route index element={<SalesListPage />} />
             <Route path="new" element={<ProductListPage />} />
+            <Route path="purchase" element={<ProductListPage />} />
           </Route>
 
           {/* Udhaar */}
@@ -94,9 +92,6 @@ export default function AppRouter() {
           {/* Reports */}
           <Route path="reports">
             <Route index element={<Reporthomepage />} />
-            <Route path="daily" element={<DailyReportPage />} />
-            <Route path="monthly" element={<MonthlyReportPage />} />
-            <Route path="custom" element={<CustomReportPage />} />
           </Route>
 
         </Route>

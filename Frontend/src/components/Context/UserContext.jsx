@@ -11,6 +11,7 @@ export const UserProvider = ({ children }) => {
             name: "",
             email: "",
             role: "",
+            shopname: "",
         };
     });
 
