@@ -9,7 +9,7 @@ const DashboardPage = () => {
         { label: "Expense", path: "/expenses", icon: <FileText size={32} />, color: "bg-green-500", hover: "hover:bg-green-600" },
         { label: "Products", path: "/products", icon: <Package size={32} />, color: "bg-purple-500", hover: "hover:bg-purple-600" },
         { label: "Sales", path: "/sales", icon: <ShoppingCart size={32} />, color: "bg-yellow-500", hover: "hover:bg-yellow-600" },
-        { label: "Udhaar", path: "/udhaar", icon: <HandCoins size={32} />, color: "bg-red-500", hover: "hover:bg-red-600" },
+        { label: "Credit", path: "/udhaar", icon: <HandCoins size={32} />, color: "bg-red-500", hover: "hover:bg-red-600" },
         { label: "Report", path: "/reports", icon: <BarChart2 size={32} />, color: "bg-indigo-500", hover: "hover:bg-indigo-600" },
     ];
 

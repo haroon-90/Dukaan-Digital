@@ -1,3 +1,3 @@
 import api from "./api";
 
-export const getReport = (data) => api.get('/report', data)
+export const getReport = (data) => api.post('/report', data)

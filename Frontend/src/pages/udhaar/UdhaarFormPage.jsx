@@ -72,7 +72,7 @@ const UdhaarFormPage = () => {
     <div className="min-h-screen bg-purple-50 flex items-center justify-center px-4">
       <div className="bg-white shadow-lg rounded-2xl w-full max-w-md p-6">
         <h2 className="text-2xl font-bold text-purple-700 mb-4">
-          {isEdit ? "Edit Udhaar" : "Add Udhaar"}
+          {isEdit ? "Edit Credit" : "Add Credit"}
         </h2>
 
         {message && <p className="mb-4 text-center text-sm">{message}</p>}
@@ -156,7 +156,7 @@ const UdhaarFormPage = () => {
             disabled={loading}
             className="w-full bg-purple-600 hover:bg-purple-700 text-white font-medium py-2 rounded-lg transition duration-200"
           >
-            {loading ? "Saving..." : isEdit ? "Update Udhaar" : "Save Udhaar"}
+            {loading ? "Saving..." : isEdit ? "Update Credit" : "Save Credit"}
           </button>
         </form>
       </div>

@@ -19,7 +19,7 @@ const Navbar = () => {
                         <NavLink to="/products" className="text-black hover:text-purple-600 hover:border-b-2 transition-all">Products</NavLink>
                         <NavLink to="/sales" className="text-black hover:text-purple-600 hover:border-b-2 transition-all">Sales</NavLink>
                         <NavLink to="/expenses" className="text-black hover:text-purple-600 hover:border-b-2 transition-all">Expenses</NavLink>
-                        <NavLink to="/udhaar" className="text-black hover:text-purple-600 hover:border-b-2 transition-all">Udhaar</NavLink>
+                        <NavLink to="/udhaar" className="text-black hover:text-purple-600 hover:border-b-2 transition-all">Credit</NavLink>
                         <NavLink to="/reports" className="text-black hover:text-purple-600 hover:border-b-2 transition-all">Report</NavLink>
                         <button
                             onClick={() => { sessionStorage.clear(); navigate('/login') }}

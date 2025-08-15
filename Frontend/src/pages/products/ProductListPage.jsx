@@ -94,7 +94,8 @@ const ProductListPage = () => {
       setSaleQuantities({});
       setCustomerName("");
       setShowSaleModal(false);
-      setTotalBill(0)
+      setTotalBill(0);
+      loadProducts();
     } catch (err) {
       console.error("Error creating sale:", err);
     }
@@ -138,212 +139,221 @@ const ProductListPage = () => {
   }, []);
 
   return (
-    <div className="relative p-6 bg-gray-50">
-      {showSaleModal && (
-        <div className="absolute inset-0 flex items-center justify-center bg-black/60 z-50 backdrop-blur-sm">
-          <div className="bg-white p-6 rounded-xl shadow-2xl w-full max-w-lg">
-            <h2 className="text-xl font-bold text-gray-800 border-b pb-3 mb-4">
-              Sale Record
-            </h2>
+  <div className="relative p-6 bg-purple-50 min-h-screen">
+    {showSaleModal && (
+      <div className="absolute inset-0 flex items-center justify-center bg-black/60 z-50 backdrop-blur-sm">
+        <div className="bg-white p-6 rounded-xl shadow-2xl w-full max-w-lg border-t-4 border-purple-600">
+          <h2 className="text-xl font-bold text-purple-700 border-b pb-3 mb-4">
+            Sale Record
+          </h2>
 
-            {/* Customer Name Input */}
-            <div className="mb-4">
-              <label className="block text-sm font-medium text-gray-600 mb-1">
-                Customer Name
-              </label>
-              <input
-                type="text"
-                value={customerName}
-                onChange={(e) => setCustomerName(e.target.value)}
-                placeholder="Enter customer name"
-                className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-400 outline-none"
-              />
-            </div>
+          {/* Customer Name Input */}
+          <div className="mb-4">
+            <label className="block text-sm font-medium text-purple-700 mb-1">
+              Customer Name
+            </label>
+            <input
+              type="text"
+              value={customerName}
+              onChange={(e) => setCustomerName(e.target.value)}
+              placeholder="Enter customer name"
+              className="w-full px-3 py-2 border border-purple-300 rounded-lg focus:ring-2 focus:ring-purple-500 outline-none"
+            />
+          </div>
 
-            {cart.length === 0 ? (
-              <p className="text-gray-500 text-center py-6">No items in cart</p>
-            ) : (
-              <div className="space-y-3 max-h-72 overflow-y-auto pr-2">
-                {cart.map((item) => (
-                  <div
-                    key={item.id}
-                    className="flex justify-between items-center border-b pb-2"
-                  >
-                    <span className="font-medium text-gray-700">
-                      {item.productname}
+          {cart.length === 0 ? (
+            <p className="text-gray-500 text-center py-6">No items in cart</p>
+          ) : (
+            <div className="space-y-3 max-h-72 overflow-y-auto pr-2">
+              {cart.map((item) => (
+                <div
+                  key={item.id}
+                  className="flex justify-between items-center border-b border-purple-100 pb-2"
+                >
+                  <span className="font-medium text-purple-800">
+                    {item.productname}
+                  </span>
+                  <span className="text-sm text-purple-600">
+                    Qty: {item.quantity} | Price: ₨ {item.price} |
+                    <span className="font-semibold text-purple-800 ml-1">
+                      Total: ₨ {item.price * item.quantity}
                     </span>
-                    <span className="text-sm text-gray-500">
-                      Qty: {item.quantity} | Price: ₨ {item.price} |
-                      <span className="font-semibold text-gray-800 ml-1">
-                        Total: ₨ {item.price * item.quantity}
-                      </span>
-                    </span>
-                  </div>
-                ))}
-              </div>
-            )}
-            <div className="flex justify-center pt-4">
-              Total bill : &nbsp; <span className="font-bold text-red-700">{TotalBill}</span>
+                  </span>
+                </div>
+              ))}
             </div>
+          )}
 
-            <div className="flex justify-end gap-3 mt-6">
-              <button
-                onClick={() => setShowSaleModal(false)}
-                className="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={confirmSale}
-                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
-              >
-                Confirm Sale
-              </button>
-            </div>
+          <div className="flex justify-center pt-4">
+            Total bill: &nbsp; 
+            <span className="font-bold text-red-600">{TotalBill}</span>
+          </div>
+
+          <div className="flex justify-end gap-3 mt-6">
+            <button
+              onClick={() => setShowSaleModal(false)}
+              className="px-4 py-2 bg-purple-100 text-purple-700 rounded-lg hover:bg-purple-200 transition"
+            >
+              Cancel
+            </button>
+            <button
+              onClick={confirmSale}
+              className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition"
+            >
+              Confirm Sale
+            </button>
           </div>
         </div>
-      )}
+      </div>
+    )}
 
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold text-gray-800">Products</h1>
-        <div className="flex gap-2">
-          {cart.length > 0 && (
-            <button
-              onClick={ShowCart}
-              className="bg-purple-600 flex gap-2 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition"
-            >
-              <ShoppingCart size={23} />
-              Sale
-            </button>
-          )}
+    {/* Header Buttons */}
+    <div className="flex justify-between items-center mb-6">
+      <h1 className="text-2xl font-bold text-purple-800">Products</h1>
+      <div className="flex gap-2">
+        {cart.length > 0 && (
           <button
-            onClick={() => navigate("/products/new")}
+            onClick={ShowCart}
             className="bg-purple-600 flex gap-2 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition"
           >
-            <PackagePlus size={23} />
-            Add Product
+            <ShoppingCart size={23} />
+            Sale
           </button>
-        </div>
-      </div>
-
-      <input
-        type="text"
-        placeholder="Search product..."
-        value={searchTerm}
-        onChange={(e) => setSearchTerm(e.target.value)}
-        className="w-full mb-4 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-400"
-      />
-
-      <div className="bg-white rounded-lg shadow overflow-x-auto">
-        <table className="min-w-full divide-y divide-gray-200">
-          <thead className="bg-gray-100">
-            <tr>
-              <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">
-                Item Name
-              </th>
-              <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">
-                Category
-              </th>
-              <th className="flex gap-1 items-center px-6 py-3 text-left text-sm font-semibold text-gray-700">
-                Purchase Price <Eye className="text-purple-600" onClick={() => setprprice(!prprice)} size={20} />
-              </th>
-              <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">
-                Selling Price
-              </th>
-              <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">
-                Quantity
-              </th>
-              <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">
-                Unit
-              </th>
-              {isSale &&
-                <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">
-                  Sale
-                </th>
-              }
-              <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">
-                Created At
-              </th>
-              {!isSale &&
-                <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700"></th>
-              }
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-gray-200">
-            {filteredProduct.length > 0 ? (
-              filteredProduct.map((p) => (
-                <tr className="hover:bg-gray-100" key={p._id}>
-                  <td className="px-6 py-4 text-sm text-gray-900">
-                    {p.itemname}
-                  </td>
-                  <td className="px-6 py-4 text-sm text-gray-600">
-                    {p.category}
-                  </td>
-                  <td className="px-6 py-4 text-sm text-gray-600">
-                    {prprice ? ((p.purchasePrice) + " PKR") : "⬤⬤⬤"}
-                  </td>
-                  <td className="px-6 py-4 text-sm text-gray-600">
-                    {p.sellingPrice} PKR
-                  </td>
-                  <td className="px-6 py-4 text-sm text-gray-600">
-                    {p.quantity}
-                  </td>
-                  <td className="px-6 py-4 text-sm text-gray-600">{p.unit}</td>
-                  {isSale &&
-                    <td className="px-6 py-4 text-sm text-gray-600 flex items-center gap-1">
-                      <input
-                        type="number"
-                        name="quantity"
-                        min="1"
-                        value={saleQuantities[p._id] || ""}
-                        onChange={(e) =>
-                          handleSaleChange(p, e.target.value)
-                        }
-                        className="w-15 px-2 py-1 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
-                      />
-                      <ShoppingCart
-                        onClick={() => handleSale(p)}
-                        className="text-purple-600 cursor-pointer"
-                        size={18}
-                      />
-                    </td>
-                  }
-                  <td className="px-6 py-4 text-sm text-gray-500">
-                    {new Date(p.createdAt).toLocaleDateString()}
-                  </td>
-                  {!isSale &&
-                    <td className="py-2 flex justify-center items-center gap-2">
-                      <span
-                        onClick={() => handleEdit(p)}
-                        className="p-2 text-blue-500 rounded-lg hover:bg-gradient-to-r hover:from-blue-50 hover:to-blue-100 transition cursor-pointer"
-                      >
-                        <Edit2 size={18} />
-                      </span>
-                      <span
-                        onClick={() => handleDelete(p)}
-                        className="p-2 text-red-500 rounded-lg hover:bg-gradient-to-r hover:from-red-50 hover:to-red-100 transition cursor-pointer"
-                      >
-                        <Trash2 size={18} />
-                      </span>
-                    </td>
-                  }
-                </tr>
-              ))
-            ) : (
-              <tr>
-                <td
-                  colSpan="9"
-                  className="px-6 py-4 text-center text-gray-500"
-                >
-                  No products found
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </table>
+        )}
+        <button
+          onClick={() => navigate("/products/new")}
+          className="bg-purple-600 flex gap-2 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition"
+        >
+          <PackagePlus size={23} />
+          Add Product
+        </button>
       </div>
     </div>
-  );
+
+    {/* Search */}
+    <input
+      type="text"
+      placeholder="Search product..."
+      value={searchTerm}
+      onChange={(e) => setSearchTerm(e.target.value)}
+      className="w-full mb-4 px-3 py-2 border border-purple-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-400"
+    />
+
+    {/* Table */}
+    <div className="bg-white rounded-lg shadow overflow-x-auto border border-purple-100">
+      <table className="min-w-full divide-y divide-purple-200">
+        <thead className="bg-purple-600">
+          <tr>
+            {[
+              "Item Name",
+              "Category",
+              "Purchase Price",
+              "Selling Price",
+              "Quantity",
+              "Unit",
+              ...(isSale ? ["Sale"] : []),
+              "Created At",
+              ...(isSale ? [] : ["Actions"]),
+            ].map((header, i) => (
+              <th
+                key={i}
+                className="px-6 py-3 text-left text-sm font-semibold text-white"
+              >
+                {header === "Purchase Price" ? (
+                  <div className="flex gap-1 items-center">
+                    {header}
+                    <Eye
+                      className="text-white cursor-pointer"
+                      onClick={() => setprprice(!prprice)}
+                      size={20}
+                    />
+                  </div>
+                ) : (
+                  header
+                )}
+              </th>
+            ))}
+          </tr>
+        </thead>
+        <tbody className="divide-y divide-purple-100">
+          {filteredProduct.length > 0 ? (
+            filteredProduct.map((p) => (
+              <tr
+                key={p._id}
+                className="hover:bg-purple-50 transition-colors"
+              >
+                <td className="px-6 py-4 text-sm">
+                  {p.itemname}
+                </td>
+                <td className="px-6 py-4 text-sm">
+                  {p.category}
+                </td>
+                <td className="px-6 py-4 text-sm">
+                  {prprice ? `${p.purchasePrice} PKR` : "⬤⬤⬤"}
+                </td>
+                <td className="px-6 py-4 text-sm">
+                  {p.sellingPrice} PKR
+                </td>
+                <td className="px-6 py-4 text-sm">
+                  {p.quantity}
+                </td>
+                <td className="px-6 py-4 text-sm">{p.unit}</td>
+
+                {isSale && (
+                  <td className="px-6 py-4 text-sm flex items-center gap-1">
+                    <input
+                      type="number"
+                      min="1"
+                      value={saleQuantities[p._id] || ""}
+                      onChange={(e) => handleSaleChange(p, e.target.value)}
+                      className="w-16 px-2 py-1 border border-purple-300 rounded focus:ring-2 focus:ring-purple-400 outline-none"
+                    />
+                    <ShoppingCart
+                      onClick={() => handleSale(p)}
+                      className="text-purple-600 cursor-pointer"
+                      size={18}
+                    />
+                  </td>
+                )}
+
+                <td className="px-6 py-4 text-sm">
+                  {new Date(p.createdAt).toLocaleDateString()}
+                </td>
+
+                {!isSale && (
+                  <td className="py-2 flex justify-center items-center gap-2">
+                    <span
+                      onClick={() => handleEdit(p)}
+                      className="p-2 text-purple-600 rounded-lg hover:bg-purple-100 transition cursor-pointer"
+                    >
+                      <Edit2 size={18} />
+                    </span>
+                    <span
+                      onClick={() => handleDelete(p)}
+                      className="p-2 text-red-500 rounded-lg hover:bg-red-100 transition cursor-pointer"
+                    >
+                      <Trash2 size={18} />
+                    </span>
+                  </td>
+                )}
+              </tr>
+            ))
+          ) : (
+            <tr>
+              <td
+                colSpan="9"
+                className="px-6 py-4 text-center text-purple-500"
+              >
+                No products found
+              </td>
+            </tr>
+          )}
+        </tbody>
+      </table>
+    </div>
+  </div>
+);
+
 };
 
 export default ProductListPage;

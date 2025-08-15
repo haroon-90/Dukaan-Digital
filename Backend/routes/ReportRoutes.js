@@ -4,7 +4,7 @@ import { getReport } from '../controllers/reportControllers.js';
 
 const router = express.Router();
 
-router.get('/', Auth, getReport);
+router.post('/', Auth, getReport);
 // router.get('/monthly', Auth, getMonthlyReport);
 
 export default router;
