@@ -5,6 +5,13 @@ import ProtectedRoute from "./ProtectedRoute.jsx"
 // Layouts
 import DashboardLayout from "./layout/DashboardLayout.jsx"
 import AuthLayout from "./layout/AuthLayout.jsx"
+import AboutLayout from "./layout/AboutLayout.jsx"
+
+// About
+import AboutUs from "../pages/About/AboutUs.jsx"
+import ContactUs from "../pages/about/ContactUs.jsx"
+import PrivacyPolicy from "../pages/about/PrivacyPolicy.jsx"
+import TermaAndConditions from "../pages/about/TermaAndConditions.jsx"
 
 // Auth Pages
 import LoginPage from "../pages/auth/LoginPage.jsx"
@@ -23,8 +30,6 @@ import ProductFormPage from "../pages/products/ProductFormPage.jsx"
 
 // Sales
 import SalesListPage from "../pages/sales/SalesListPage.jsx"
-import AddSalePage from "../pages/sales/AddSalePage.jsx"
-import SaleDetailPage from "../pages/sales/SaleDetailPage.jsx"
 
 // Udhaar
 import UdhaarListPage from "../pages/udhaar/UdhaarListPage.jsx"
@@ -46,6 +51,14 @@ export default function AppRouter() {
       <Route element={<AuthLayout />}>
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
+      </Route>
+
+      {/* Auth Layout Routes */}
+      <Route element={<AboutLayout />}>
+        <Route path="/aboutus" element={<AboutUs />} />
+        <Route path="/privacypolicy" element={<PrivacyPolicy />} />
+        <Route path="/termsandconditions" element={<TermaAndConditions />} />
+        <Route path="/contactus" element={<ContactUs />} />
       </Route>
 
       {/* Protected Routes */}

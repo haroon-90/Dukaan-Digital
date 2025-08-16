@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { getProducts, deleteProducts } from "../../Services/productServices.js";
-import { createsale } from "../../Services/saleServices.js";
+import { createsale } from "../../Services/saleService.js";
 import { Edit2, Trash2, PackagePlus, ShoppingCart, Eye, PlusSquare } from "lucide-react";
 import toast from "react-hot-toast";
 
@@ -152,12 +152,12 @@ const ProductListPage = () => {
   }, []);
 
   return (
-    <div className="relative p-6 bg-purple-50 min-h-screen">
+    <div className="relative p-6 bg-blue-50 min-h-screen">
       {showSaleModal && (
-        <div className="absolute inset-0 flex items-center justify-center bg-black/60 z-50 backdrop-blur-sm p-4 print:p-0">
+        <div className="absolute inset-0 flex items-start justify-center bg-black/60 z-50 backdrop-blur-sm p-4 print:p-0">
           <div className="bg-white p-8 rounded-xl shadow-2xl w-full max-w-lg font-mono text-gray-800 print:shadow-none print:border-0 print:rounded-none print:p-0">
             <div className="text-center pb-4 mb-4 border-b border-dashed border-gray-400 print:border-solid print:mb-2">
-              <h2 className="text-2xl font-bold text-purple-700 tracking-wide">
+              <h2 className="text-2xl font-bold text-blue-700 tracking-wide">
                 {JSON.parse(sessionStorage.getItem("user")).shopname}
               </h2>
               <p className="text-sm font-semibold text-gray-600 mt-1">
@@ -176,7 +176,7 @@ const ProductListPage = () => {
                 value={customerName}
                 onChange={(e) => setCustomerName(e.target.value)}
                 placeholder={`Enter ${isPurchase ? "supplier" : "customer"} name`}
-                className="flex-1 px-3 py-1 border-b border-gray-300 bg-transparent outline-none text-sm focus:border-purple-500 transition"
+                className="flex-1 px-3 py-1 border-b border-gray-300 bg-transparent outline-none text-sm focus:border-blue-500 transition"
               />
             </div>
             {cart.length === 0 ? (
@@ -191,7 +191,7 @@ const ProductListPage = () => {
                 </div>
                 {cart.map((item) => (
                   <div key={item.id} className="flex justify-between text-sm py-2 border-b border-dashed border-gray-200 print:border-solid">
-                    <span className="flex-1 text-purple-800 font-medium truncate">
+                    <span className="flex-1 text-blue-800 font-medium truncate">
                       {item.productname}
                     </span>
                     <span className="w-16 text-right">{item.quantity}{item.unit}</span>
@@ -222,7 +222,7 @@ const ProductListPage = () => {
               </button>
               <button
                 onClick={confirmSaleOrPurchase}
-                className="px-6 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors"
+                className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
               >
                 Confirm {isPurchase ? "Purchase" : "Sale"}
               </button>
@@ -231,12 +231,12 @@ const ProductListPage = () => {
         </div>
       )}
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold text-purple-800">Products</h1>
+        <h1 className="text-2xl font-bold text-blue-800">Products</h1>
         <div className="flex gap-2">
           {cart.length > 0 && (
             <button
               onClick={ShowCart}
-              className="bg-purple-600 flex gap-2 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition"
+              className="bg-blue-600 flex gap-2 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition"
             >
               <ShoppingCart size={23} />
               {isPurchase ? "Purchase" : "Sale"}
@@ -244,7 +244,7 @@ const ProductListPage = () => {
           )}
           {!isSale && <button
             onClick={() => navigate("/products/new")}
-            className="bg-purple-600 flex gap-2 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition"
+            className="bg-blue-600 flex gap-2 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition"
           >
             <PackagePlus size={23} />
             Add Product
@@ -257,12 +257,12 @@ const ProductListPage = () => {
         placeholder="Search product..."
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
-        className="w-full mb-4 px-3 py-2 border border-purple-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-400"
+        className="w-full mb-4 px-3 py-2 border border-blue-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
       />
 
-      <div className="bg-white rounded-lg shadow overflow-x-auto border border-purple-100">
-        <table className="min-w-full divide-y divide-purple-200">
-          <thead className="bg-purple-600">
+      <div className="bg-white rounded-lg shadow overflow-x-auto border border-blue-100">
+        <table className="min-w-full divide-y divide-blue-200">
+          <thead className="bg-blue-600 sticky top-0">
             <tr>
               {[
                 "Item Name",
@@ -277,7 +277,7 @@ const ProductListPage = () => {
               ].map((header, i) => (
                 <th
                   key={i}
-                  className="px-6 py-3 text-left text-sm font-semibold text-white"
+                  className="px-6 py-3 text-left text-sm font-semibold text-white uppercase"
                 >
                   {header === "Purchase Price" ? (
                     <div className="flex gap-1 items-center">
@@ -295,19 +295,19 @@ const ProductListPage = () => {
               ))}
             </tr>
           </thead>
-          <tbody className="divide-y divide-purple-100">
+          <tbody className="divide-y divide-blue-100">
             {filteredProduct.length > 0 ? (
               filteredProduct.map((p) => (
                 <tr
                   key={p._id}
-                  className="hover:bg-purple-50 transition-colors"
+                  className="hover:bg-blue-50 transition-colors"
                 >
                   <td className="px-6 py-4 text-sm">{p.itemname}</td>
                   <td className="px-6 py-4 text-sm">{p.category}</td>
-                  <td className="px-6 py-4 text-sm">
+                  <td className="px-6 py-4 text-sm font-bold text-green-500">
                     {prprice ? `${p.purchasePrice} PKR` : "•••"}
                   </td>
-                  <td className="px-6 py-4 text-sm">
+                  <td className="px-6 py-4 text-sm font-bold text-green-500">
                     {p.sellingPrice} PKR
                   </td>
                   <td className="px-6 py-4 text-sm">{p.quantity}</td>
@@ -320,18 +320,18 @@ const ProductListPage = () => {
                         min="1"
                         value={saleQuantities[p._id] || ""}
                         onChange={(e) => handleSaleChange(p, e.target.value)}
-                        className="w-16 px-2 py-1 border border-purple-300 rounded focus:ring-2 focus:ring-purple-400 outline-none"
+                        className="w-16 px-2 py-1 border border-blue-300 rounded focus:ring-2 focus:ring-blue-400 outline-none"
                       />
                       {
                         isPurchase ?
                           <PlusSquare
                             onClick={() => handleCartAdd(p)}
-                            className="text-purple-600 cursor-pointer"
+                            className="text-blue-600 cursor-pointer"
                             size={18}
                           /> :
                           <ShoppingCart
                             onClick={() => handleCartAdd(p)}
-                            className="text-purple-600 cursor-pointer"
+                            className="text-blue-600 cursor-pointer"
                             size={18}
                           />
 
@@ -339,7 +339,7 @@ const ProductListPage = () => {
                     </td>
                   )}
 
-                  <td className="px-6 py-4 text-sm">
+                  <td className="px-6 py-4 text-sm text-blue-700">
                     {new Date(p.createdAt).toLocaleDateString()}
                   </td>
 
@@ -347,7 +347,7 @@ const ProductListPage = () => {
                     <td className="py-2 flex justify-center items-center gap-2">
                       <span
                         onClick={() => handleEdit(p)}
-                        className="p-2 text-purple-600 rounded-lg hover:bg-purple-100 transition cursor-pointer"
+                        className="p-2 text-blue-600 rounded-lg hover:bg-blue-100 transition cursor-pointer"
                       >
                         <Edit2 size={18} />
                       </span>
@@ -365,7 +365,7 @@ const ProductListPage = () => {
               <tr>
                 <td
                   colSpan="9"
-                  className="px-6 py-4 text-center text-purple-500"
+                  className="px-6 py-4 text-center text-blue-500"
                 >
                   No products found
                 </td>

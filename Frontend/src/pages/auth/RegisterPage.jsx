@@ -45,14 +45,14 @@ const RegisterPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-linear-60 from-purple-400 via-purple-100 to-purple-400 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-linear-60 from-blue-400 via-blue-100 to-blue-400 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-4xl">
         <div className="bg-white py-8 px-6 shadow-lg rounded-3xl sm:px-10">
           <div className="sm:mx-auto sm:w-full sm:max-w-4xl">
             <div className="flex justify-center mb-4">
               <img className='h-14' src={DukaanDigital} alt="DukaanDigital" />
             </div>
-            <h2 className="mt-2 mb-6 text-center text-xl font-extrabold text-purple-500">
+            <h2 className="mt-2 mb-6 text-center text-xl font-extrabold text-blue-500">
               Start your journey with us today!
             </h2>
           </div>
@@ -72,7 +72,7 @@ const RegisterPage = () => {
                   name="name"
                   id="name"
                   required
-                  className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-purple-500 focus:border-purple-500"
+                  className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
                   onChange={handleChange}
                 />
               </div>
@@ -85,7 +85,7 @@ const RegisterPage = () => {
                   name="email"
                   id="email"
                   required
-                  className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-purple-500 focus:border-purple-500"
+                  className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
                   onChange={handleChange}
                 />
               </div>
@@ -98,7 +98,7 @@ const RegisterPage = () => {
                   name="password"
                   id="password"
                   required
-                  className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-purple-500 focus:border-purple-500"
+                  className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
                   onChange={handleChange}
                 />
               </div>
@@ -111,7 +111,7 @@ const RegisterPage = () => {
                   name="phone"
                   id="phone"
                   required
-                  className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-purple-500 focus:border-purple-500"
+                  className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
                   onChange={handleChange}
                 />
               </div>
@@ -123,7 +123,7 @@ const RegisterPage = () => {
                   type="text"
                   name="shopname"
                   id="shopname"
-                  className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-purple-500 focus:border-purple-500"
+                  className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
                   onChange={handleChange}
                 />
               </div>
@@ -136,11 +136,11 @@ const RegisterPage = () => {
                   name="city"
                   id="city"
                   required
-                  className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-purple-500 focus:border-purple-500"
+                  className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
                   onChange={handleChange}
                 />
               </div>
-              {/* <div className="col-span-1 md:col-span-2 lg:col-span-3 flex items-center justify-center accent-purple-600">
+              {/* <div className="col-span-1 md:col-span-2 lg:col-span-3 flex items-center justify-center accent-blue-600">
                 <div className="mt-1 flex items-center space-x-4">
                   <div className="flex items-center">
                     <input
@@ -150,7 +150,7 @@ const RegisterPage = () => {
                       value="manager"
                       defaultChecked
                       onChange={handleChange}
-                      className="focus:ring-purple-500 h-4 w-4 text-purple-600 border-gray-300"
+                      className="focus:ring-blue-500 h-4 w-4 text-blue-600 border-gray-300"
                     />
                     <label htmlFor="manager" className="ml-2 block text-sm font-medium text-gray-700">
                       Manager
@@ -163,7 +163,7 @@ const RegisterPage = () => {
                       type="radio"
                       value="admin"
                       onChange={handleChange}
-                      className="focus:ring-purple-500 h-4 w-4 text-purple-600 border-gray-300"
+                      className="focus:ring-blue-500 h-4 w-4 text-blue-600 border-gray-300"
                     />
                     <label htmlFor="admin" className="ml-2 block text-sm font-medium text-gray-700">
                       Admin
@@ -178,7 +178,7 @@ const RegisterPage = () => {
                 <select
                   name="role"
                   id="role"
-                  className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-purple-500 focus:border-purple-500"
+                  className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
                   onChange={handleChange}
                 >
                   <option value="manager">Manager</option>
@@ -190,7 +190,7 @@ const RegisterPage = () => {
               <button
                 type="submit"
                 disabled={loading}
-                className="flex justify-center py-3 px-8 border border-transparent rounded-full shadow-sm text-sm font-medium text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 disabled:opacity-50 transition-colors"
+                className="flex justify-center py-3 px-8 border border-transparent rounded-full shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 transition-colors"
               >
                 {loading ? 'Registering...' : 'Register'}
               </button>
@@ -198,7 +198,7 @@ const RegisterPage = () => {
             <div className="text-center text-sm text-gray-600">
               Already have an account?{' '}
               <span
-                className="text-purple-600 hover:text-purple-500 cursor-pointer font-medium"
+                className="text-blue-600 hover:text-blue-500 cursor-pointer font-medium"
                 onClick={() => navigate('/login')}
               >
                 Login

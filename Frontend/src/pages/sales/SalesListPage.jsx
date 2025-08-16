@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getsales, deletesale } from "../../Services/saleServices.js";
+import { getsales, deletesale } from "../../Services/saleService.js";
 import { Eye, ShoppingCart, Trash2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
@@ -18,12 +18,13 @@ const SalesListPage = () => {
   const [endDate, setEndDate] = useState(formatDate(new Date()));
 
   const [type, setType] = useState("sale");
+  const [filterType, setFilterType] = useState("sale");
 
-  const fetchData = async () => {
+  const fetchData = async (currentType = type) => {
     try {
       setLoading(true);
       const body = {
-        type,
+        type: currentType,
         startDate,
         endDate,
       };
@@ -39,6 +40,7 @@ const SalesListPage = () => {
 
       setSales(saleData);
       setPurchases(purchaseData);
+      setType(currentType);
       toast.success("Data refreshed")
     } catch (err) {
       if (err.response?.status === 404) {
@@ -82,15 +84,21 @@ const SalesListPage = () => {
     }
   }
 
+  const handleFilter = (e) => {
+    const newFilterType = e.target.value;
+    setFilterType(newFilterType);
+    fetchData(newFilterType);
+  }
+
   const RenderTable = ({ title, data }) => (
-    <div className="relative bg-white shadow-md rounded-lg p-4 border border-purple-200">
-      <h2 className="text-xl font-semibold text-purple-700 mb-4">{title}</h2>
+    <div className="relative bg-white shadow-md rounded-lg p-4 border border-blue-200">
+      <h2 className="text-xl font-semibold text-blue-700 mb-4">{title}</h2>
       {data.length === 0 ? (
-        <p className="text-purple-500">No records found</p>
+        <p className="text-blue-500">No records found</p>
       ) : (
-        <div className="overflow-x-auto">
+        <div className="overflow-x-auto shadow-lg rounded-lg">
           <table className="w-full text-sm text-left text-gray-700">
-            <thead className="bg-purple-600 text-white uppercase text-xs">
+            <thead className="bg-blue-600 text-white uppercase text-xs">
               <tr>
                 <th className="px-4 py-3">{type == "sale" ? "Customer" : "Supplier"}</th>
                 <th className="px-4 py-3">Date</th>
@@ -102,12 +110,12 @@ const SalesListPage = () => {
               {data.map((item) => (
                 <tr
                   key={item._id}
-                  className="border-b hover:bg-purple-50 transition"
+                  className="border-b hover:bg-blue-50 transition"
                 >
-                  <td className="px-4 py-3 font-medium text-purple-800">
+                  <td className="px-4 py-3 font-medium text-blue-800">
                     {item.customerName}
                   </td>
-                  <td className="px-4 py-3 text-purple-700">
+                  <td className="px-4 py-3 text-blue-700">
                     {new Date(item.createdAt).toLocaleDateString()}
                   </td>
                   <td className="px-4 py-3 font-semibold text-green-600">
@@ -116,13 +124,13 @@ const SalesListPage = () => {
                   <td className="px-4 py-3 flex justify-around">
                     <button
                       onClick={() => handleViewDetails(item)}
-                      className="flex items-center gap-1 text-purple-600 hover:text-purple-800 transition"
+                      className="flex items-center gap-1 text-blue-600 hover:text-blue-800 transition"
                     >
                       <Eye size={18} />
                     </button>
                     <button
                       onClick={() => handleDelete(item)}
-                      className="flex items-center gap-1 text-purple-600 hover:text-purple-800 transition"
+                      className="flex items-center gap-1 text-blue-600 hover:text-blue-800 transition"
                     >
                       <Trash2 size={18} />
                     </button>
@@ -137,46 +145,42 @@ const SalesListPage = () => {
   );
 
   return (
-    <div className="relative p-6 space-y-6 min-h-screen">
-      {/* Filter controls */}
-      <div className="flex justify-between items-center">
-        <div className="flex items-center gap-4">
-          <label className="font-semibold text-purple-700">Type:</label>
-          <select
-            value={type}
-            onChange={(e) => setType(e.target.value)}
-            className="border border-purple-300 rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-purple-400"
-          >
-            <option value="sale">Sale</option>
-            <option value="purchase">Purchase</option>
-          </select>
-
-          <label className="font-semibold text-purple-700">Start Date:</label>
-          <input
-            type="date"
-            value={startDate}
-            onChange={(e) => setStartDate(e.target.value)}
-            className="border border-purple-300 rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-purple-400"
-          />
-
-          <label className="font-semibold text-purple-700">End Date:</label>
-          <input
-            type="date"
-            value={endDate}
-            onChange={(e) => setEndDate(e.target.value)}
-            className="border border-purple-300 rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-purple-400"
-          />
-
-          <button
-            onClick={fetchData}
-            className="bg-purple-600 text-white px-4 py-1 rounded hover:bg-purple-700 transition"
-          >
-            Filter
-          </button>
+    <div className="relative p-6 space-y-6 min-h-screen bg-white">
+      <div className="flex md:justify-between items-center flex-wrap gap-2 justify-center">
+        <div className="flex items-center justify-center flex-wrap gap-4">
+          <div className="flex items-center flex-wrap gap-1">
+            <label className="font-semibold text-blue-700">Type:</label>
+            <select
+              value={filterType}
+              onChange={(e) => handleFilter(e)}
+              className="border border-blue-300 rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-blue-400"
+            >
+              <option value="sale">Sale</option>
+              <option value="purchase">Purchase</option>
+            </select>
+          </div>
+          <div className="flex items-center flex-wrap gap-1">
+            <label className="font-semibold text-blue-700">Start Date:</label>
+            <input
+              type="date"
+              value={startDate}
+              onChange={(e) => setStartDate(e.target.value)}
+              className="border border-blue-300 rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-blue-400"
+            />
+          </div>
+          <div className="flex items-center flex-wrap gap-1">
+            <label className="font-semibold text-blue-700">End Date:</label>
+            <input
+              type="date"
+              value={endDate}
+              onChange={(e) => setEndDate(e.target.value)}
+              className="border border-blue-300 rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-blue-400"
+            />
+          </div>
         </div>
         <div className="flex gap-1">
           <button
-            className="px-4 py-1 bg-purple-600 hover:bg-purple-700 transition text-white rounded flex items-center gap-2"
+            className="px-4 py-1 bg-blue-600 hover:bg-blue-700 transition text-white rounded flex items-center gap-2"
             onClick={() => {
               navigate("/sales/new");
             }}
@@ -184,7 +188,7 @@ const SalesListPage = () => {
             <ShoppingCart size={16} /> sale
           </button>
           <button
-            className="px-4 py-1 bg-purple-600 hover:bg-purple-700 transition text-white rounded flex items-center gap-2"
+            className="px-4 py-1 bg-blue-600 hover:bg-blue-700 transition text-white rounded flex items-center gap-2"
             onClick={() => {
               navigate("/sales/purchase");
             }}
@@ -196,7 +200,7 @@ const SalesListPage = () => {
 
       {loading &&
         <div className="flex justify-center items-center py-6">
-          <div className="w-12 h-12 border-4 border-t-4 border-gray-200 border-t-purple-500 rounded-full animate-spin"></div>
+          <div className="w-12 h-12 border-4 border-t-4 border-gray-200 border-t-blue-500 rounded-full animate-spin"></div>
         </div>
       }
 
@@ -216,7 +220,7 @@ const SalesListPage = () => {
           <div className="bg-white p-8 rounded-xl shadow-2xl w-full max-w-xl max-h-[90vh] overflow-y-auto border border-gray-300 text-gray-800 print:shadow-none print:border-0 print:rounded-none">
 
             <div className="text-center pb-4 mb-4 border-b border-dashed border-gray-400 print:border-solid">
-              <h2 className="text-2xl font-bold text-purple-700 tracking-wide">
+              <h2 className="text-2xl font-bold text-blue-700 tracking-wide">
                 {JSON.parse(sessionStorage.getItem("user")).shopname}
               </h2>
               <p className="text-sm font-semibold text-gray-600 mt-1">
@@ -238,7 +242,7 @@ const SalesListPage = () => {
               </p>
             </div>
 
-            <div>
+            <div className="max-h-[30vh] overflow-y-auto">
               <div className="flex justify-between font-bold text-xs border-b border-dashed border-gray-400 py-2 sticky top-0 bg-white print:border-solid">
                 <span className="flex-1">Item</span>
                 <span className="w-16 text-right">Qty</span>
@@ -248,7 +252,7 @@ const SalesListPage = () => {
 
               {selectedSale.items.map((it) => (
                 <div key={it._id} className="flex justify-between text-sm py-2 border-b border-dashed border-gray-200 print:border-solid">
-                  <span className="flex-1 text-purple-800 font-medium">{it.productName}</span>
+                  <span className="flex-1 text-blue-800 font-medium">{it.productName}</span>
                   <span className="w-16 text-right">{it.quantity} {it.unit || ""}</span>
                   <span className="w-20 text-right">₨ {it.price.toLocaleString()}</span>
                   <span className="w-20 text-right font-semibold">

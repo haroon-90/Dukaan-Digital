@@ -41,6 +41,9 @@ const ProductFormPage = () => {
       if (id) {
         await updateProduct(id, product);
         toast.success("Product updated successfully");
+        setTimeout(() => {
+          navigate('/products');
+        }, 1000);
       } else {
         await addProduct(product);
         toast.success('Product added successfully!')
@@ -53,18 +56,15 @@ const ProductFormPage = () => {
           unit: ''
         });
       }
-      setTimeout(() => {
-        navigate('/products');
-      }, 1500);
     } catch (err) {
       toast.error(err.response?.data?.msg || "Failed to add product!")
     }
   };
 
   return (
-    <div className="flex items-center justify-center p-6">
+    <div className="flex items-center justify-center p-6 bg-white">
       <div className="w-full max-w-lg bg-white rounded-2xl shadow-2xl p-8 border border-gray-100">
-        <h2 className="text-3xl font-extrabold text-center text-purple-700 mb-6 tracking-tight">
+        <h2 className="text-3xl font-extrabold text-center text-blue-700 mb-6 tracking-tight">
           {id ? "Edit Product" : "Add New Product"}
         </h2>
 
@@ -77,7 +77,8 @@ const ProductFormPage = () => {
               value={product.itemname}
               type="text"
               placeholder="Enter item name"
-              className="w-full px-4 py-2.5 border rounded-lg bg-gray-50 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:border-transparent transition-all duration-200"
+              required
+              className="w-full px-4 py-2.5 border rounded-lg bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent transition-all duration-200"
             />
           </div>
 
@@ -89,7 +90,8 @@ const ProductFormPage = () => {
               value={product.category}
               type="text"
               placeholder="Enter category"
-              className="w-full px-4 py-2.5 border rounded-lg bg-gray-50 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:border-transparent transition-all duration-200"
+              required
+              className="w-full px-4 py-2.5 border rounded-lg bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent transition-all duration-200"
             />
           </div>
 
@@ -102,7 +104,8 @@ const ProductFormPage = () => {
                 value={product.purchasePrice}
                 type="number"
                 placeholder="0.00"
-                className="w-full px-4 py-2.5 border rounded-lg bg-gray-50 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:border-transparent transition-all duration-200"
+                required
+                className="w-full px-4 py-2.5 border rounded-lg bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent transition-all duration-200"
               />
             </div>
 
@@ -114,7 +117,8 @@ const ProductFormPage = () => {
                 value={product.sellingPrice}
                 type="number"
                 placeholder="0.00"
-                className="w-full px-4 py-2.5 border rounded-lg bg-gray-50 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:border-transparent transition-all duration-200"
+                required
+                className="w-full px-4 py-2.5 border rounded-lg bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent transition-all duration-200"
               />
             </div>
           </div>
@@ -128,7 +132,8 @@ const ProductFormPage = () => {
                 value={product.quantity}
                 type="number"
                 placeholder="Enter quantity"
-                className="w-full px-4 py-2.5 border rounded-lg bg-gray-50 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:border-transparent transition-all duration-200"
+                required
+                className="w-full px-4 py-2.5 border rounded-lg bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent transition-all duration-200"
               />
             </div>
 
@@ -140,14 +145,15 @@ const ProductFormPage = () => {
                 value={product.unit}
                 type="text"
                 placeholder="e.g. kg, pcs"
-                className="w-full px-4 py-2.5 border rounded-lg bg-gray-50 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:border-transparent transition-all duration-200"
+                required
+                className="w-full px-4 py-2.5 border rounded-lg bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent transition-all duration-200"
               />
             </div>
           </div>
 
           <button
             type="submit"
-            className="mx-auto block w-full bg-purple-600 text-white py-3 rounded-lg font-semibold shadow-lg hover:bg-purple-700 hover:shadow-xl transition-all duration-200"
+            className="mx-auto block w-full bg-blue-600 text-white py-3 rounded-lg font-semibold shadow-lg hover:bg-blue-700 hover:shadow-xl transition-all duration-200"
           >
             {id ? "Update Product" : "Add Product"}
           </button>

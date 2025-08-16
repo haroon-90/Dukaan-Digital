@@ -73,15 +73,15 @@ const UdhaarFormPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-purple-50 flex items-center justify-center px-4">
+    <div className="min-h-screen bg-blue-50 flex items-center justify-center px-4">
       <div className="bg-white shadow-lg rounded-2xl w-full max-w-md p-6">
-        <h2 className="text-2xl font-bold text-purple-700 mb-4">
+        <h2 className="text-2xl font-bold text-blue-700 mb-4">
           {isEdit ? "Edit Credit" : "Add Credit"}
         </h2>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-purple-700">Customer Name</label>
+            <label className="block text-sm font-medium text-blue-700">Customer Name</label>
             <input
               type="text"
               name="customerName"
@@ -89,13 +89,13 @@ const UdhaarFormPage = () => {
               onChange={handleChange}
               placeholder="Enter customer name"
               disabled={isEdit}
-              className="mt-1 block w-full border border-purple-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500"
+              className="mt-1 block w-full border border-blue-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
               required
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-purple-700">Contact Number</label>
+            <label className="block text-sm font-medium text-blue-700">Contact Number</label>
             <input
               type="tel"
               name="contact"
@@ -103,26 +103,26 @@ const UdhaarFormPage = () => {
               onChange={handleChange}
               placeholder="03XXXXXXXXX"
               disabled={isEdit}
-              className="mt-1 block w-full border border-purple-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500"
+              className="mt-1 block w-full border border-blue-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
               required
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-purple-700">Amount</label>
+            <label className="block text-sm font-medium text-blue-700">Amount</label>
             <input
               type="number"
               name="amount"
               value={formData.amount}
               onChange={handleChange}
               placeholder="Enter amount"
-              className="mt-1 block w-full border border-purple-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500"
+              className="mt-1 block w-full border border-blue-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
               required
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-purple-700">Reason</label>
+            <label className="block text-sm font-medium text-blue-700">Reason</label>
             <textarea
               name="reason"
               value={formData.reason}
@@ -130,18 +130,17 @@ const UdhaarFormPage = () => {
               placeholder="Enter reason"
               disabled={isEdit}
               rows={3}
-              className="mt-1 block w-full border border-purple-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500"
-              required
+              className="mt-1 block w-full border border-blue-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
             ></textarea>
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-purple-700">Status</label>
+            <label className="block text-sm font-medium text-blue-700">Status</label>
             <select
               name="status"
               value={formData.status}
               onChange={handleChange}
-              className="mt-1 block w-full border border-purple-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500"
+              className="mt-1 block w-full border border-blue-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
               <option value="pending">Pending</option>
               <option value="paid">Paid</option>
@@ -151,7 +150,7 @@ const UdhaarFormPage = () => {
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-purple-600 hover:bg-purple-700 text-white font-medium py-2 rounded-lg transition duration-200"
+            className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 rounded-lg transition duration-200"
           >
             {loading ? "Saving..." : isEdit ? "Update Credit" : "Save Credit"}
           </button>

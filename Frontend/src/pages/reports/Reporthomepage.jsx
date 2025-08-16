@@ -44,26 +44,26 @@ const Reporthomepage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-purple-50 flex flex-col items-center p-6">
-      <div className="bg-white shadow-lg rounded-2xl p-6 w-full max-w-lg border border-purple-200">
-        <h2 className="text-2xl font-bold text-purple-700 mb-4 text-center">
+    <div className="min-h-screen bg-blue-50 flex flex-col items-center p-6">
+      <div className="bg-white shadow-lg rounded-2xl p-6 w-full max-w-lg border border-blue-200">
+        <h2 className="text-2xl font-bold text-blue-700 mb-4 text-center">
           Reports
         </h2>
         <div className="flex justify-center gap-4 mb-4">
           <button
-            onClick={() => setSelectedType("date")}
+            onClick={() => { setSelectedType("date"); setReport() }}
             className={`px-4 py-2 rounded-lg font-medium ${selectedType === "date"
-              ? "bg-purple-600 text-white"
-              : "bg-purple-100 text-purple-700"
+              ? "bg-blue-600 text-white"
+              : "bg-blue-100 text-blue-700"
               }`}
           >
             By Date
           </button>
           <button
-            onClick={() => setSelectedType("month")}
+            onClick={() => { setSelectedType("month"); setReport() }}
             className={`px-4 py-2 rounded-lg font-medium ${selectedType === "month"
-              ? "bg-purple-600 text-white"
-              : "bg-purple-100 text-purple-700"
+              ? "bg-blue-600 text-white"
+              : "bg-blue-100 text-blue-700"
               }`}
           >
             By Month
@@ -71,33 +71,33 @@ const Reporthomepage = () => {
         </div>
         {selectedType === "date" ? (
           <div className="mb-4">
-            <label className="block text-sm font-medium text-purple-600 mb-1">
+            <label className="block text-sm font-medium text-blue-600 mb-1">
               Select Date
             </label>
             <input
               type="date"
               value={date}
               onChange={(e) => setDate(e.target.value)}
-              className="w-full px-3 py-2 border border-purple-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
+              className="w-full px-3 py-2 border border-blue-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
         ) : (
           <div className="mb-4">
-            <label className="block text-sm font-medium text-purple-600 mb-1">
+            <label className="block text-sm font-medium text-blue-600 mb-1">
               Select Month
             </label>
             <input
               type="month"
               value={month}
               onChange={(e) => setMonth(e.target.value)}
-              className="w-full px-3 py-2 border border-purple-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
+              className="w-full px-3 py-2 border border-blue-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
         )}
         <button
           onClick={handleSubmit}
           disabled={loading}
-          className="w-full bg-purple-600 hover:bg-purple-700 text-white font-medium py-2 px-4 rounded-lg transition-colors"
+          className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg transition-colors"
         >
           {loading ? "Loading..." : "Get Report"}
         </button>

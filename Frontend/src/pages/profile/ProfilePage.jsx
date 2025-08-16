@@ -43,9 +43,9 @@ const ProfilePage = () => {
   }, []);
 
   return (
-    <div className="p-6 font-sans bg-gray-50">
+    <div className="p-6 min-h-screen font-sans bg-gray-50">
       <div className="max-w-lg mx-auto bg-white rounded-2xl shadow-xl overflow-hidden">
-        <div className="relative bg-gradient-to-r from-indigo-500 to-purple-600 p-6 text-center text-white">
+        <div className="relative bg-blue-600 p-6 text-center text-white">
           <div className='absolute z-50 top-25 right-4 cursor-pointer text-indigo-600 bg-indigo-100 p-2 rounded-full'
             onClick={() => handleEdit()}>
             {<Edit2 size={18} />}
