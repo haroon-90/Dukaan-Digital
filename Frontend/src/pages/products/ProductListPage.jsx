@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { getProducts, deleteProducts } from "../../Services/productServices.js";
+import { getProducts, deleteProducts } from "../../services/productServices.js";
 import { createsale } from "../../Services/saleService.js";
 import { Edit2, Trash2, PackagePlus, ShoppingCart, Eye, PlusSquare } from "lucide-react";
 import toast from "react-hot-toast";
@@ -45,7 +45,8 @@ const ProductListPage = () => {
       id: product._id,
       productname: product.itemname,
       price: isPurchase ? product.purchasePrice : product.sellingPrice,
-      quantity
+      quantity,
+      unit: product.unit
     };
 
     setTotalBill(
@@ -78,7 +79,7 @@ const ProductListPage = () => {
 
   const confirmSaleOrPurchase = async () => {
     if (!customerName.trim()) {
-      // alert(`Please enter ${isPurchase ? "supplier" : "customer"} name`);
+      // alert(Please enter ${isPurchase ? "supplier" : "customer"} name);
       toast.error(`Please enter ${isPurchase ? "supplier" : "customer"} name`);
       return;
     }
@@ -120,10 +121,6 @@ const ProductListPage = () => {
     }
   };
 
-  const handleEdit = (e) => {
-    navigate("/products/edit/" + e._id);
-  };
-
   const handleDelete = async (e) => {
     try {
       if (confirm(`Are you sure you want to delete "${e.itemname}"?`)) {
@@ -152,7 +149,7 @@ const ProductListPage = () => {
   }, []);
 
   return (
-    <div className="relative p-6 bg-blue-50 min-h-screen">
+    <div className="relative p-6 bg-white min-h-screen">
       {showSaleModal && (
         <div className="absolute inset-0 flex items-start justify-center bg-black/60 z-50 backdrop-blur-sm p-4 print:p-0">
           <div className="bg-white p-8 rounded-xl shadow-2xl w-full max-w-lg font-mono text-gray-800 print:shadow-none print:border-0 print:rounded-none print:p-0">
@@ -194,7 +191,7 @@ const ProductListPage = () => {
                     <span className="flex-1 text-blue-800 font-medium truncate">
                       {item.productname}
                     </span>
-                    <span className="w-16 text-right">{item.quantity}{item.unit}</span>
+                    <span className="w-16 text-right">{item.quantity} {item.unit}</span>
                     <span className="w-20 text-right">₨ {item.price.toLocaleString()}</span>
                     <span className="w-20 text-right font-semibold">
                       ₨ {(item.price * item.quantity).toLocaleString()}
@@ -230,149 +227,153 @@ const ProductListPage = () => {
           </div>
         </div>
       )}
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold text-blue-800">Products</h1>
-        <div className="flex gap-2">
-          {cart.length > 0 && (
-            <button
-              onClick={ShowCart}
-              className="bg-blue-600 flex gap-2 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition"
-            >
-              <ShoppingCart size={23} />
-              {isPurchase ? "Purchase" : "Sale"}
-            </button>
-          )}
-          {!isSale && <button
-            onClick={() => navigate("/products/new")}
-            className="bg-blue-600 flex gap-2 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition"
+      <div className="flex items-center gap-4 mb-6">
+        <input
+          type="text"
+          placeholder="Search product..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          className="flex-1 px-3 py-2 border border-blue-300 rounded focus:outline-none"
+        />
+        {cart.length > 0 && (
+          <button
+            onClick={ShowCart}
+            className="bg-blue-600 flex items-center gap-2 text-white px-4 py-2 rounded"
           >
-            <PackagePlus size={23} />
+
+            {isPurchase ? (
+              <span className="flex items-center gap-2">
+                <PlusSquare size={20} /> Purchase
+              </span>
+            ) : (
+              <span className="flex items-center gap-2">
+                <ShoppingCart size={20} /> Sale
+              </span>
+            )}
+
+          </button>
+        )}
+        {!isSale && (
+          <button
+            onClick={() => navigate("/products/new")}
+            className="bg-blue-600 flex items-center gap-2 text-white px-4 py-2 rounded"
+          >
+            <PackagePlus size={20} />
             Add Product
-          </button>}
-        </div>
+          </button>
+        )}
+
       </div>
 
-      <input
-        type="text"
-        placeholder="Search product..."
-        value={searchTerm}
-        onChange={(e) => setSearchTerm(e.target.value)}
-        className="w-full mb-4 px-3 py-2 border border-blue-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
-      />
+      <div className="relative bg-white shadow-md rounded-lg p-4 border border-blue-200">
+        <div className="flex justify-between items-center mb-4">
 
-      <div className="bg-white rounded-lg shadow overflow-x-auto border border-blue-100">
-        <table className="min-w-full divide-y divide-blue-200">
-          <thead className="bg-blue-600 sticky top-0">
-            <tr>
-              {[
-                "Item Name",
-                "Category",
-                "Purchase Price",
-                "Selling Price",
-                "Quantity",
-                "Unit",
-                ...(isSale || isPurchase ? [isPurchase ? "Purchase" : "Sale"] : []),
-                "Created At",
-                ...(isSale || isPurchase ? [] : ["Actions"]),
-              ].map((header, i) => (
-                <th
-                  key={i}
-                  className="px-6 py-3 text-left text-sm font-semibold text-white uppercase"
-                >
-                  {header === "Purchase Price" ? (
-                    <div className="flex gap-1 items-center">
-                      {header}
-                      <Eye
-                        className="text-white cursor-pointer"
-                        onClick={() => setprprice(!prprice)}
-                        size={20}
-                      />
-                    </div>
-                  ) : (
-                    header
-                  )}
-                </th>
-              ))}
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-blue-100">
-            {filteredProduct.length > 0 ? (
-              filteredProduct.map((p) => (
-                <tr
-                  key={p._id}
-                  className="hover:bg-blue-50 transition-colors"
-                >
-                  <td className="px-6 py-4 text-sm">{p.itemname}</td>
-                  <td className="px-6 py-4 text-sm">{p.category}</td>
-                  <td className="px-6 py-4 text-sm font-bold text-green-500">
-                    {prprice ? `${p.purchasePrice} PKR` : "•••"}
-                  </td>
-                  <td className="px-6 py-4 text-sm font-bold text-green-500">
-                    {p.sellingPrice} PKR
-                  </td>
-                  <td className="px-6 py-4 text-sm">{p.quantity}</td>
-                  <td className="px-6 py-4 text-sm">{p.unit}</td>
+          <h1 className="text-xl font-semibold text-blue-700">Products</h1>
+          <div className="flex gap-2">
+          </div>
+        </div>
 
-                  {(isSale || isPurchase) && (
-                    <td className="px-6 py-4 text-sm flex items-center gap-1">
-                      <input
-                        type="number"
-                        min="1"
-                        value={saleQuantities[p._id] || ""}
-                        onChange={(e) => handleSaleChange(p, e.target.value)}
-                        className="w-16 px-2 py-1 border border-blue-300 rounded focus:ring-2 focus:ring-blue-400 outline-none"
-                      />
-                      {
-                        isPurchase ?
-                          <PlusSquare
-                            onClick={() => handleCartAdd(p)}
-                            className="text-blue-600 cursor-pointer"
-                            size={18}
-                          /> :
-                          <ShoppingCart
-                            onClick={() => handleCartAdd(p)}
-                            className="text-blue-600 cursor-pointer"
-                            size={18}
-                          />
-
-                      }
-                    </td>
-                  )}
-
-                  <td className="px-6 py-4 text-sm text-blue-700">
-                    {new Date(p.createdAt).toLocaleDateString()}
-                  </td>
-
-                  {!isSale && !isPurchase && (
-                    <td className="py-2 flex justify-center items-center gap-2">
-                      <span
-                        onClick={() => handleEdit(p)}
-                        className="p-2 text-blue-600 rounded-lg hover:bg-blue-100 transition cursor-pointer"
-                      >
-                        <Edit2 size={18} />
-                      </span>
-                      <span
-                        onClick={() => handleDelete(p)}
-                        className="p-2 text-red-500 rounded-lg hover:bg-red-100 transition cursor-pointer"
-                      >
-                        <Trash2 size={18} />
-                      </span>
-                    </td>
-                  )}
-                </tr>
-              ))
-            ) : (
+        <div className="overflow-x-auto rounded-lg">
+          <table className="w-full text-sm text-left text-gray-700">
+            <thead className="bg-blue-600 text-white uppercase text-xs">
               <tr>
-                <td
-                  colSpan="9"
-                  className="px-6 py-4 text-center text-blue-500"
-                >
-                  No products found
-                </td>
+                {[
+                  "Item Name",
+                  "Category",
+                  "Purchase Price",
+                  "Selling Price",
+                  "Quantity",
+                  "Unit",
+                  ...(isSale || isPurchase ? [isPurchase ? "Purchase" : "Sale"] : []),
+                  "Created At",
+                  ...(isSale || isPurchase ? [] : ["Actions"]),
+                ].map((header, i) => (
+                  <th key={i} className="px-4 py-3">
+                    {header.toLowerCase() === "purchase price" ? (
+                      <div className="flex gap-1 items-center">
+                        {header}
+                        <Eye
+                          className="text-white cursor-pointer"
+                          onClick={() => setprprice(!prprice)}
+                          size={16}
+                        />
+                      </div>
+                    ) : (
+                      header
+                    )}
+                  </th>
+                ))}
               </tr>
-            )}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {filteredProduct.length === 0 ? (
+                <tr>
+                  <td colSpan={9} className="text-center text-blue-500 py-4">
+                    No records found
+                  </td>
+                </tr>
+              ) : (
+                filteredProduct.map((p) => (
+                  <tr key={p._id} className="border-b hover:bg-blue-50 transition">
+                    <td className="px-4 py-3 font-medium text-blue-800">{p.itemname}</td>
+                    <td className="px-4 py-3">{p.category}</td>
+                    <td className="px-4 py-3 text-green-600 font-semibold">
+                      {prprice ? `₨ ${p.purchasePrice}` : "•••"}
+                    </td>
+                    <td className="px-4 py-3 text-green-600 font-semibold">₨ {p.sellingPrice}</td>
+                    <td className="px-4 py-3 text-gray-700 font-semibold">{p.quantity}</td>
+                    <td className="px-4 py-3 text-gray-700 font-semibold">{p.unit}</td>
+                    {(isSale || isPurchase) && (
+                      <td className="px-6 py-4 text-sm flex items-center gap-1">
+                        <input
+                          type="number"
+                          min="1"
+                          value={saleQuantities[p._id] || ""}
+                          onChange={(e) => handleSaleChange(p, e.target.value)}
+                          className="w-16 px-2 py-1 border border-blue-300 rounded focus:ring-2 focus:ring-blue-400 outline-none"
+                        />
+                        {
+                          isPurchase ?
+                            <PlusSquare
+                              onClick={() => handleCartAdd(p)}
+                              className="text-blue-600 cursor-pointer"
+                              size={18}
+                            /> :
+                            <ShoppingCart
+                              onClick={() => handleCartAdd(p)}
+                              className="text-blue-600 cursor-pointer hover:scale-110 transition-transform"
+                              size={18}
+                            />
+
+                        }
+                      </td>
+                    )}
+                    <td className="px-4 py-3 text-blue-700">
+                      {new Date(p.createdAt).toLocaleDateString()}
+                    </td>
+                    {!isSale && !isPurchase && (
+                      <td className="py-2 flex justify-center items-center gap-2">
+                        <button
+                          onClick={() => navigate("/products/edit/" + p._id)}
+                          className="p-2 text-blue-600 rounded-lg hover:bg-blue-100"
+                        >
+                          <Edit2 size={16} />
+                        </button>
+                        <button
+                          onClick={() => handleDelete(p)}
+                          className="p-2 text-red-500 rounded-lg hover:bg-red-100"
+                        >
+                          <Trash2 size={16} />
+                        </button>
+                      </td>
+                    )}
+
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   );

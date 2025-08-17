@@ -25,7 +25,7 @@ const Dashboard = () => {
         sales: 120000,
         expenses: 80000,
         profit: 40000,
-        udhaar: 15000,
+        credit: 15000,
     };
 
     const salesData = [
@@ -94,9 +94,9 @@ const Dashboard = () => {
                 <Card className="bg-yellow-500 text-white">
                     <CardContent className="flex items-center justify-between">
                         <div>
-                            <p className="text-sm">Udhaar</p>
+                            <p className="text-sm">Credit</p>
                             <h2 className="text-2xl font-bold">
-                                ₨ {summary.udhaar.toLocaleString()}
+                                ₨ {summary.credit.toLocaleString()}
                             </h2>
                         </div>
                         <HandCoins size={40} />

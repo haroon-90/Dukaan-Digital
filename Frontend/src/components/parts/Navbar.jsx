@@ -13,12 +13,12 @@ const Navbar = ({ toggleSidebar }) => {
                             onClick={toggleSidebar}
                             className="text-gray-400 hover:text-white focus:outline-none"
                         >
-                            <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="white">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
                             </svg>
                         </button>
                     </div>
-                    <div className="flex-shrink-0 p-2 pl-8">
+                    <div className="flex-shrink-0 p-2 pl-0 md:pl-8">
                         <img className="h-18 p-2 invert" src={Dukaan_Digital} alt="Dukaan_Digital" />
                     </div>
                     <div className="md:flex items-center space-x-8">

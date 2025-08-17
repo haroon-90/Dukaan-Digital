@@ -14,7 +14,7 @@ const UdhaarListPage = () => {
     try {
       const res = await getUdhaarlist();
       if (res.data && res.data.length > 0) {
-        setUdhaarList(res.data);
+        setUdhaarList(res.data.reverse());
         toast.success("Data Refreshed")
       } else {
         toast.error("Failed to refresh Credit record");

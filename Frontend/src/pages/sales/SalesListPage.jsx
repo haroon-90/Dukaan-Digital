@@ -38,8 +38,8 @@ const SalesListPage = () => {
       const saleData = res.data.filter((item) => item.type === "sale");
       const purchaseData = res.data.filter((item) => item.type === "purchase");
 
-      setSales(saleData);
-      setPurchases(purchaseData);
+      setSales(saleData.reverse());
+      setPurchases(purchaseData.reverse());
       setType(currentType);
       toast.success("Data refreshed")
     } catch (err) {
@@ -217,7 +217,7 @@ const SalesListPage = () => {
 
       {showDetails && selectedSale && (
         <div className="absolute inset-0 flex items-center justify-center bg-black/70 z-50 backdrop-blur-sm p-4 font-mono print:p-0">
-          <div className="bg-white p-8 rounded-xl shadow-2xl w-full max-w-xl max-h-[90vh] overflow-y-auto border border-gray-300 text-gray-800 print:shadow-none print:border-0 print:rounded-none">
+          <div className="bg-white p-8 rounded-xl shadow-2xl w-full max-w-xl  overflow-y-auto border border-gray-300 text-gray-800 print:shadow-none print:border-0 print:rounded-none">
 
             <div className="text-center pb-4 mb-4 border-b border-dashed border-gray-400 print:border-solid">
               <h2 className="text-2xl font-bold text-blue-700 tracking-wide">
