@@ -31,6 +31,9 @@ import ProductFormPage from "../pages/products/ProductFormPage.jsx"
 // Sales
 import SalesListPage from "../pages/sales/SalesListPage.jsx"
 
+// Purchase
+import PurchaseFormPage from "../pages/purchase/PurchaseFormPage.jsx"
+
 // Udhaar
 import UdhaarListPage from "../pages/udhaar/UdhaarListPage.jsx"
 import UdhaarFormPage from "../pages/udhaar/UdhaarFormPage.jsx"
@@ -77,7 +80,6 @@ export default function AppRouter() {
           {/* Products */}
           <Route path="products">
             <Route index element={<ProductListPage />} />
-            <Route path="new" element={<ProductFormPage />} />
             <Route path="edit/:id" element={<ProductFormPage />} />
           </Route>
 
@@ -86,6 +88,12 @@ export default function AppRouter() {
             <Route index element={<SalesListPage />} />
             <Route path="new" element={<ProductListPage />} />
             <Route path="purchase" element={<ProductListPage />} />
+          </Route>
+
+          {/* Purchase */}
+          <Route path="purchase" >
+            <Route index element={<SalesListPage />} />
+            <Route path="new" element={<PurchaseFormPage />} />
           </Route>
 
           {/* Udhaar */}

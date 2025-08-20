@@ -7,6 +7,7 @@ import AuthRoutes from './routes/authRoutes.js'
 import ProfileRoutes from './routes/profileRoute.js'
 import ProductRoutes from './routes/ProductRoutes.js'
 import SalesRoutes from './routes/SalesRoutes.js'
+import PurchaseRoutes from './routes/PurchaseRoutes.js'
 import UdhaarRoutes from './routes/UdhaarRoutes.js'
 import ExpenseRoutes from './routes/ExpenseRoutes.js'
 import ReportRoutes from './routes/ReportRoutes.js'
@@ -30,6 +31,7 @@ app.use('/api/auth', AuthRoutes)
 app.use('/api/profile', ProfileRoutes)
 app.use('/api/products', ProductRoutes)
 app.use('/api/sales', SalesRoutes)
+app.use('/api/purchase', PurchaseRoutes)
 app.use('/api/udhaar', UdhaarRoutes)
 app.use('/api/expense', ExpenseRoutes)
 app.use('/api/report', ReportRoutes)

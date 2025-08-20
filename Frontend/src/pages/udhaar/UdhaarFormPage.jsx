@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { addUdhaar, getUdhaarById, updateUdhaar } from "../../Services/udhaarServices.js";
+import { addUdhaar, getUdhaarById, updateUdhaar } from "../../services/udhaarServices.js";
 import { useNavigate, useParams } from "react-router-dom";
 import toast from "react-hot-toast";
 

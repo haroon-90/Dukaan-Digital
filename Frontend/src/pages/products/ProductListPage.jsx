@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { getProducts, deleteProducts } from "../../services/productServices.js";
-import { createsale } from "../../Services/saleService.js";
-import { Edit2, Trash2, PackagePlus, ShoppingCart, Eye, PlusSquare } from "lucide-react";
+import { createsale } from "../../services/saleService.js";
+import { Edit2, Trash2, ShoppingCart, Eye } from "lucide-react";
 import toast from "react-hot-toast";
 
 const ProductListPage = () => {
@@ -17,7 +17,6 @@ const ProductListPage = () => {
   const [TotalBill, setTotalBill] = useState(0);
   const [prprice, setprprice] = useState(false);
   const [isSale, setisSale] = useState(false);
-  const [isPurchase, setisPurchase] = useState(false);
 
   const filteredProduct = products.filter((item) =>
     item.itemname.toLowerCase().includes(searchTerm.toLowerCase())
@@ -44,13 +43,13 @@ const ProductListPage = () => {
     const cartItem = {
       id: product._id,
       productname: product.itemname,
-      price: isPurchase ? product.purchasePrice : product.sellingPrice,
+      price: product.sellingPrice,
       quantity,
       unit: product.unit
     };
 
     setTotalBill(
-      TotalBill + ((isPurchase ? product.purchasePrice : product.sellingPrice) * quantity)
+      TotalBill + (product.sellingPrice * quantity)
     );
 
     setCart((prev) => {
@@ -79,8 +78,7 @@ const ProductListPage = () => {
 
   const confirmSaleOrPurchase = async () => {
     if (!customerName.trim()) {
-      // alert(Please enter ${isPurchase ? "supplier" : "customer"} name);
-      toast.error(`Please enter ${isPurchase ? "supplier" : "customer"} name`);
+      toast.error("Please enter customer name");
       return;
     }
 
@@ -90,14 +88,14 @@ const ProductListPage = () => {
         quantity: item.quantity,
         price: item.price,
       })),
-      type: isPurchase ? "purchase" : "sale",
+      type: "sale",
       customerName: customerName.trim()
     };
 
     try {
       const res = await createsale(payload);
-      console.log(`${isPurchase ? "Purchase" : "Sale"} Created:`, res.data);
-      toast.success(`${isPurchase ? "Purchase" : "Sale"} Created`)
+      console.log("Sale Created:", res.data);
+      toast.success("Sale Created")
       setCart([]);
       setSaleQuantities({});
       setCustomerName("");
@@ -105,7 +103,7 @@ const ProductListPage = () => {
       setTotalBill(0);
       loadProducts();
     } catch (err) {
-      toast.error(`Failed to create ${isPurchase ? "Purchase" : "Sale"}`)
+      toast.error("Failed to create Sale")
       console.error("Error creating record:", err);
     }
   };
@@ -137,13 +135,8 @@ const ProductListPage = () => {
   useEffect(() => {
     if (location.pathname === "/products") {
       setisSale(false);
-      setisPurchase(false);
     } else if (location.pathname === "/sales/new") {
       setisSale(true);
-      setisPurchase(false);
-    } else if (location.pathname === "/sales/purchase") {
-      setisSale(false);
-      setisPurchase(true);
     }
     loadProducts();
   }, []);
@@ -152,13 +145,13 @@ const ProductListPage = () => {
     <div className="relative p-6 bg-white min-h-screen">
       {showSaleModal && (
         <div className="absolute inset-0 flex items-start justify-center bg-black/60 z-50 backdrop-blur-sm p-4 print:p-0">
-          <div className="bg-white p-8 rounded-xl shadow-2xl w-full max-w-lg font-mono text-gray-800 print:shadow-none print:border-0 print:rounded-none print:p-0">
+          <div className="bg-white p-8 max-h-[100%] min-h-[90vh] rounded-xl overflow-auto shadow-2xl w-full max-w-lg font-mono text-gray-800 print:shadow-none print:border-0 print:rounded-none print:p-0">
             <div className="text-center pb-4 mb-4 border-b border-dashed border-gray-400 print:border-solid print:mb-2">
               <h2 className="text-2xl font-bold text-blue-700 tracking-wide">
                 {JSON.parse(sessionStorage.getItem("user")).shopname}
               </h2>
               <p className="text-sm font-semibold text-gray-600 mt-1">
-                {isPurchase ? "Purchase Receipt" : "Sales Invoice"}
+                Sales Invoice
               </p>
               <p className="text-xs text-gray-500 mt-2">
                 Date: {new Date().toLocaleDateString()}
@@ -166,13 +159,13 @@ const ProductListPage = () => {
             </div>
             <div className="mb-6 flex flex-col sm:flex-row items-baseline">
               <p className="text-sm font-semibold text-gray-700 mr-2">
-                {isPurchase ? "Supplier:" : "Customer:"}
+                Customer:
               </p>
               <input
                 type="text"
                 value={customerName}
                 onChange={(e) => setCustomerName(e.target.value)}
-                placeholder={`Enter ${isPurchase ? "supplier" : "customer"} name`}
+                placeholder={"Enter customer name"}
                 className="flex-1 px-3 py-1 border-b border-gray-300 bg-transparent outline-none text-sm focus:border-blue-500 transition"
               />
             </div>
@@ -200,17 +193,17 @@ const ProductListPage = () => {
                 ))}
               </div>
             )}
-            <div className="border-t border-dashed border-gray-400 my-4 print:border-solid"></div>
-            <div className="flex justify-between items-baseline font-bold text-xl pt-2">
+            <div className="border-t border-dashed border-gray-400 my-2 print:border-solid"></div>
+            <div className="flex justify-between items-baseline font-bold text-xl">
               <span>TOTAL:</span>
               <span className="text-red-600">
                 ₨ {TotalBill.toLocaleString()}
               </span>
             </div>
-            <div className="text-center text-xs text-gray-500 mt-6 pt-4 border-t border-dashed border-gray-400 print:border-solid">
+            <div className="text-center text-xs text-gray-500 mt-2 pt-2 border-t border-dashed border-gray-400 print:border-solid">
               <p>Thank you for your business!</p>
             </div>
-            <div className="flex justify-end gap-3 mt-8 print:hidden">
+            <div className="flex justify-end gap-3 mt-4 print:hidden">
               <button
                 onClick={() => setShowSaleModal(false)}
                 className="px-6 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors"
@@ -221,7 +214,7 @@ const ProductListPage = () => {
                 onClick={confirmSaleOrPurchase}
                 className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
               >
-                Confirm {isPurchase ? "Purchase" : "Sale"}
+                Confirm Sale
               </button>
             </div>
           </div>
@@ -240,32 +233,14 @@ const ProductListPage = () => {
             onClick={ShowCart}
             className="bg-blue-600 flex items-center gap-2 text-white px-4 py-2 rounded"
           >
-
-            {isPurchase ? (
-              <span className="flex items-center gap-2">
-                <PlusSquare size={20} /> Purchase
-              </span>
-            ) : (
-              <span className="flex items-center gap-2">
-                <ShoppingCart size={20} /> Sale
-              </span>
-            )}
-
+            <span className="flex items-center gap-2">
+              <ShoppingCart size={20} /> Sale
+            </span>
           </button>
         )}
-        {!isSale && (
-          <button
-            onClick={() => navigate("/products/new")}
-            className="bg-blue-600 flex items-center gap-2 text-white px-4 py-2 rounded"
-          >
-            <PackagePlus size={20} />
-            Add Product
-          </button>
-        )}
-
       </div>
 
-      <div className="relative bg-white shadow-md rounded-lg p-4 border border-blue-200">
+      <div className="bg-white shadow-md rounded-lg p-4 border border-blue-200">
         <div className="flex justify-between items-center mb-4">
 
           <h1 className="text-xl font-semibold text-blue-700">Products</h1>
@@ -273,9 +248,9 @@ const ProductListPage = () => {
           </div>
         </div>
 
-        <div className="overflow-x-auto rounded-lg">
+        <div className="relative overflow-x-auto rounded-lg max-h-96 overflow-y-auto">
           <table className="w-full text-sm text-left text-gray-700">
-            <thead className="bg-blue-600 text-white uppercase text-xs">
+            <thead className="sticky top-0 bg-blue-600 text-white uppercase text-xs">
               <tr>
                 {[
                   "Item Name",
@@ -284,9 +259,10 @@ const ProductListPage = () => {
                   "Selling Price",
                   "Quantity",
                   "Unit",
-                  ...(isSale || isPurchase ? [isPurchase ? "Purchase" : "Sale"] : []),
-                  "Created At",
-                  ...(isSale || isPurchase ? [] : ["Actions"]),
+                  ...(isSale ? ["Sale"] : []),
+                  ...(isSale ? [] : ["Created At"]),
+                  // "Created At",
+                  ...(isSale ? [] : ["Actions"]),
                 ].map((header, i) => (
                   <th key={i} className="px-4 py-3">
                     {header.toLowerCase() === "purchase price" ? (
@@ -323,7 +299,7 @@ const ProductListPage = () => {
                     <td className="px-4 py-3 text-green-600 font-semibold">₨ {p.sellingPrice}</td>
                     <td className="px-4 py-3 text-gray-700 font-semibold">{p.quantity}</td>
                     <td className="px-4 py-3 text-gray-700 font-semibold">{p.unit}</td>
-                    {(isSale || isPurchase) && (
+                    {isSale && (
                       <td className="px-6 py-4 text-sm flex items-center gap-1">
                         <input
                           type="number"
@@ -332,26 +308,19 @@ const ProductListPage = () => {
                           onChange={(e) => handleSaleChange(p, e.target.value)}
                           className="w-16 px-2 py-1 border border-blue-300 rounded focus:ring-2 focus:ring-blue-400 outline-none"
                         />
-                        {
-                          isPurchase ?
-                            <PlusSquare
-                              onClick={() => handleCartAdd(p)}
-                              className="text-blue-600 cursor-pointer"
-                              size={18}
-                            /> :
-                            <ShoppingCart
-                              onClick={() => handleCartAdd(p)}
-                              className="text-blue-600 cursor-pointer hover:scale-110 transition-transform"
-                              size={18}
-                            />
-
-                        }
+                        <ShoppingCart
+                          onClick={() => handleCartAdd(p)}
+                          className="text-blue-600 cursor-pointer hover:scale-110 transition-transform"
+                          size={18}
+                        />
                       </td>
                     )}
+                    {!isSale && (
                     <td className="px-4 py-3 text-blue-700">
                       {new Date(p.createdAt).toLocaleDateString()}
                     </td>
-                    {!isSale && !isPurchase && (
+                    )}
+                    {!isSale && (
                       <td className="py-2 flex justify-center items-center gap-2">
                         <button
                           onClick={() => navigate("/products/edit/" + p._id)}
@@ -367,7 +336,6 @@ const ProductListPage = () => {
                         </button>
                       </td>
                     )}
-
                   </tr>
                 ))
               )}

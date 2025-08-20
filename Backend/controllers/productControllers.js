@@ -2,7 +2,7 @@ import Product from "../models/Product.js";
 
 const addProduct = async (req, res) => {
     try {
-        const { itemname, category, purchasePrice, sellingPrice, quantity, unit } = req.body;
+        const { itemname, category, unit } = req.body;
         const userId = req.user;
         const existing = await Product.findOne({ itemname, category, userId })
         if (existing) {
@@ -20,16 +20,16 @@ const addProduct = async (req, res) => {
                 product: existing
             });
         }
-        if (!itemname || !category || !purchasePrice || !sellingPrice || !quantity || !unit) {
+        if (!itemname || !category  || !unit) {
             return res.status(400).json({ msg: "All fields are required to add new item" });
         }
         const newProduct = new Product({
             userId,
             itemname,
             category,
-            purchasePrice,
-            sellingPrice,
-            quantity,
+            purchasePrice : 0,
+            sellingPrice : 0,
+            quantity : 0,
             unit
         });
         await newProduct.save();

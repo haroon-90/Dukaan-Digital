@@ -31,11 +31,6 @@ const saleSchema = new mongoose.Schema(
                 }
             }
         ],
-        type: {
-            type: String,
-            enum: ['sale', 'purchase'],
-            required: true
-        },
         customerName: {
             type: String
         },

@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react";
-import { getsales, deletesale } from "../../Services/saleService.js";
-import { Eye, ShoppingCart, Trash2 } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { getsales, deletesale } from "../../services/saleService.js";
+import { getPurchases } from "../../services/purchaseServices.js";
+import { Eye, ShoppingCart, Trash2, ShoppingBag } from "lucide-react";
+import { useNavigate, useLocation } from "react-router-dom";
 import toast from "react-hot-toast";
 
 const SalesListPage = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [sales, setSales] = useState([]);
   const [purchases, setPurchases] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -17,30 +19,48 @@ const SalesListPage = () => {
   const [startDate, setStartDate] = useState(formatDate(new Date(new Date().setMonth(new Date().getMonth(), 1))));
   const [endDate, setEndDate] = useState(formatDate(new Date()));
 
-  const [type, setType] = useState("sale");
-  const [filterType, setFilterType] = useState("sale");
+  const [type, setType] = useState();
 
-  const fetchData = async (currentType = type) => {
+  const fetchSales = async () => {
     try {
       setLoading(true);
       const body = {
-        type: currentType,
         startDate,
         endDate,
       };
       const res = await getsales(body);
       if (!res.data || res.data.length === 0) {
         setSales([]);
+        return;
+      }
+      console.log("Sales data : ", res.data)
+      setSales(res.data.reverse());
+      toast.success("Data refreshed")
+    } catch (err) {
+      if (err.response?.status === 404) {
+        setSales([]);
+        setPurchases([]);
+      } else {
+        toast.error(err.response?.data?.msg || "Error fetching data")
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const fetchPurchase = async () => {
+    try {
+      setLoading(true);
+      const body = {
+        startDate,
+        endDate,
+      };
+      const res = await getPurchases(body);
+      if (!res.data || res.data.length === 0) {
         setPurchases([]);
         return;
       }
-
-      const saleData = res.data.filter((item) => item.type === "sale");
-      const purchaseData = res.data.filter((item) => item.type === "purchase");
-
-      setSales(saleData.reverse());
-      setPurchases(purchaseData.reverse());
-      setType(currentType);
+      setPurchases(res.data.reverse());
       toast.success("Data refreshed")
     } catch (err) {
       if (err.response?.status === 404) {
@@ -55,7 +75,21 @@ const SalesListPage = () => {
   };
 
   useEffect(() => {
-    fetchData();
+    if (location.pathname === "/sales") {
+      setType("sale");
+      fetchSales();
+    } else if (location.pathname === "/purchase") {
+      setType("purchase");
+      fetchPurchase();
+    }
+  }, [location]);
+
+  useEffect(() => {
+    if (type == "sale") {
+      fetchSales();
+    } else if (type == "purchase") {
+      fetchPurchase();
+    }
   }, []);
 
   const handleViewDetails = (sale) => {
@@ -75,7 +109,7 @@ const SalesListPage = () => {
         if (res.status == 200 || res.status == 201) {
           toast.success("deleted successfully")
         }
-        fetchData();
+        fetchSales();
         setShowDetails(false);
       }
     } catch (err) {
@@ -84,11 +118,11 @@ const SalesListPage = () => {
     }
   }
 
-  const handleFilter = (e) => {
-    const newFilterType = e.target.value;
-    setFilterType(newFilterType);
-    fetchData(newFilterType);
-  }
+  // const handleFilter = (e) => {
+  //   const newFilterType = e.target.value;
+  //   setFilterType(newFilterType);
+  //   fetchSales(newFilterType);
+  // }
 
   const RenderTable = ({ title, data }) => (
     <div className="relative bg-white shadow-md rounded-lg p-4 border border-blue-200">
@@ -113,13 +147,13 @@ const SalesListPage = () => {
                   className="border-b hover:bg-blue-50 transition"
                 >
                   <td className="px-4 py-3 font-medium text-blue-800">
-                    {item.customerName}
+                    {item.customerName ? item.customerName : item.suppliername}
                   </td>
                   <td className="px-4 py-3 text-blue-700">
                     {new Date(item.createdAt).toLocaleDateString()}
                   </td>
                   <td className="px-4 py-3 font-semibold text-green-600">
-                    ₨ {item.totalAmount}
+                    ₨ {item.totalAmount ? item.totalAmount : item.total}
                   </td>
                   <td className="px-4 py-3 flex justify-around">
                     <button
@@ -148,7 +182,7 @@ const SalesListPage = () => {
     <div className="relative p-6 space-y-6 min-h-screen bg-white">
       <div className="flex md:justify-between items-center flex-wrap gap-2 justify-center">
         <div className="flex items-center justify-center flex-wrap gap-4">
-          <div className="flex items-center flex-wrap gap-1">
+          {/* <div className="flex items-center flex-wrap gap-1">
             <label className="font-semibold text-blue-700">Type:</label>
             <select
               value={filterType}
@@ -158,7 +192,7 @@ const SalesListPage = () => {
               <option value="sale">Sale</option>
               <option value="purchase">Purchase</option>
             </select>
-          </div>
+          </div> */}
           <div className="flex items-center flex-wrap gap-1">
             <label className="font-semibold text-blue-700">Start Date:</label>
             <input
@@ -178,24 +212,20 @@ const SalesListPage = () => {
             />
           </div>
         </div>
-        <div className="flex gap-1">
-          <button
-            className="px-4 py-1 bg-blue-600 hover:bg-blue-700 transition text-white rounded flex items-center gap-2"
-            onClick={() => {
-              navigate("/sales/new");
-            }}
-          >
-            <ShoppingCart size={16} /> sale
-          </button>
-          <button
-            className="px-4 py-1 bg-blue-600 hover:bg-blue-700 transition text-white rounded flex items-center gap-2"
-            onClick={() => {
-              navigate("/sales/purchase");
-            }}
-          >
-            <ShoppingCart size={16} /> Purchase
-          </button>
-        </div>
+        <button
+          className="px-4 py-1 bg-blue-600 hover:bg-blue-700 transition text-white rounded flex items-center gap-2"
+          onClick={() => {
+            type === "sale" && navigate("/sales/new")
+            type === "purchase" && navigate("/purchase/new")
+          }}
+        >
+          {
+            type == "sale" ? <ShoppingCart size={16} /> : <ShoppingBag size={16} />
+          }
+          {
+            type == "sale" ? "Sale" : "Purchase"
+          }
+        </button>
       </div>
 
       {loading &&
@@ -224,7 +254,7 @@ const SalesListPage = () => {
                 {JSON.parse(sessionStorage.getItem("user")).shopname}
               </h2>
               <p className="text-sm font-semibold text-gray-600 mt-1">
-                {selectedSale.type === "sale" ? "Sales Invoice" : "Purchase Receipt"}
+                {type === "sale" ? "Sales Invoice" : "Purchase Receipt"}
               </p>
               {/* <p className="text-xs text-gray-500 mt-2">
                     Invoice #: {selectedSale._id.slice(-6).toUpperCase()}
@@ -233,8 +263,8 @@ const SalesListPage = () => {
 
             <div className="mb-6">
               <p className="text-sm font-semibold">
-                {selectedSale.type === "sale" ? "Customer:" : "Supplier:"}
-                <span className="font-normal ml-2">{selectedSale.customerName || "Walk-in"}</span>
+                {type === "sale" ? "Customer:" : "Supplier:"}
+                <span className="font-normal ml-2">{type === "sale" ? selectedSale.customerName : selectedSale.suppliername || "Walk-in"}</span>
               </p>
               <p className="text-sm font-semibold mt-1">
                 Date:
@@ -252,9 +282,11 @@ const SalesListPage = () => {
 
               {selectedSale.items.map((it) => (
                 <div key={it._id} className="flex justify-between text-sm py-2 border-b border-dashed border-gray-200 print:border-solid">
-                  <span className="flex-1 text-blue-800 font-medium">{it.productName}</span>
+                  <span className="flex-1 text-blue-800 font-medium">{it.itemname}</span>
                   <span className="w-16 text-right">{it.quantity} {it.unit || ""}</span>
-                  <span className="w-20 text-right">₨ {it.price.toLocaleString()}</span>
+                  {type == "sale" &&
+                    <span className="w-20 text-right">₨ {it.price.toLocaleString() || it.purchasePrice.toLocaleString()}</span>
+                  }
                   <span className="w-20 text-right font-semibold">
                     ₨ {(it.quantity * it.price).toLocaleString()}
                   </span>
@@ -266,7 +298,7 @@ const SalesListPage = () => {
               <div className="flex justify-between items-baseline font-bold text-xl">
                 <span>TOTAL:</span>
                 <span className="text-green-600">
-                  ₨ {selectedSale.totalAmount.toLocaleString()}
+                  ₨ {type == "sale" ? selectedSale.totalAmount.toLocaleString() : selectedSale.total.toLocaleString()}
                 </span>
               </div>
             </div>

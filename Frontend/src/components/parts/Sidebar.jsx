@@ -7,9 +7,10 @@ import {
     HandCoins,
     FileText,
     LayoutDashboard,
+    ShoppingBag,
 } from "lucide-react";
 
-const Sidebar = ({toggleSidebar}) => {
+const Sidebar = ({ toggleSidebar }) => {
     const navigate = useNavigate();
     const location = useLocation();
 
@@ -30,6 +31,11 @@ const Sidebar = ({toggleSidebar}) => {
             icon: <ShoppingCart size={20} />,
         },
         {
+            label: "Purchase",
+            path: "/purchase",
+            icon: <ShoppingBag size={20} />,
+        },
+        {
             label: "Expenses",
             path: "/expenses",
             icon: <FileText size={20} />,
@@ -47,7 +53,7 @@ const Sidebar = ({toggleSidebar}) => {
     ];
 
     const isActive = (path) => {
-        if(path == '/'){
+        if (path == '/') {
             return location.pathname === path;
         }
         return location.pathname.includes(path);
@@ -60,7 +66,7 @@ const Sidebar = ({toggleSidebar}) => {
                     {menuItems.map((item, index) => (
                         <li key={index} className="mb-2">
                             <button
-                                onClick={() => {navigate(item.path); toggleSidebar()}}
+                                onClick={() => { navigate(item.path); toggleSidebar() }}
                                 className={`flex items-center gap-3 p-3 w-full text-left rounded-md transition-colors duration-200 
                                 ${isActive(item.path)
                                         ? "bg-white text-blue-600"

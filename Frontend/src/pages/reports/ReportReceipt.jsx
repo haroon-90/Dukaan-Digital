@@ -26,8 +26,8 @@ const ReportReceipt = ({ report, period }) => {
     ];
 
     return (
-        <div className="flex justify-center my-10 print:mt-0 print:mb-0">
-            <div className="w-full max-w-sm font-mono bg-white border border-gray-300 rounded-lg shadow-lg p-6 print:border-0 print:shadow-none print:p-0 print:w-auto">
+        <div className="flex justify-center my-10">
+            <div className="w-full max-w-sm font-mono bg-white border-y-2 border-dashed border-gray-500  shadow-lg p-6 print:shadow-none print:w-auto">
 
                 <div className="text-center flex flex-col justify-center pb-4 border-b border-dashed border-gray-400 mb-4 print:border-solid">
                     <img className='h-15 mb-4' src={Dukaan_Digital} alt="Dukaan_Digital" />
@@ -72,6 +72,33 @@ const ReportReceipt = ({ report, period }) => {
                     <span className={`text-2xl font-extrabold ${report.netAmount < 0 ? "text-red-600" : "text-green-700"}`}>
                         Rs. {formatNumber(report.netAmount)}
                     </span>
+                </div>
+
+                <div className="text-center text-xs urdu-font leading-8 text-gray-800 mt-6 pt-4 border-t border-dashed border-gray-400 print:border-solid">
+                    {period.length == 7 ? " اس مہینے " : " آج "}
+                    <span className="underline text-blue-700 mx-1">{report.totalSale}</span>
+                    کی فروخت ہوئی،
+                    <span className="underline text-orange-600 mx-1">{report.totalExpense}</span>
+                    خرچ ہوا اور
+                    {report.netAmount >= 0 ? (
+                        <span className="underline text-green-600 mx-1">
+                            {report.netAmount}
+                        </span>
+                    ) : (
+                        <span className="underline text-red-600 mx-1">
+                            {Math.abs(report.netAmount)}
+                        </span>
+                    )}
+                    {report.netAmount >= 0 ? (
+                        <span>
+                            منافع
+                        </span>
+                    ) : (
+                        <span >
+                            نقصان
+                        </span>
+                    )}
+                    {report.netAmount >= 0 ? " بچا۔" : " ہوا۔"}
                 </div>
 
                 <div className="text-center text-xs text-gray-500 mt-6 pt-4 border-t border-dashed border-gray-400 print:border-solid">

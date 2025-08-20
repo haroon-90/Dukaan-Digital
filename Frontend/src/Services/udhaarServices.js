@@ -1,4 +1,4 @@
-import api from "./api";
+import api from "./Api";
 
 export const addUdhaar = (data) => api.post("/udhaar", data);
 export const getUdhaarlist = () => api.get("/udhaar");

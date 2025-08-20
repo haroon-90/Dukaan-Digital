@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { updateProfile } from "../../Services/profileServices.js";
+import { updateProfile } from "../../services/profileServices.js";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 

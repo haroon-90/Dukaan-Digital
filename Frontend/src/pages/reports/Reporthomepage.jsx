@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { getReport } from "../../Services/reportServices.js";
+import { getReport } from "../../services/reportServices.js";
 import ReportReceipt from "./ReportReceipt.jsx";
 import toast from "react-hot-toast";
 

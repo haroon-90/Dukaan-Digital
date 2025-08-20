@@ -3,7 +3,7 @@ import Product from '../models/Product.js';
 
 const createSale = async (req, res) => {
     try {
-        const { items, type, customerName } = req.body;
+        const { items, customerName } = req.body;
         const userId = req.user;
         if (!items || items.length === 0) {
             return res.status(400).json({ msg: "Items are required" });
@@ -17,23 +17,17 @@ const createSale = async (req, res) => {
             item.productName = product.itemname;
             item.unit = product.unit;
             console.log(item.unit)
-            if (type === 'sale') {
-                if (product.quantity < item.quantity) {
-                    return res.status(400).json({ msg: `Not enough stock for ${product.itemname}` });
-                }
-                item.price = product.sellingPrice;
-                product.quantity -= item.quantity;
-            } else if (type === 'purchase') {
-                product.purchasePrice = item.price;
-                product.quantity += item.quantity;
+            if (product.quantity < item.quantity) {
+                return res.status(400).json({ msg: `Not enough stock for ${product.itemname}` });
             }
+            item.price = product.sellingPrice;
+            product.quantity -= item.quantity;
             await product.save();
             totalAmount += (item.quantity * item.price);
         }
         const sale = new Sale({
             userId,
             items,
-            type,
             customerName,
             totalAmount
         });
@@ -48,19 +42,20 @@ const createSale = async (req, res) => {
 const getSales = async (req, res) => {
     try {
         console.log(req.body);
-        const { startDate, endDate, type } = req.body;
+        const { startDate, endDate } = req.body;
         const userId = req.user;
-        const filter = { userId };
-        if (type) {
-            filter.type = type;
-        }
+        // const filter = { userId };
+        // if (type) {
+        //     filter.type = type;
+        // }
+        let createdAt;
         if (startDate && endDate) {
-            filter.createdAt = {
+            createdAt = {
                 $gte: new Date(startDate),
                 $lte: new Date(new Date(endDate).setHours(23, 59, 59, 999))
             };
         }
-        const sales = await Sale.find(filter);
+        const sales = await Sale.find({ userId, createdAt });
         if (!sales || sales.length === 0) {
             return res.status(404).json({ msg: "No record found" });
         }

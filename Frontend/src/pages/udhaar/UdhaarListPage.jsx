@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getUdhaarlist, deleteUdhaar } from "../../Services/udhaarServices.js";
+import { getUdhaarlist, deleteUdhaar } from "../../services/udhaarServices.js";
 import { Trash2, Edit2, HandCoins } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
@@ -67,7 +67,7 @@ const UdhaarListPage = () => {
             placeholder="Search by name or contact..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="px-4 py-2 min-w-100 border border-blue-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="px-4 py-2 min-w-100 border border-blue-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
           <select
             value={statusFilter}

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { login } from '../../Services/authService.js';
+import { login } from '../../services/authService.js';
 import { useNavigate } from 'react-router-dom';
 import { useUserContext } from '../../components/Context/UserContext.jsx';
 import DukaanDigital from '../../assets/Dukaan_Digital.svg'

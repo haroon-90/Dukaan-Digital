@@ -1,4 +1,4 @@
-import api from "./api";
+import api from "./Api";
 
 export const getsales = (data) => api.post('/sales/all', data)
 export const createsale = (data) => api.post('/sales', data)
