@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { getsales, deletesale } from "../../services/saleService.js";
-import { getPurchases } from "../../services/purchaseServices.js";
+import { getPurchases, deletePurchase } from "../../services/purchaseServices.js";
 import { Eye, ShoppingCart, Trash2, ShoppingBag } from "lucide-react";
 import { useNavigate, useLocation } from "react-router-dom";
 import toast from "react-hot-toast";
@@ -105,12 +105,21 @@ const SalesListPage = () => {
   const handleDelete = async (item) => {
     try {
       if (confirm("Are you really want to delete this?")) {
-        const res = await deletesale(selectedSale?._id || item._id);
-        if (res.status == 200 || res.status == 201) {
-          toast.success("deleted successfully")
+        if (type == "sale") {
+          const res = await deletesale(selectedSale?._id || item._id);
+          if (res.status == 200 || res.status == 201) {
+            toast.success("deleted successfully")
+          }
+          fetchSales();
+          setShowDetails(false);
+        } else {
+          const res = await deletePurchase(selectedSale?._id || item._id);
+          if (res.status == 200 || res.status == 201) {
+            toast.success("deleted successfully")
+          }
+          fetchPurchase();
+          setShowDetails(false);
         }
-        fetchSales();
-        setShowDetails(false);
       }
     } catch (err) {
       console.log(err);
@@ -246,7 +255,7 @@ const SalesListPage = () => {
       )}
 
       {showDetails && selectedSale && (
-        <div className="absolute inset-0 flex items-center justify-center bg-black/70 z-50 backdrop-blur-sm p-4 font-mono print:p-0">
+        <div className="absolute top-0 inset-0 flex items-center justify-center bg-black/70 z-50 backdrop-blur-sm p-4 font-mono print:p-0">
           <div className="bg-white p-8 rounded-xl shadow-2xl w-full max-w-xl  overflow-y-auto border border-gray-300 text-gray-800 print:shadow-none print:border-0 print:rounded-none">
 
             <div className="text-center pb-4 mb-4 border-b border-dashed border-gray-400 print:border-solid">
@@ -273,7 +282,7 @@ const SalesListPage = () => {
             </div>
 
             <div className="max-h-[30vh] overflow-y-auto">
-              <div className="flex justify-between font-bold text-xs border-b border-dashed border-gray-400 py-2 sticky top-0 bg-white print:border-solid">
+              <div className="flex justify-between font-bold text-xs border-b border-dashed border-gray-400 p-2 sticky top-0 bg-blue-600 text-white rounded-t print:border-solid">
                 <span className="flex-1">Item</span>
                 <span className="w-16 text-right">Qty</span>
                 <span className="w-20 text-right">Price</span>
@@ -281,14 +290,15 @@ const SalesListPage = () => {
               </div>
 
               {selectedSale.items.map((it) => (
-                <div key={it._id} className="flex justify-between text-sm py-2 border-b border-dashed border-gray-200 print:border-solid">
-                  <span className="flex-1 text-blue-800 font-medium">{it.itemname}</span>
+                <div key={it._id} className="flex justify-between text-sm border-b border-dashed border-gray-200 p-2 print:border-solid">
+                  <span className="flex-1 text-blue-800 font-medium">{it.itemname || it.productName}</span>
                   <span className="w-16 text-right">{it.quantity} {it.unit || ""}</span>
                   {type == "sale" &&
-                    <span className="w-20 text-right">₨ {it.price.toLocaleString() || it.purchasePrice.toLocaleString()}</span>
+                    <span className="w-20 text-right">₨ {it.price.toLocaleString()}</span> ||
+                    <span className="w-20 text-right">₨ {it.purchasePrice.toLocaleString()}</span>
                   }
                   <span className="w-20 text-right font-semibold">
-                    ₨ {(it.quantity * it.price).toLocaleString()}
+                    ₨ {type == "sale" ? (it.quantity * it.price).toLocaleString() : (it.quantity * it.purchasePrice).toLocaleString()}
                   </span>
                 </div>
               ))}

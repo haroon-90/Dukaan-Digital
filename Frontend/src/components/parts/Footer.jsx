@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 const Footer = () => {
     return (
         <footer className="bg-blue-600 text-white p-6">
-            <div className="container mx-auto max-w-7xl">
+            <div className="container mx-auto">
                 <div className="flex flex-col md:flex-row justify-between items-start md:items-center">
                     <div className="mb-6 md:mb-0 flex items-center gap-4">
                         <img className="h-12 invert" src={Dukaan_Digital} alt="Dukaan_Digital" />

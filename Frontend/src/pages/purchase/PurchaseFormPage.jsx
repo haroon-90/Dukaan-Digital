@@ -168,7 +168,7 @@ const PurchaseFormPage = () => {
 
     try {
       const res = await addPurchase(purchaseDetails);
-      toast.success(res.data.message);
+      toast.success(res.data.message || "Purchased");
       setPurchaseDetails({
         suppliername: '',
         items: [],
@@ -192,8 +192,8 @@ const PurchaseFormPage = () => {
   };
 
   return (
-    <div className="flex bg-white justify-center items-center p-6">
-      <form onSubmit={handlePurchase} className="bg-white shadow-xl rounded-xl p-6 w-full max-w-md border border-blue-300">
+    <div className="flex justify-center items-center bg-white p-6">
+      <form onSubmit={handlePurchase} className="bg-white shadow-lg rounded-xl p-6 w-full max-w-md border border-blue-300">
         <h1 className="text-2xl font-bold text-blue-700 mb-4 text-center">New Purchase</h1>
         
         {/* Supplier Name */}
@@ -212,7 +212,7 @@ const PurchaseFormPage = () => {
 
         {/* Product Section */}
         <div className="mb-6 border-t pt-4 border-gray-200">
-          <h2 className="text-xl font-semibold mb-4 text-gray-800">Add Product</h2>
+          <h2 className="text-2xl font-bold text-blue-700 mb-4 text-center">Add Product</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             
             {/* Item Name */}
@@ -288,6 +288,7 @@ const PurchaseFormPage = () => {
                     type="text"
                     id="category"
                     name="category"
+                    placeholder="Enter category"
                     value={currentItem.category}
                     onChange={handleItemChange}
                     className="w-full border border-blue-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -300,6 +301,7 @@ const PurchaseFormPage = () => {
                     id="unit"
                     name="unit"
                     type='text'
+                    placeholder="e.g. kg, pcs"
                     value={currentItem.unit}
                     onChange={handleItemChange}
                     className="w-full border border-blue-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -346,7 +348,7 @@ const PurchaseFormPage = () => {
                   <div className="flex-1 pr-4">
                     <p className="font-semibold text-gray-800 text-base mb-1">{item.itemname}</p>
                     <p className="text-xs text-gray-500">
-                      Price: <span className="text-gray-700 font-medium">{formatPrice(item.purchasePrice)}</span>
+                      P-Price: <span className="text-gray-700 font-medium">{formatPrice(item.purchasePrice)}</span>
                     </p>
                   </div>
                   <div className="text-right flex-shrink-0">

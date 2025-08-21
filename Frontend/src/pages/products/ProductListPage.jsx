@@ -72,6 +72,25 @@ const ProductListPage = () => {
     toast.success("Added to cart");
   };
 
+  // const handleCartDelete = (e) => {
+  //   setCart((prev)=>{
+  //     const filtered = prev.filter(item => item.id !== e.id);
+  //     const removedItemTotal = e.price * e.quantity;
+  //     setTotalBill(prevTotal => prevTotal - removedItemTotal);
+  //     return filtered;
+  //   })
+  // }
+  const handleCartDelete = (id) => {
+    const itemToRemove = cart.find((item) => item.id === id);
+    if (!itemToRemove) return;
+    setTotalBill((prev) => prev - (itemToRemove.price * itemToRemove.quantity));
+    const updatedCart = cart.filter((item) => item.id !== id);
+    setCart(updatedCart);
+    if (updatedCart.length === 0) {
+      setShowSaleModal(false);
+    }
+  };
+
   const ShowCart = () => {
     setShowSaleModal(true);
   };
@@ -178,6 +197,7 @@ const ProductListPage = () => {
                   <span className="w-16 text-right">Qty</span>
                   <span className="w-20 text-right">Price</span>
                   <span className="w-20 text-right">Total</span>
+                  <span className="w-10 text-right"></span>
                 </div>
                 {cart.map((item) => (
                   <div key={item.id} className="flex justify-between text-sm py-2 border-b border-dashed border-gray-200 print:border-solid">
@@ -189,6 +209,7 @@ const ProductListPage = () => {
                     <span className="w-20 text-right font-semibold">
                       ₨ {(item.price * item.quantity).toLocaleString()}
                     </span>
+                    <span className="w-10 text-red-500 hover:text-red-600"><Trash2 onClick={() => handleCartDelete(item.id)} className="float-end" size={18} /></span>
                   </div>
                 ))}
               </div>
@@ -316,9 +337,9 @@ const ProductListPage = () => {
                       </td>
                     )}
                     {!isSale && (
-                    <td className="px-4 py-3 text-blue-700">
-                      {new Date(p.createdAt).toLocaleDateString()}
-                    </td>
+                      <td className="px-4 py-3 text-blue-700">
+                        {new Date(p.createdAt).toLocaleDateString()}
+                      </td>
                     )}
                     {!isSale && (
                       <td className="py-2 flex justify-center items-center gap-2">

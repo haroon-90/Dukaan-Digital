@@ -5,7 +5,7 @@ import {
     ShoppingCart,
     BarChart2,
     HandCoins,
-    FileText,
+    ReceiptIcon,
     LayoutDashboard,
     ShoppingBag,
 } from "lucide-react";
@@ -38,7 +38,7 @@ const Sidebar = ({ toggleSidebar }) => {
         {
             label: "Expenses",
             path: "/expenses",
-            icon: <FileText size={20} />,
+            icon: <ReceiptIcon size={20} />,
         },
         {
             label: "Credit",
@@ -60,21 +60,21 @@ const Sidebar = ({ toggleSidebar }) => {
     };
 
     return (
-        <aside className="w-64 min-h-full bg-blue-600 text-white flex flex-col p-4 shadow-lg">
+        <aside className="group md:w-20 md:hover:w-64 w-64 min-h-full bg-blue-600 text-white flex flex-col p-4 shadow-lg transition-all duration-500">
             <nav className="flex-1">
                 <ul>
                     {menuItems.map((item, index) => (
                         <li key={index} className="mb-2">
                             <button
                                 onClick={() => { navigate(item.path); toggleSidebar() }}
-                                className={`flex items-center gap-3 p-3 w-full text-left rounded-md transition-colors duration-200 
+                                className={`flex items-center gap-3 md:group-hover:pr-3 md:pr-0 p-3 w-full text-left rounded-md transition-colors duration-300 
                                 ${isActive(item.path)
                                         ? "bg-white text-blue-600"
                                         : "hover:bg-blue-400"
                                     }`}
                             >
                                 {item.icon}
-                                <span>{item.label}</span>
+                                <span className=" md:group-hover:inline-block md:w-0 w-40 md:group-hover:w-40 overflow-hidden whitespace-nowrap transition-[width] duration-300">{item.label}</span>
                             </button>
                         </li>
                     ))}
@@ -83,14 +83,14 @@ const Sidebar = ({ toggleSidebar }) => {
             <div className="mt-auto border-y border-gray-300 py-2">
                 <button
                     onClick={() => navigate("/profile")}
-                    className={`flex items-center gap-3 p-3 w-full text-left rounded-md transition-colors duration-200
+                    className={`flex items-center gap-3 group-hover:pr-3 pr-0 p-3 w-full text-left rounded-md transition-colors duration-200
                           ${isActive("/profile")
                             ? "bg-white text-blue-500"
                             : "hover:bg-blue-400"
                         }`}
                 >
                     <User size={20} />
-                    <span>Profile</span>
+                    <span className="md:group-hover:inline-block md:w-0 w-40 md:group-hover:w-40 overflow-hidden whitespace-nowrap transition-[width] duration-300">Profile</span>
                 </button>
             </div>
         </aside>

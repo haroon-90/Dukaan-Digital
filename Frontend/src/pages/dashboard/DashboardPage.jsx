@@ -9,7 +9,7 @@ import {
     Pie,
     Cell,
 } from "recharts";
-import { ShoppingCart, HandCoins, DollarSign } from "lucide-react";
+import { ShoppingCart, HandCoins, DollarSign, Receipt } from "lucide-react";
 
 const Card = ({ children, className = "" }) => (
     <div className={`rounded-2xl shadow-md ${className}`}>{children}</div>
@@ -49,10 +49,12 @@ const Dashboard = () => {
     ];
 
     return (
-        <div className="p-6 bg-gray-50 min-h-scree">
-            <h1 className="text-3xl font-bold mb-6">
-                {JSON.parse(sessionStorage.getItem("user")).shopname}
-            </h1>
+        <div className="p-6 bg-gray-50 min-h-screen">
+            <div className="flex justify-center">
+                <h1 className="text-3xl text-blue-700 font-bold p-2 px-4 mb-4 rounded-full border-2 border-t-red-500 border-l-green-500 border-r-yellow-500">
+                    {JSON.parse(sessionStorage.getItem("user")).shopname}
+                </h1>
+            </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
                 <Card className="bg-blue-500 text-white">
@@ -75,7 +77,7 @@ const Dashboard = () => {
                                 ₨ {summary.expenses.toLocaleString()}
                             </h2>
                         </div>
-                        <DollarSign size={40} />
+                        <Receipt size={40} />
                     </CardContent>
                 </Card>
 

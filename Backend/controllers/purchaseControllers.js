@@ -7,7 +7,7 @@ const addPurchase = async (req, res) => {
         const { items, suppliername } = req.body;
         let total = 0;
         for (const item of items) {
-            const product = await Product.findOne({ itemname: item.itemname });
+            const product = await Product.findOne({ itemname: item.itemname, userId });
             if (product) {
                 product.purchasePrice = item.purchasePrice;
                 product.quantity += item.quantity;
@@ -65,7 +65,23 @@ const getPurchase = async (req, res) => {
     }
 };
 
+const deletePurchase = async (req, res) => {
+    try {
+        const id = req.params.id;
+        const purchase = await Purchase.findById(id);
+        if (!purchase) {
+            return res.status(404).json({ msg: "Purchase not found" });
+        }
+        await Purchase.findByIdAndDelete(id);
+        res.status(200).json({ msg: "Purchase deleted successfully!" })
+    } catch (err) {
+        console.log("Error:", err);
+        res.status(500).json({ msg: "Internal server error" });
+    }
+};
+
 export {
     addPurchase,
-    getPurchase
+    getPurchase,
+    deletePurchase
 };

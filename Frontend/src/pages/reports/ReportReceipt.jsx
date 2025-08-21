@@ -10,8 +10,8 @@ const ReportReceipt = ({ report, period }) => {
 
     // Define the sections of the report to display
     const mainFinancials = [
+        // { key: "totalPurchase", label: "Total Purchase", color: "text-green-700" },
         { key: "totalSale", label: "Total Sales", color: "text-green-700" },
-        { key: "totalPurchase", label: "Total Purchase", color: "text-green-700" },
         { key: "totalProfit", label: "Total Profit", color: "text-green-700" },
     ];
 
@@ -40,6 +40,15 @@ const ReportReceipt = ({ report, period }) => {
                     </p>
                 </div>
 
+                <div className="flex justify-between items-baseline py-1">
+                    <span className="text-sm font-medium text-gray-700">Total Purchase:</span>
+                    <span className={`text-lg font-semibold text-green-700`}>
+                        Rs. {formatNumber(report.totalPurchase)}
+                    </span>
+                </div>
+
+                <div className="border-t border-dashed border-gray-400 py-2 print:border-solid"></div>
+                
                 <div className="mb-4">
                     {mainFinancials.map(item => (
                         <div key={item.key} className="flex justify-between items-baseline py-1">
