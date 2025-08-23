@@ -18,11 +18,12 @@ const ReportReceipt = ({ report, period }) => {
     const otherMetrics = [
         { key: "totalExpense", label: "Total Expenses", color: "text-red-600" },
         { key: "totalUdhaar", label: "Total Pending Credit", color: "text-orange-600" },
-        { key: "totalQuantitySold", label: "Total Quantity Sold", color: "text-gray-700" },
-        { key: "numberOfSales", label: "Number of Sales", color: "text-gray-700" },
-        { key: "numberOfPurchase", label: "Number of Purchases", color: "text-gray-700" },
-        { key: "numberOfExpenses", label: "Number of Expenses", color: "text-gray-700" },
-        { key: "numberOfUdhaar", label: "Number of Credits", color: "text-gray-700" },
+        { key: "totalPaidUdhaar", label: "Total Paid Credit", color: "text-green-600" },
+        { key: "totalQuantitySold", label: "Total Quantity Sold", color: "text-blue-700" },
+        { key: "numberOfSales", label: "Number of Sales", color: "text-black" },
+        { key: "numberOfPurchase", label: "Number of Purchases", color: "text-black" },
+        { key: "numberOfExpenses", label: "Number of Expenses", color: "text-black" },
+        { key: "numberOfUdhaar", label: "Number of Credits", color: "text-black" },
     ];
 
     return (
@@ -32,7 +33,7 @@ const ReportReceipt = ({ report, period }) => {
                 <div className="text-center flex flex-col justify-center pb-4 border-b border-dashed border-gray-400 mb-4 print:border-solid">
                     <img className='h-15 mb-4' src={Dukaan_Digital} alt="Dukaan_Digital" />
                     <div className="border-t border-dashed border-gray-400 py-2 print:border-solid"></div>
-                    <h4 className="text-gray-800 mb-2">{JSON.parse(sessionStorage.getItem("user")).shopname}</h4>
+                    <h4 className="text-gray-800 mx-auto mb-2">{JSON.parse(sessionStorage.getItem("user")).shopname}</h4>
                     <div className="border-t border-dashed border-gray-400 py-2 print:border-solid"></div>
                     <h2 className="text-2xl font-bold text-gray-800">{period.length == 7 ? "Monthly" : "Daily"} Report</h2>
                     <p className="text-xs text-gray-500 mt-1">
@@ -48,7 +49,7 @@ const ReportReceipt = ({ report, period }) => {
                 </div>
 
                 <div className="border-t border-dashed border-gray-400 py-2 print:border-solid"></div>
-                
+
                 <div className="mb-4">
                     {mainFinancials.map(item => (
                         <div key={item.key} className="flex justify-between items-baseline py-1">
@@ -65,7 +66,7 @@ const ReportReceipt = ({ report, period }) => {
                 <div className="mb-4 text-sm text-gray-600">
                     <h3 className="font-semibold text-gray-800 mb-2">Other Details</h3>
                     {otherMetrics.map(item => (
-                        <div key={item.key} className="flex justify-between py-1">
+                        <div key={item.key} className={`flex justify-between py-1 ${item.color}`}>
                             <span className="text-xs font-normal">{item.label}:</span>
                             <span className="text-sm font-medium">
                                 {formatNumber(report[item.key])}
@@ -110,13 +111,16 @@ const ReportReceipt = ({ report, period }) => {
                     {report.netAmount >= 0 ? " بچا۔" : " ہوا۔"}
                 </div>
 
-                <div className="text-center text-xs text-gray-500 mt-6 pt-4 border-t border-dashed border-gray-400 print:border-solid">
+                <div className='flex flex-col items-start justify-center mt-4 pt-2 border-y border-dashed border-gray-400 print:border-solid'>
+                    <h4 className="text-gray-600 text-sm mb-2">Contact: {JSON.parse(sessionStorage.getItem("user")).phone}</h4>
+                    <h4 className="text-gray-600 text-sm mb-2">Address: {JSON.parse(sessionStorage.getItem("user")).address}</h4>
+                </div>
+                <div className="text-center text-xs text-gray-500 mt-6">
                     Generated at : {new Date().toLocaleDateString()}
                 </div>
-                <div className="text-center text-xs text-gray-500 mt-6 pt-4">
+                <div className="text-center text-xs text-gray-500 pt-4">
                     Thank you!
                 </div>
-
             </div>
         </div>
     );

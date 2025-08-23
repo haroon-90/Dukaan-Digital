@@ -37,6 +37,10 @@ const saleSchema = new mongoose.Schema(
         totalAmount: {
             type: Number,
             required: true
+        },
+        saleProfit: {
+            type: Number,
+            required: true
         }
     },
     { timestamps: true }

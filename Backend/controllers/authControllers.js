@@ -1,11 +1,10 @@
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 import User from '../models/User.js';
-import Shop from '../models/Shop.js';
 
 const register = async (req, res) => {
     try {
-        const { name, email, password, role, phone, shopname, city } = req.body;
+        const { name, email, password, role, phone, shopname, address } = req.body;
 
         const isExist = await User.findOne({ email });
         if (isExist) {
@@ -14,7 +13,7 @@ const register = async (req, res) => {
         const hashed = await bcrypt.hash(password, 10);
 
         const newUser = new User({
-            name, email, password: hashed, role, phone, shopname, city
+            name, email, password: hashed, role, phone, shopname, address
         });
         const saverUser = await newUser.save();
 
@@ -29,7 +28,7 @@ const register = async (req, res) => {
 
 const login = async (req, res) => {
     try {
-        const { email, password, role } = req.body;
+        const { email, password } = req.body;
 
         const user = await User.findOne({ email });
         if (!user) {
@@ -51,6 +50,7 @@ const login = async (req, res) => {
                 name: user.name,
                 shopname: user.shopname,
                 phone: user.phone,
+                address: user.address,
                 email: user.email,
                 role: user.role,
             }

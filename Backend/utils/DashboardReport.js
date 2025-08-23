@@ -1,6 +1,5 @@
 import Product from "../models/Product.js";
 import Expense from "../models/Expense.js";
-import Purchase from "../models/Purchase.js";
 import Sale from "../models/Sales.js";
 import Udhaar from "../models/Udhaar.js";
 
@@ -22,15 +21,6 @@ const DashboardReport = async (userId) => {
         }
     });
     console.log(Expenses);
-    const Expenses2 = await Expense.find({
-        userId,
-        $expr: {
-            $and: [
-                { $eq: [{ $month: "$createdAt" }, currentMonth - 1] },
-                { $eq: [{ $year: "$createdAt" }, currentYear] }
-            ]
-        }
-    });
     const Expenses3 = await Expense.find({
         userId,
         $expr: {
@@ -49,15 +39,6 @@ const DashboardReport = async (userId) => {
             ]
         }
     });
-    const Purchases = await Purchase.find({
-        userId,
-        $expr: {
-            $and: [
-                { $eq: [{ $month: "$createdAt" }, currentMonth] },
-                { $eq: [{ $year: "$createdAt" }, currentYear] }
-            ]
-        }
-    });
     const Sales = await Sale.find({
         userId,
         $expr: {
@@ -71,26 +52,15 @@ const DashboardReport = async (userId) => {
     const totalSales = Sales.reduce((sum, s) => sum + (s.totalAmount || 0), 0);
     const totalExpenses = Expenses.reduce((sum, s) => sum + (s.amount || 0), 0);
     const totalCredit = Udhaars.reduce((sum, s) => sum + (s.amount || 0), 0);
-    const totalPurchase = Purchases.reduce((sum, s) => sum + (s.total || 0), 0);
-    // const netProfit = totalSales - totalPurchase - totalExpenses - totalCredit;
-    const netProfit = totalSales - totalPurchase - totalExpenses;
+    const Profit = Sales.reduce((sum, s) => sum + (s.saleProfit || 0), 0);
 
     const summary = {
         sales: totalSales,
         expenses: totalExpenses,
-        profit: netProfit,
+        profit: Profit,
         credit: totalCredit,
     };
 
-    // const Sales2 = await Sale.find({
-    //     userId,
-    //     $expr: {
-    //         $and: [
-    //             { $eq: [{ $month: "$createdAt" }, currentMonth - 1] },
-    //             { $eq: [{ $year: "$createdAt" }, currentYear] }
-    //         ]
-    //     }
-    // });
     const Sales3 = await Sale.find({
         userId,
         $expr: {

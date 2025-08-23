@@ -9,6 +9,7 @@ const createSale = async (req, res) => {
             return res.status(400).json({ msg: "Items are required" });
         }
         let totalAmount = 0;
+        let saleProfit = 0;
         for (const item of items) {
             const product = await Product.findById(item.productId);
             if (!product) {
@@ -24,12 +25,14 @@ const createSale = async (req, res) => {
             product.quantity -= item.quantity;
             await product.save();
             totalAmount += (item.quantity * item.price);
+            saleProfit += ((product.sellingPrice - product.purchasePrice)* item.quantity)
         }
         const sale = new Sale({
             userId,
             items,
             customerName,
-            totalAmount
+            totalAmount,
+            saleProfit
         });
         await sale.save();
         res.status(201).json({ msg: "Sale recorded successfully", sale });

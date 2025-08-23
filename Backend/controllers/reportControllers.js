@@ -52,7 +52,7 @@ const getReport = async (req, res) => {
             ]
         });
 
-        if (!sale.length && purchase.length && !expense.length && !udhaar.length) {
+        if (!sale.length && !purchase.length && !expense.length && !udhaar.length) {
             console.log("NO DATA")
             return res.status(404).json({ msg: "No data found for this selection" });
         }
@@ -72,6 +72,7 @@ const getReport = async (req, res) => {
                 totalProfit: report.totalProfit,
                 totalExpense: report.totalExpense,
                 totalUdhaar: report.totalUdhaar,
+                totalPaidUdhaar: report.totalPaidUdhaar,
                 netAmount: report.netAmount,
                 totalQuantitySold: report.totalQuantitySold,
                 numberOfSales: report.numberOfSales,

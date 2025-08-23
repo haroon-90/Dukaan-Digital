@@ -24,7 +24,7 @@ const Navbar = ({ toggleSidebar }) => {
                     <div className="md:flex items-center space-x-8">
                         <button
                             onClick={() => { sessionStorage.clear(); navigate('/login') }}
-                            className='px-2 py-1 flex gap-2 items-center font-bold cursor-pointer bg-white hover:bg-blue-600 hover:text-white rounded-full text-blue-500 transition-colors'
+                            className='px-2 py-1 flex gap-2 items-center font-bold cursor-pointer bg-white hover:bg-blue-600 hover:text-white rounded-lg text-blue-500 transition-colors'
                         >
                             <LogOut size={18} /><span className='hidden md:flex'> Logout</span>
                         </button>

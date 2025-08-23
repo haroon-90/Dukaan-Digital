@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { getProfile, deleteProfile } from '../../services/profileServices.js';
-import { User, Mail, Phone, Briefcase, Store, Calendar, Edit2, Trash2 } from "lucide-react";
+import { User, Mail, Phone, Briefcase, Store, Calendar, Edit2, Trash2, MapPinned } from "lucide-react";
 import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 
@@ -20,7 +20,7 @@ const ProfilePage = () => {
 
   const handleDelete = async () => {
     try {
-      if(confirm("Are you sure you want to delete your account? This will remove all your data.")){
+      if (confirm("Are you sure you want to delete your account? This will remove all your data.")) {
         const deleted = await deleteProfile();
         if (deleted) {
           console.log("Profile deleted seccessfully")
@@ -64,6 +64,7 @@ const ProfilePage = () => {
         <div className="p-6 space-y-4">
           <ProfileDetail icon={<Mail size={18} />} label="Email" value={profile.email} />
           <ProfileDetail icon={<Phone size={18} />} label="Phone" value={profile.phone} />
+          <ProfileDetail icon={<MapPinned size={18} />} label="Address" value={profile.address} />
           <ProfileDetail icon={<Store size={18} />} label="Shop Name" value={profile.shopname} />
           <ProfileDetail icon={<Briefcase size={18} />} label="Role" value={profile.role} />
           <ProfileDetail

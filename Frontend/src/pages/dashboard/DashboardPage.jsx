@@ -6,11 +6,8 @@ import {
     YAxis,
     Tooltip,
     ResponsiveContainer,
-    PieChart,
-    Pie,
-    Cell,
 } from "recharts";
-import { ShoppingCart, HandCoins, DollarSign, Receipt, MessageCircleWarning } from "lucide-react";
+import { ShoppingCart, HandCoins, DollarSign, Receipt, MessageCircleWarning, Eye, EyeOff } from "lucide-react";
 import { getDashboard } from "../../services/dashboardServices";
 
 const Card = ({ children, className = "" }) => (
@@ -22,6 +19,7 @@ const CardContent = ({ children, className = "" }) => (
 );
 
 const Dashboard = () => {
+    const [ishide, setishide] = useState(true);
     const [loading, setloading] = useState(true);
     const [summary, setsummary] = useState()
     const [salesData, setsalesData] = useState()
@@ -33,9 +31,6 @@ const Dashboard = () => {
             setsummary(res.data.summary);
             setsalesData(res.data.salesData);
             setLowStock(res.data.lowStock);
-            // console.log("Summary:", res.data.summary);
-            // console.log("Sales Data:", res.data.salesData);
-            // console.log("Low Stock:", res.data.lowStock);
             setloading(false);
         } catch (err) {
             console.log(err);
@@ -46,66 +41,52 @@ const Dashboard = () => {
         fetchData();
     }, [])
 
-    // Dummy Data
-    // const summary = {
-    //     sales: 120000,
-    //     expenses: 80000,
-    //     profit: 40000,
-    //     credit: 15000,
-    // };
-
-    // const salesData = [
-    //     { month: "Jan", sales: 30000, expenses: 20000 },
-    //     { month: "Feb", sales: 25000, expenses: 18000 },
-    //     { month: "Mar", sales: 40000, expenses: 30000 },
-    // ];
-
-    const RecentSales = [
-        { item: "Rice (5kg)", amount: 1750 },
-        { item: "Cooking Oil (2L)", amount: 800 },
-    ];
-
-    const categoryData = [
-        { name: "Grocery", value: 40000 },
-        { name: "Dairy", value: 30000 },
-        { name: "Bakery", value: 20000 },
-        { name: "Frozen", value: 10000 },
-    ];
-
-    const COLORS = ["#4F46E5", "#10B981", "#F59E0B", "#EF4444"];
-
-    // const lowStock = [
-    //     { item: "Milk Bread", qty: 2 },
-    //     { item: "Butter", qty: 1 },
-    // ];
-
     return (
         <div>
             {loading ? (
                 <div className="flex flex-col items-center justify-center bg-gray-50 min-h-screen">
-                    <span class="loader">loading..</span>
+                    <span class="loader"></span>
                     <span className="text-blue-600 font-bold text-xl mt-2">Loading...</span>
                 </div>) :
                 <div className="p-6 bg-gray-50 min-h-screen">
-                    {/* <div className="flex justify-center">
+                    <div className="flex justify-between items-center">
                         <h1 className="text-3xl text-blue-700 font-bold p-2 px-4 mb-4 rounded-full border-2 border-t-red-500 border-l-green-500 border-r-yellow-500">
                             {JSON.parse(sessionStorage.getItem("user")).shopname}
                         </h1>
-                    </div> */}
-                    <h1 className="text-3xl font-bold mb-6">
+                        <div className={`p-2 rounded-full border-2 border-dashed border-gray-400 flex items-center justify-center  transition-colors ${ishide ? "bg-red-100 border-red-600" : "bg-green-100 border-green-600"}`} title={ishide ? "Show Values" : "Hide Values"}>
+                            {ishide ? (
+                                <EyeOff className="text-red-600 cursor-pointer" size={24} onClick={() => setishide(!ishide)} />
+                            ) : (
+                                <Eye className="text-green-600 cursor-pointer" size={24} onClick={() => setishide(!ishide)} />
+                            )}
+                        </div>
+                    </div>
+                    {/* <h1 className="text-3xl font-bold mb-6">
                         {JSON.parse(sessionStorage.getItem("user")).shopname}
-                    </h1>
+                    </h1> */}
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
                         <Card className="bg-blue-500 text-white">
                             <CardContent className="flex items-center justify-between">
                                 <div>
-                                    <p className="text-sm">Total Sales</p>
+                                    <p className="text-sm">Sales</p>
                                     <h2 className="text-2xl font-bold">
-                                        ₨ {summary.sales.toLocaleString()}
+                                        {ishide ? "*****" : `₨ ${summary.sales.toLocaleString()}`}
                                     </h2>
                                 </div>
                                 <ShoppingCart size={40} />
+                            </CardContent>
+                        </Card>
+
+                        <Card className="bg-green-500 text-white">
+                            <CardContent className="flex items-center justify-between">
+                                <div>
+                                    <p className="text-sm">Profit</p>
+                                    <h2 className="text-2xl font-bold">
+                                        {ishide ? "*****" : `₨ ${summary.profit.toLocaleString()}`}
+                                    </h2>
+                                </div>
+                                <DollarSign size={40} />
                             </CardContent>
                         </Card>
 
@@ -114,22 +95,10 @@ const Dashboard = () => {
                                 <div>
                                     <p className="text-sm">Expenses</p>
                                     <h2 className="text-2xl font-bold">
-                                        ₨ {summary.expenses.toLocaleString()}
+                                        {ishide ? "*****" : `₨ ${summary.expenses.toLocaleString()}`}
                                     </h2>
                                 </div>
                                 <Receipt size={40} />
-                            </CardContent>
-                        </Card>
-
-                        <Card className="bg-green-500 text-white">
-                            <CardContent className="flex items-center justify-between">
-                                <div>
-                                    <p className="text-sm">Net Profit</p>
-                                    <h2 className="text-2xl font-bold">
-                                        ₨ {summary.profit.toLocaleString()}
-                                    </h2>
-                                </div>
-                                <DollarSign size={40} />
                             </CardContent>
                         </Card>
 
@@ -138,7 +107,7 @@ const Dashboard = () => {
                                 <div>
                                     <p className="text-sm">Credit</p>
                                     <h2 className="text-2xl font-bold">
-                                        ₨ {summary.credit.toLocaleString()}
+                                        {ishide ? "*****" : `₨ ${summary.credit.toLocaleString()}`}
                                     </h2>
                                 </div>
                                 <HandCoins size={40} />
@@ -146,7 +115,6 @@ const Dashboard = () => {
                         </Card>
                     </div>
 
-                    {/* Charts Section */}
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
                         <Card>
                             <CardContent>
@@ -169,6 +137,9 @@ const Dashboard = () => {
                                     {/* <span className="text-yellow-500">⚠</span> Low Stock Alerts */}
                                     <MessageCircleWarning className="text-red-600" size={18} /> Low Stock Alerts
                                 </h2>
+                                {lowStock.length === 0 &&
+                                    <p className="text-red-600 text-center">No low stock items</p>
+                                }
                                 <ul className="space-y-2">
                                     {lowStock.map((item, index) => (
                                         <li
@@ -182,55 +153,6 @@ const Dashboard = () => {
                                 </ul>
                             </CardContent>
                         </Card>
-
-                        {/* <Card>
-                            <CardContent>
-                                <h2 className="text-lg font-semibold mb-4">Category-wise Sales</h2>
-                                <ResponsiveContainer width="100%" height={250}>
-                                    <PieChart>
-                                        <Pie
-                                            data={categoryData}
-                                            dataKey="value"
-                                            nameKey="name"
-                                            cx="50%"
-                                            cy="50%"
-                                            outerRadius={80}
-                                            label
-                                        >
-                                            {categoryData.map((entry, index) => (
-                                                <Cell
-                                                    key={`cell-${index}`}
-                                                    fill={COLORS[index % COLORS.length]}
-                                                />
-                                            ))}
-                                        </Pie>
-                                        <Tooltip />
-                                    </PieChart>
-                                </ResponsiveContainer>
-                            </CardContent>
-                        </Card> */}
-                    </div>
-
-                    {/* Recent Activity & Low Stock */}
-                    <div className="gap-6">
-                        {/* <Card className="bg-green-50 rounded-xl">
-                            <CardContent>
-                                <h2 className="text-lg font-semibold mb-4 flex items-center gap-2">
-                                    <ShoppingCart className="text-green-600" size={18} />Recent Sales
-                                </h2>
-                                <ul className="space-y-2">
-                                    {RecentSales.map((item, index) => (
-                                        <li
-                                            key={index}
-                                            className="not-even:bg-green-100 p-0.5 rounded flex justify-between text-green-600 font-medium"
-                                        >
-                                            <span>{item.item}</span>
-                                            <span>{item.qty} left</span>
-                                        </li>
-                                    ))}
-                                </ul>
-                            </CardContent>
-                        </Card> */}
 
                     </div>
                 </div>
