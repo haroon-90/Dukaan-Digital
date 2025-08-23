@@ -1,7 +1,7 @@
-import { useState, useEffect } from 'react'
-import { getProductById, updateProduct } from '../../services/productServices.js'
+import React, { useState, useEffect } from 'react';
+import { addProduct, getProductById, updateProduct } from '../../services/productServices.js';
 import { useParams, useNavigate } from "react-router-dom";
-import toast from 'react-hot-toast';
+import { toast } from 'react-hot-toast';
 
 const ProductFormPage = () => {
   const { id } = useParams();
@@ -15,18 +15,21 @@ const ProductFormPage = () => {
     quantity: '',
     unit: ''
   });
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    const fetchProduct = async () => {
-      try {
-        const res = await getProductById(id);
-        setProduct(res.data);
-      } catch (err) {
-        toast.error("Failed to edit product")
-        navigate('/products')
-      }
-    };
-    fetchProduct();
+    if (id) {
+      const fetchProduct = async () => {
+        try {
+          const res = await getProductById(id);
+          setProduct(res.data);
+          toast.success('Product fetched successfully!');
+        } catch (err) {
+          toast.error('Failed to fetch product!');
+        }
+      };
+      fetchProduct();
+    }
   }, [id]);
 
   const handleChange = (e) => {
@@ -35,115 +38,135 @@ const ProductFormPage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
+
     try {
-      await updateProduct(id, product);
-      toast.success("Product updated successfully");
+      if (id) {
+        await updateProduct(id, product);
+        toast.success('Product updated successfully!');
+      } else {
+        await addProduct(product);
+        toast.success('Product added successfully!');
+        setProduct({
+          itemname: '',
+          category: '',
+          purchasePrice: '',
+          sellingPrice: '',
+          quantity: '',
+          unit: ''
+        });
+      }
       setTimeout(() => {
         navigate('/products');
-      }, 500);
+      }, 1500);
     } catch (err) {
-      toast.error(err.response?.data?.msg || "Failed to add product!")
+      toast.error('Error saving product!');
+      console.error(err);
     }
+
+    setLoading(false);
   };
 
   return (
-    <div className="flex items-center justify-center p-6 bg-white">
-      <div className="w-full max-w-lg bg-white rounded-2xl shadow-2xl p-8 border border-gray-100">
-        <h2 className="text-3xl font-extrabold text-center text-blue-700 mb-6 tracking-tight">
-          Edit Product
+    <div className="bg-white flex justify-center items-center p-6">
+      <form
+        onSubmit={handleSubmit}
+        className="bg-white shadow-lg rounded-xl p-6 w-full max-w-md border border-blue-300"
+      >
+        <h2 className="text-2xl font-bold text-blue-700 mb-4 text-center">
+          {id ? "Edit Product" : "Add New Product"}
         </h2>
 
-        <form onSubmit={handleSubmit} className="space-y-5">
+        <div className="mb-4">
+          <label className="block text-blue-700 font-medium mb-1">Item Name</label>
+          <input
+            name="itemname"
+            value={product.itemname}
+            onChange={handleChange}
+            type="text"
+            placeholder="Enter item name"
+            className="w-full border border-blue-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            required
+          />
+        </div>
+
+        <div className="mb-4">
+          <label className="block text-blue-700 font-medium mb-1">Category</label>
+          <input
+            name="category"
+            value={product.category}
+            onChange={handleChange}
+            type="text"
+            placeholder="Enter category"
+            className="w-full border border-blue-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            required
+          />
+        </div>
+
+        <div className="grid grid-cols-2 gap-4 mb-4">
           <div>
-            <label className="block text-gray-800 font-semibold mb-1">Item Name</label>
+            <label className="block text-blue-700 font-medium mb-1">Purchase Price</label>
             <input
-              name="itemname"
+              name="purchasePrice"
+              value={product.purchasePrice}
               onChange={handleChange}
-              value={product.itemname}
-              type="text"
-              placeholder="Enter item name"
+              type="number"
+              placeholder="0.00"
+              className="w-full border border-blue-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
               required
-              className="w-full px-4 py-2.5 border rounded-lg bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent transition-all duration-200"
             />
           </div>
 
           <div>
-            <label className="block text-gray-800 font-semibold mb-1">Category</label>
+            <label className="block text-blue-700 font-medium mb-1">Selling Price</label>
             <input
-              name="category"
+              name="sellingPrice"
+              value={product.sellingPrice}
               onChange={handleChange}
-              value={product.category}
-              type="text"
-              placeholder="Enter category"
+              type="number"
+              placeholder="0.00"
+              className="w-full border border-blue-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
               required
-              className="w-full px-4 py-2.5 border rounded-lg bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent transition-all duration-200"
+            />
+          </div>
+        </div>
+
+        <div className="grid grid-cols-2 gap-4 mb-4">
+          <div>
+            <label className="block text-blue-700 font-medium mb-1">Quantity</label>
+            <input
+              name="quantity"
+              value={product.quantity}
+              onChange={handleChange}
+              type="number"
+              placeholder="Enter quantity"
+              className="w-full border border-blue-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              required
             />
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <label className="block text-gray-800 font-semibold mb-1">Purchase Price</label>
-              <input
-                name="purchasePrice"
-                onChange={handleChange}
-                value={product.purchasePrice}
-                type="number"
-                placeholder="0.00"
-                required
-                className="w-full px-4 py-2.5 border rounded-lg bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent transition-all duration-200"
-              />
-            </div>
-
-            <div>
-              <label className="block text-gray-800 font-semibold mb-1">Selling Price</label>
-              <input
-                name="sellingPrice"
-                onChange={handleChange}
-                value={product.sellingPrice}
-                type="number"
-                placeholder="0.00"
-                required
-                className="w-full px-4 py-2.5 border rounded-lg bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent transition-all duration-200"
-              />
-            </div>
+          <div>
+            <label className="block text-blue-700 font-medium mb-1">Unit</label>
+            <input
+              name="unit"
+              value={product.unit}
+              onChange={handleChange}
+              type="text"
+              placeholder="e.g. kg, pcs"
+              className="w-full border border-blue-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              required
+            />
           </div>
+        </div>
 
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <label className="block text-gray-800 font-semibold mb-1">Quantity</label>
-              <input
-                name="quantity"
-                onChange={handleChange}
-                value={product.quantity}
-                type="number"
-                placeholder="Enter quantity"
-                required
-                className="w-full px-4 py-2.5 border rounded-lg bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent transition-all duration-200"
-              />
-            </div>
-
-            <div>
-              <label className="block text-gray-800 font-semibold mb-1">Unit</label>
-              <input
-                name="unit"
-                onChange={handleChange}
-                value={product.unit}
-                type="text"
-                placeholder="e.g. kg, pcs"
-                required
-                className="w-full px-4 py-2.5 border rounded-lg bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent transition-all duration-200"
-              />
-            </div>
-          </div>
-
-          <button
-            type="submit"
-            className="mx-auto block w-full bg-blue-600 text-white py-3 rounded-lg font-semibold shadow-lg hover:bg-blue-700 hover:shadow-xl transition-all duration-200"
-          >
-            Update Product
-          </button>
-        </form>
-      </div>
+        <button
+          type="submit"
+          disabled={loading}
+          className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg transition duration-200 disabled:opacity-50"
+        >
+          {loading ? (id ? "Updating..." : "Saving...") : (id ? "Update Product" : "Add Product")}
+        </button>
+      </form>
     </div>
   );
 };

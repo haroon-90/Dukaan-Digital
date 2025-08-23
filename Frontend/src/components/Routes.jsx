@@ -80,6 +80,7 @@ export default function AppRouter() {
           {/* Products */}
           <Route path="products">
             <Route index element={<ProductListPage />} />
+            <Route path="new" element={<ProductFormPage />} />
             <Route path="edit/:id" element={<ProductFormPage />} />
           </Route>
 

@@ -11,6 +11,7 @@ import PurchaseRoutes from './routes/PurchaseRoutes.js'
 import UdhaarRoutes from './routes/UdhaarRoutes.js'
 import ExpenseRoutes from './routes/ExpenseRoutes.js'
 import ReportRoutes from './routes/ReportRoutes.js'
+import Dashboard from './routes/DashboardRoutes.js'
 
 dotenv.config();
 
@@ -19,8 +20,8 @@ const app = express();
 app.use(express.json());
 // app.use(cors());
 app.use(cors({
-  origin: 'http://localhost:5173', // Allow requests from your frontend origin
-  credentials: true // Allow sending and receiving cookies/authentication headers
+    origin: 'http://localhost:5173', // Allow requests from your frontend origin
+    credentials: true // Allow sending and receiving cookies/authentication headers
 }));
 
 app.get('/', (_, res) => {
@@ -35,6 +36,7 @@ app.use('/api/purchase', PurchaseRoutes)
 app.use('/api/udhaar', UdhaarRoutes)
 app.use('/api/expense', ExpenseRoutes)
 app.use('/api/report', ReportRoutes)
+app.use('/api/dashboard', Dashboard)
 
 const PORT = process.env.PORT || 5000;
 mongoose.connect(process.env.MONGODB_URL)
