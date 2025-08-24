@@ -90,16 +90,16 @@ const ReportReceipt = ({ report, period }) => {
                     کی فروخت ہوئی،
                     <span className="underline text-orange-600 mx-1">{report.totalExpense}</span>
                     خرچ ہوا اور
-                    {report.netAmount >= 0 ? (
+                    {report.totalProfit >= 0 ? (
                         <span className="underline text-green-600 mx-1">
-                            {report.netAmount}
+                            {report.totalProfit}
                         </span>
                     ) : (
                         <span className="underline text-red-600 mx-1">
-                            {Math.abs(report.netAmount)}
+                            {Math.abs(report.totalProfit)}
                         </span>
                     )}
-                    {report.netAmount >= 0 ? (
+                    {report.totalProfit >= 0 ? (
                         <span>
                             منافع
                         </span>
@@ -108,7 +108,7 @@ const ReportReceipt = ({ report, period }) => {
                             نقصان
                         </span>
                     )}
-                    {report.netAmount >= 0 ? " بچا۔" : " ہوا۔"}
+                    {report.totalProfit >= 0 ? " بچا۔" : " ہوا۔"}
                 </div>
 
                 <div className='flex flex-col items-start justify-center mt-4 pt-2 border-y border-dashed border-gray-400 print:border-solid'>

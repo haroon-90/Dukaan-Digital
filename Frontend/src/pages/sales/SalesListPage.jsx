@@ -173,7 +173,7 @@ const SalesListPage = () => {
                     </button>
                     <button
                       onClick={() => handleDelete(item)}
-                      className="flex items-center gap-1 text-blue-600 hover:text-blue-800 transition"
+                      className="flex items-center gap-1 text-red-500 hover:text-red-600 transition"
                     >
                       <Trash2 size={18} />
                     </button>

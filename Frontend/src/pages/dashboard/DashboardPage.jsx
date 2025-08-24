@@ -7,7 +7,7 @@ import {
     Tooltip,
     ResponsiveContainer,
 } from "recharts";
-import { ShoppingCart, HandCoins, DollarSign, Receipt, MessageCircleWarning, Eye, EyeOff } from "lucide-react";
+import { ShoppingCart, HandCoins, DollarSign, Receipt, MessageCircleWarning, Eye, EyeOff, Sparkles, PartyPopper, CheckCircle2, TrendingUp } from "lucide-react";
 import { getDashboard } from "../../services/dashboardServices";
 
 const Card = ({ children, className = "" }) => (
@@ -61,9 +61,6 @@ const Dashboard = () => {
                             )}
                         </div>
                     </div>
-                    {/* <h1 className="text-3xl font-bold mb-6">
-                        {JSON.parse(sessionStorage.getItem("user")).shopname}
-                    </h1> */}
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
                         <Card className="bg-blue-500 text-white">
@@ -131,14 +128,28 @@ const Dashboard = () => {
                             </CardContent>
                         </Card>
 
-                        <Card className="bg-red-50 rounded-xl">
+                        <Card className="rounded-xl">
                             <CardContent >
                                 <h2 className="text-lg font-semibold mb-4 flex items-center gap-2">
-                                    {/* <span className="text-yellow-500">⚠</span> Low Stock Alerts */}
                                     <MessageCircleWarning className="text-red-600" size={18} /> Low Stock Alerts
                                 </h2>
                                 {lowStock.length === 0 &&
-                                    <p className="text-red-600 text-center">No low stock items</p>
+                                    <li className="relative p-6 rounded-xl shadow-md bg-green-600 text-white">
+                                        <div className="absolute -top-2 -right-2 bg-white/20 backdrop-blur-sm rounded-full p-2">
+                                            <Sparkles size={18} />
+                                        </div>
+
+                                        <div className="flex items-center justify-center gap-3">
+                                            <PartyPopper size={28} />
+                                            <span className="text-lg font-semibold">All items are fully stocked!</span>
+                                            <CheckCircle2 size={24} />
+                                        </div>
+
+                                        <p className="text-sm text-white/90 text-center mt-1">
+                                            Your inventory is in perfect shape
+                                            <TrendingUp size={16} className="inline" />
+                                        </p>
+                                    </li>
                                 }
                                 <ul className="space-y-2">
                                     {lowStock.map((item, index) => (

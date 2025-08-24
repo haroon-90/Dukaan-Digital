@@ -7,7 +7,7 @@ const uri = "mongodb://localhost:27017/Dukaan_Digital";
 mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 
 // Dummy userId (replace with a valid ObjectId from your database)
-const userId = "68aa0c9a81f12874e1d822d2";
+const userId = "68ab49467981f620debaef87";
 const today = new Date().toISOString().split("T")[0];
 
 const purchases = [

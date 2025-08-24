@@ -61,7 +61,7 @@ const UdhaarFormPage = () => {
         toast.success(isEdit ? "Credit updated successfully!" : "Credit added successfully!");
         setTimeout(() => {
           navigate('/udhaar');
-        }, 1500);
+        }, 200);
       } else {
         toast.error('Failed');
       }

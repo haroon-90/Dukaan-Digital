@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { addProduct, getProductById, updateProduct } from '../../services/productServices.js';
 import { useParams, useNavigate } from "react-router-dom";
 import { toast } from 'react-hot-toast';
@@ -58,7 +58,7 @@ const ProductFormPage = () => {
       }
       setTimeout(() => {
         navigate('/products');
-      }, 1500);
+      }, 200);
     } catch (err) {
       toast.error('Error saving product!');
       console.error(err);

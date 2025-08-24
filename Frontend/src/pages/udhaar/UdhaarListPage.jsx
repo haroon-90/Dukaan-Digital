@@ -60,14 +60,14 @@ const UdhaarListPage = () => {
 
   return (
     <div className="p-6 min-h-screen bg-white">
-      <div className="flex justify-between mb-4">
-        <div className="flex flex-wrap gap-4">
+      <div className="flex justify-between gap-1 mb-4 w-full">
+        <div className="flex flex-wrap w-[calc(100%-8.75rem)] gap-4">
           <input
             type="text"
             placeholder="Search by name or contact..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="px-4 py-2 min-w-100 border border-blue-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="px-4 py-2 md:w-3xl border border-blue-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
           <select
             value={statusFilter}
@@ -80,10 +80,10 @@ const UdhaarListPage = () => {
           </select>
         </div>
 
-        <div className="flex justify-between items-center mb-2">
+        <div className="mb-2">
           <button
             onClick={() => navigate("/udhaar/new")}
-            className="bg-blue-600 flex gap-2 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition"
+            className="bg-blue-600 w-35 flex items-center gap-2 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition"
           >
             <HandCoins size={23} />
             Add Credit
@@ -135,7 +135,7 @@ const UdhaarListPage = () => {
                     </td>
                     <td className="px-4 py-2 flex justify-between items-center">
                       <button onClick={() => handleEdit(item)} className="text-blue-600"><Edit2 size={18} /></button>
-                      <button onClick={() => handleDelete(item)} className="text-blue-600"><Trash2 size={18} /></button>
+                      <button onClick={() => handleDelete(item)} className="text-red-500"><Trash2 size={18} /></button>
                     </td>
                   </tr>
                 ))
