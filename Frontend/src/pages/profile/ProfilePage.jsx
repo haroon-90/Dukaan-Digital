@@ -86,19 +86,19 @@ const ProfilePage = () => {
             {<Trash2 size={18} />}
           </div>
           <div className="w-fit mx-auto mb-2 p-2 rounded-full bg-white flex items-center justify-center font-bold text-2xl shadow-lg">
-            <h1 className='text-black Logo-font'>{profile.shopname}</h1>
+            <h1 className='text-black Logo-font'>{profile.shopname || JSON.parse(sessionStorage.getItem("user")).shopname}</h1>
           </div>
-          <h2 className="text-xl font-semibold">{profile.name}</h2>
-          <p className="text-sm opacity-80 capitalize">{profile.role}</p>
+          <h2 className="text-xl font-semibold">{profile.name || JSON.parse(sessionStorage.getItem("user")).name}</h2>
+          <p className="text-sm opacity-80 capitalize">{profile.role || JSON.parse(sessionStorage.getItem("user")).role}</p>
         </div>
 
         <div className="p-6 space-y-4">
-          <ProfileDetail icon={<User size={18} />} label="Name" value={profile.name} />
-          <ProfileDetail icon={<Mail size={18} />} label="Email" value={profile.email} />
-          <ProfileDetail icon={<Phone size={18} />} label="Phone" value={profile.phone} />
-          <ProfileDetail icon={<MapPinned size={18} />} label="Address" value={profile.address} />
-          <ProfileDetail icon={<Store size={18} />} label="Shop Name" value={profile.shopname} />
-          <ProfileDetail icon={<Briefcase size={18} />} label="Role" value={profile.role} />
+          <ProfileDetail icon={<User size={18} />} label="Name" value={profile.name || JSON.parse(sessionStorage.getItem("user")).name} />
+          <ProfileDetail icon={<Mail size={18} />} label="Email" value={profile.email || JSON.parse(sessionStorage.getItem("user")).email} />
+          <ProfileDetail icon={<Phone size={18} />} label="Phone" value={profile.phone || JSON.parse(sessionStorage.getItem("user")).phone} />
+          <ProfileDetail icon={<MapPinned size={18} />} label="Address" value={profile.address || JSON.parse(sessionStorage.getItem("user")).address} />
+          <ProfileDetail icon={<Store size={18} />} label="Shop Name" value={profile.shopname || JSON.parse(sessionStorage.getItem("user")).shopname} />
+          <ProfileDetail icon={<Briefcase size={18} />} label="Role" value={profile.role || JSON.parse(sessionStorage.getItem("user")).role} />
           <ProfileDetail
             icon={<Calendar size={18} />}
             label="Joined On"

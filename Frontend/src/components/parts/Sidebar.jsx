@@ -41,7 +41,7 @@ const Sidebar = ({ toggleSidebar }) => {
             icon: <ReceiptIcon size={20} />,
         },
         {
-            label: "Credit",
+            label: "Credits",
             path: "/udhaar",
             icon: <HandCoins size={20} />,
         },
