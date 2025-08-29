@@ -5,6 +5,7 @@ import tailwindcss from '@tailwindcss/vite';
 import manifest from './public/manifest.json';
 
 export default defineConfig({
+  base: '/Dukaan-Digital/',
   plugins: [
     react(),
     tailwindcss(),
