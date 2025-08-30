@@ -3,6 +3,7 @@ import { getExpense, deleteExpense } from '../../services/expenseServices.js';
 import { Trash2, FileText } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
+import Loader from '../loader/loader.jsx';
 
 const ExpenseListPage = () => {
   const navigate = useNavigate();
@@ -62,9 +63,10 @@ const ExpenseListPage = () => {
         <h1 className="text-xl font-semibold text-blue-700 mb-4">Expense Records</h1>
 
         {loading ? (
-          <div className="flex justify-center items-center py-6">
-            <div className="w-12 h-12 border-4 border-t-4 border-gray-200 border-t-blue-500 rounded-full animate-spin"></div>
-          </div>
+          // <div className="flex justify-center items-center py-6">
+          //   <div className="w-12 h-12 border-4 border-t-4 border-gray-200 border-t-blue-500 rounded-full animate-spin"></div>
+          // </div>
+          <Loader/>
         ) : (
           <div className="overflow-x-auto shadow-lg rounded-lg">
             <table className="w-full text-sm text-left text-gray-700">

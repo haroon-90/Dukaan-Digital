@@ -3,26 +3,32 @@ import { getUdhaarlist, deleteUdhaar } from "../../services/udhaarServices.js";
 import { Trash2, Edit2, HandCoins } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
+import Loader from "../loader/loader.jsx";
 
 const UdhaarListPage = () => {
   const navigate = useNavigate();
   const [udhaarList, setUdhaarList] = useState([]);
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
+  const [loading, setloading] = useState(true);
 
   const getUdhaar = async () => {
     try {
+      setloading(true);
       const res = await getUdhaarlist();
       if (res.data && res.data.length > 0) {
         setUdhaarList(res.data.reverse());
         toast.success("Data Refreshed")
+        setloading(false);
       } else {
         toast.error("Failed to refresh Credit record");
         setUdhaarList([]);
+        setloading(false);
       }
     } catch (err) {
       toast.error("Failed to refresh Credit record");
       console.error("Error fetching udhaar list", err);
+      setloading(false);
     }
   };
 
@@ -93,65 +99,75 @@ const UdhaarListPage = () => {
 
       <div className="bg-white shadow-md rounded-lg border border-blue-200 p-6 space-y-4">
         <h1 className="text-2xl font-bold text-blue-700">Credit Records</h1>
+
+        {loading &&
+          // <div className="flex justify-center items-center py-6">
+          //   <div className="w-12 h-12 border-4 border-t-4 border-gray-200 border-t-blue-500 rounded-full animate-spin"></div>
+          // </div>
+          <Loader />
+        }
+
         {/* Table */}
-        <div className="overflow-x-auto shadow-lg rounded-lg">
-          <table className="min-w-full bg-white border border-blue-200">
-            <thead className="bg-blue-600 text-white uppercase text-xs">
-              <tr>
-                <th className="px-4 py-3 text-left">Customer Name</th>
-                <th className="px-4 py-3 text-left">Contact</th>
-                <th className="px-4 py-3 text-left">Amount</th>
-                <th className="px-4 py-3 text-left">Reason</th>
-                <th className="px-4 py-3 text-left">Status</th>
-                <th className="px-4 py-3 text-left">Created At</th>
-                <th className="px-4 py-3 text-left"></th>
-              </tr>
-            </thead>
-            <tbody>
-              {filteredData.length > 0 ? (
-                filteredData.map((item) => (
-                  <tr
-                    key={item._id}
-                    className="border-b border-blue-100 hover:bg-blue-50 transition"
-                  >
-                    <td className="px-4 py-2">{item.customerName}</td>
-                    <td className="px-4 py-2">{item.contact}</td>
-                    <td className="px-4 py-2 font-semibold text-blue-800">
-                      Rs {item.amount}
-                    </td>
-                    <td className="px-4 py-2">
-                      {item.reason || "No reason provided"}
-                    </td>
-                    <td
-                      className={`px-4 py-2 font-medium ${item.status === "paid"
-                        ? "text-green-600"
-                        : "text-red-600"
-                        }`}
+        {!loading &&
+          <div className="overflow-x-auto shadow-lg rounded-lg">
+            <table className="min-w-full bg-white border border-blue-200">
+              <thead className="bg-blue-600 text-white uppercase text-xs">
+                <tr>
+                  <th className="px-4 py-3 text-left">Customer Name</th>
+                  <th className="px-4 py-3 text-left">Contact</th>
+                  <th className="px-4 py-3 text-left">Amount</th>
+                  <th className="px-4 py-3 text-left">Reason</th>
+                  <th className="px-4 py-3 text-left">Status</th>
+                  <th className="px-4 py-3 text-left">Created At</th>
+                  <th className="px-4 py-3 text-left"></th>
+                </tr>
+              </thead>
+              <tbody>
+                {filteredData.length > 0 ? (
+                  filteredData.map((item) => (
+                    <tr
+                      key={item._id}
+                      className="border-b border-blue-100 hover:bg-blue-50 transition"
                     >
-                      {item.status}
-                    </td>
-                    <td className="px-4 py-2">
-                      {new Date(item.createdAt).toLocaleDateString()}
-                    </td>
-                    <td className="px-4 py-2 flex justify-between items-center">
-                      <button onClick={() => handleEdit(item)} className="text-blue-600"><Edit2 size={18} /></button>
-                      <button onClick={() => handleDelete(item)} className="text-red-500"><Trash2 size={18} /></button>
+                      <td className="px-4 py-2">{item.customerName}</td>
+                      <td className="px-4 py-2">{item.contact}</td>
+                      <td className="px-4 py-2 font-semibold text-blue-800">
+                        Rs {item.amount}
+                      </td>
+                      <td className="px-4 py-2">
+                        {item.reason || "No reason provided"}
+                      </td>
+                      <td
+                        className={`px-4 py-2 font-medium ${item.status === "paid"
+                          ? "text-green-600"
+                          : "text-red-600"
+                          }`}
+                      >
+                        {item.status}
+                      </td>
+                      <td className="px-4 py-2">
+                        {new Date(item.createdAt).toLocaleDateString()}
+                      </td>
+                      <td className="px-4 py-2 flex justify-between items-center">
+                        <button onClick={() => handleEdit(item)} className="text-blue-600"><Edit2 size={18} /></button>
+                        <button onClick={() => handleDelete(item)} className="text-red-500"><Trash2 size={18} /></button>
+                      </td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td
+                      colSpan="6"
+                      className="px-4 py-6 text-center text-gray-500"
+                    >
+                      No Credit records found
                     </td>
                   </tr>
-                ))
-              ) : (
-                <tr>
-                  <td
-                    colSpan="6"
-                    className="px-4 py-6 text-center text-gray-500"
-                  >
-                    No Credit records found
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          </table>
-        </div>
+                )}
+              </tbody>
+            </table>
+          </div>
+        }
       </div>
     </div>
   );

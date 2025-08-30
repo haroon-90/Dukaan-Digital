@@ -4,6 +4,7 @@ import { getProducts, deleteProducts } from "../../services/productServices.js";
 import { createsale } from "../../services/saleService.js";
 import { Edit2, Trash2, ShoppingCart, Eye, Package } from "lucide-react";
 import toast from "react-hot-toast";
+import Loader from "../loader/loader.jsx";
 
 const ProductListPage = () => {
   const navigate = useNavigate();
@@ -17,6 +18,7 @@ const ProductListPage = () => {
   const [TotalBill, setTotalBill] = useState(0);
   const [prprice, setprprice] = useState(false);
   const [isSale, setisSale] = useState(false);
+  const [loading, setloading] = useState(true);
 
   const filteredProduct = products.filter((item) =>
     item.itemname.toLowerCase().includes(searchTerm.toLowerCase())
@@ -110,12 +112,15 @@ const ProductListPage = () => {
 
   const loadProducts = async () => {
     try {
+      setloading(true);
       const res = await getProducts();
       setProducts(res.data);
       toast.success("Products refreshed!")
+      setloading(false);
     } catch (err) {
       toast.error("Failed to refresh products")
       console.error("Error fetching products:", err);
+      setloading(false);
     }
   };
 
@@ -280,100 +285,107 @@ const ProductListPage = () => {
           <div className="flex gap-2">
           </div>
         </div>
-        <div className="overflow-x-auto shadow-lg rounded-lg">
-          <table className="w-full text-sm text-left text-gray-700">
-            <thead className="sticky top-0 bg-blue-600 text-white uppercase text-xs">
-              <tr>
-                {[
-                  "Item Name",
-                  "Category",
-                  "Purchase Price",
-                  "Selling Price",
-                  "Quantity",
-                  "Unit",
-                  ...(isSale ? ["Sale"] : []),
-                  ...(isSale ? [] : ["Created At"]),
-                  // "Created At",
-                  ...(isSale ? [] : ["Actions"]),
-                ].map((header, i) => (
-                  <th key={i} className="px-4 py-3">
-                    {header.toLowerCase() === "purchase price" ? (
-                      <div className="flex gap-1 items-center">
-                        {header}
-                        <Eye
-                          className="text-white cursor-pointer"
-                          onClick={() => setprprice(!prprice)}
-                          size={16}
-                        />
-                      </div>
-                    ) : (
-                      header
-                    )}
-                  </th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {filteredProduct.length === 0 ? (
+
+        {loading &&
+          <Loader />
+        }
+
+        {!loading &&
+          <div className="overflow-x-auto shadow-lg rounded-lg">
+            <table className="w-full text-sm text-left text-gray-700">
+              <thead className="sticky top-0 bg-blue-600 text-white uppercase text-xs">
                 <tr>
-                  <td colSpan={9} className="text-center text-blue-500 py-4">
-                    No records found
-                  </td>
+                  {[
+                    "Item Name",
+                    "Category",
+                    "Purchase Price",
+                    "Selling Price",
+                    "Quantity",
+                    "Unit",
+                    ...(isSale ? ["Sale"] : []),
+                    ...(isSale ? [] : ["Created At"]),
+                    // "Created At",
+                    ...(isSale ? [] : ["Actions"]),
+                  ].map((header, i) => (
+                    <th key={i} className="px-4 py-3">
+                      {header.toLowerCase() === "purchase price" ? (
+                        <div className="flex gap-1 items-center">
+                          {header}
+                          <Eye
+                            className="text-white cursor-pointer"
+                            onClick={() => setprprice(!prprice)}
+                            size={16}
+                          />
+                        </div>
+                      ) : (
+                        header
+                      )}
+                    </th>
+                  ))}
                 </tr>
-              ) : (
-                filteredProduct.map((p) => (
-                  <tr key={p._id} className="border-b hover:bg-blue-50 transition">
-                    <td className="px-4 py-3 font-medium text-blue-800">{p.itemname}</td>
-                    <td className="px-4 py-3">{p.category}</td>
-                    <td className="px-4 py-3 text-green-600 font-semibold">
-                      {prprice ? `Rs ${p.purchasePrice}` : "•••"}
+              </thead>
+              <tbody>
+                {filteredProduct.length === 0 ? (
+                  <tr>
+                    <td colSpan={9} className="text-center text-blue-500 py-4">
+                      No records found
                     </td>
-                    <td className="px-4 py-3 text-green-600 font-semibold">Rs {p.sellingPrice}</td>
-                    <td className="px-4 py-3 text-gray-700 font-semibold">{p.quantity}</td>
-                    <td className="px-4 py-3 text-gray-700 font-semibold">{p.unit}</td>
-                    {isSale && (
-                      <td className="px-6 py-4 text-sm flex items-center gap-1">
-                        <input
-                          type="number"
-                          min="1"
-                          value={saleQuantities[p._id] || ""}
-                          onChange={(e) => handleSaleChange(p, e.target.value)}
-                          className="w-16 px-2 py-1 border border-blue-300 rounded focus:ring-2 focus:ring-blue-400 outline-none"
-                        />
-                        <ShoppingCart
-                          onClick={() => handleCartAdd(p)}
-                          className="text-blue-600 cursor-pointer hover:scale-110 transition-transform"
-                          size={18}
-                        />
-                      </td>
-                    )}
-                    {!isSale && (
-                      <td className="px-4 py-3 text-blue-700">
-                        {new Date(p.createdAt).toLocaleDateString()}
-                      </td>
-                    )}
-                    {!isSale && (
-                      <td className="py-2 flex justify-center items-center gap-2">
-                        <button
-                          onClick={() => navigate("/products/edit/" + p._id)}
-                          className="p-2 text-blue-600 rounded-lg hover:bg-blue-100"
-                        >
-                          <Edit2 size={16} />
-                        </button>
-                        <button
-                          onClick={() => handleDelete(p)}
-                          className="p-2 text-red-500 rounded-lg hover:bg-red-100"
-                        >
-                          <Trash2 size={16} />
-                        </button>
-                      </td>
-                    )}
                   </tr>
-                ))
-              )}
-            </tbody>
-          </table>
-        </div>
+                ) : (
+                  filteredProduct.map((p) => (
+                    <tr key={p._id} className="border-b hover:bg-blue-50 transition">
+                      <td className="px-4 py-3 font-medium text-blue-800">{p.itemname}</td>
+                      <td className="px-4 py-3">{p.category}</td>
+                      <td className="px-4 py-3 text-green-600 font-semibold">
+                        {prprice ? `Rs ${p.purchasePrice}` : "•••"}
+                      </td>
+                      <td className="px-4 py-3 text-green-600 font-semibold">Rs {p.sellingPrice}</td>
+                      <td className="px-4 py-3 text-gray-700 font-semibold">{p.quantity}</td>
+                      <td className="px-4 py-3 text-gray-700 font-semibold">{p.unit}</td>
+                      {isSale && (
+                        <td className="px-6 py-4 text-sm flex items-center gap-1">
+                          <input
+                            type="number"
+                            min="1"
+                            value={saleQuantities[p._id] || ""}
+                            onChange={(e) => handleSaleChange(p, e.target.value)}
+                            className="w-16 px-2 py-1 border border-blue-300 rounded focus:ring-2 focus:ring-blue-400 outline-none"
+                          />
+                          <ShoppingCart
+                            onClick={() => handleCartAdd(p)}
+                            className="text-blue-600 cursor-pointer hover:scale-110 transition-transform"
+                            size={18}
+                          />
+                        </td>
+                      )}
+                      {!isSale && (
+                        <td className="px-4 py-3 text-blue-700">
+                          {new Date(p.createdAt).toLocaleDateString()}
+                        </td>
+                      )}
+                      {!isSale && (
+                        <td className="py-2 flex justify-center items-center gap-2">
+                          <button
+                            onClick={() => navigate("/products/edit/" + p._id)}
+                            className="p-2 text-blue-600 rounded-lg hover:bg-blue-100"
+                          >
+                            <Edit2 size={16} />
+                          </button>
+                          <button
+                            onClick={() => handleDelete(p)}
+                            className="p-2 text-red-500 rounded-lg hover:bg-red-100"
+                          >
+                            <Trash2 size={16} />
+                          </button>
+                        </td>
+                      )}
+                    </tr>
+                  ))
+                )}
+              </tbody>
+            </table>
+          </div>
+        }
       </div>
     </div>
   );
