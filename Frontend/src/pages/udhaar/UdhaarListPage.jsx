@@ -67,7 +67,7 @@ const UdhaarListPage = () => {
             placeholder="Search by name or contact..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="px-4 py-2 md:w-3xl border border-blue-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="px-4 py-2 md:w-lg min-w-10 border border-blue-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
           <select
             value={statusFilter}

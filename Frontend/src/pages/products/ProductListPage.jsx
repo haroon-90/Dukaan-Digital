@@ -199,13 +199,13 @@ const ProductListPage = () => {
                 </div>
                 {cart.map((item) => (
                   <div key={item.id} className="flex justify-between text-sm py-2 border-b border-dashed border-gray-200 print:border-solid">
-                    <span className="flex-1 text-blue-800 font-medium truncate">
+                    <span className="flex-1 text-blue-800 font-medium text-wrap">
                       {item.productname}
                     </span>
                     <span className="w-16 text-right">{item.quantity} {item.unit}</span>
-                    <span className="w-20 text-right">₨ {item.price.toLocaleString()}</span>
+                    <span className="w-20 text-right">Rs {item.price.toLocaleString()}</span>
                     <span className="w-20 text-right font-semibold">
-                      ₨ {(item.price * item.quantity).toLocaleString()}
+                      Rs {(item.price * item.quantity).toLocaleString()}
                     </span>
                     <span className="w-10 text-red-500 hover:text-red-600 cursor-pointer"
                       onClick={() => handleCartDelete(item.id)}>
@@ -220,7 +220,7 @@ const ProductListPage = () => {
             <div className="flex justify-between items-baseline font-bold text-xl">
               <span>TOTAL:</span>
               <span className="text-red-600">
-                ₨ {TotalBill.toLocaleString()}
+                Rs {TotalBill.toLocaleString()}
               </span>
             </div>
             <div className="text-center text-xs text-gray-500 mt-2 pt-2 border-t border-dashed border-gray-400 print:border-solid">
@@ -249,7 +249,7 @@ const ProductListPage = () => {
           placeholder="Search product..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-          className="flex-1 px-2 py-1 border border-blue-300 rounded focus:outline-none"
+          className="flex-1 px-2 py-1 min-w-10 border border-blue-300 rounded focus:outline-none"
         />
         {!isSale &&
           <button
@@ -326,9 +326,9 @@ const ProductListPage = () => {
                     <td className="px-4 py-3 font-medium text-blue-800">{p.itemname}</td>
                     <td className="px-4 py-3">{p.category}</td>
                     <td className="px-4 py-3 text-green-600 font-semibold">
-                      {prprice ? `₨ ${p.purchasePrice}` : "•••"}
+                      {prprice ? `Rs ${p.purchasePrice}` : "•••"}
                     </td>
-                    <td className="px-4 py-3 text-green-600 font-semibold">₨ {p.sellingPrice}</td>
+                    <td className="px-4 py-3 text-green-600 font-semibold">Rs {p.sellingPrice}</td>
                     <td className="px-4 py-3 text-gray-700 font-semibold">{p.quantity}</td>
                     <td className="px-4 py-3 text-gray-700 font-semibold">{p.unit}</td>
                     {isSale && (

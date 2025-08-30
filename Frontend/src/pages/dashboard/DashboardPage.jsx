@@ -49,8 +49,8 @@ const Dashboard = () => {
                     <span className="text-blue-600 font-bold text-xl mt-2">Loading...</span>
                 </div>) :
                 <div className="p-6 bg-gray-50 min-h-screen">
-                    <div className="flex justify-between items-center">
-                        <h1 className="text-3xl text-blue-700 font-bold p-2 px-4 mb-4 rounded-full border-2 border-t-red-500 border-l-green-500 border-r-yellow-500">
+                    <div className="flex justify-between items-center gap-2">
+                        <h1 className="text-3xl text-center text-blue-700 font-bold p-2 px-4 mb-4 rounded-full border-2 border-t-red-500 border-l-green-500 border-r-yellow-500">
                             {JSON.parse(sessionStorage.getItem("user")).shopname}
                         </h1>
                         <div className={`p-2 rounded-full border-2 border-dashed border-gray-400 flex items-center justify-center  transition-colors ${ishide ? "bg-red-100 border-red-600" : "bg-green-100 border-green-600"}`} title={ishide ? "Show Values" : "Hide Values"}>

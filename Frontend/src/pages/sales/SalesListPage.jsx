@@ -162,7 +162,7 @@ const SalesListPage = () => {
                     {new Date(item.createdAt).toLocaleDateString()}
                   </td>
                   <td className="px-4 py-3 font-semibold text-green-600">
-                    ₨ {item.totalAmount ? item.totalAmount : item.total}
+                    Rs {item.totalAmount ? item.totalAmount : item.total}
                   </td>
                   <td className="px-4 py-3 flex justify-around">
                     <button
@@ -294,11 +294,11 @@ const SalesListPage = () => {
                   <span className="flex-1 text-blue-800 font-medium">{it.itemname || it.productName}</span>
                   <span className="w-16 text-right">{it.quantity} {it.unit || ""}</span>
                   {type == "sale" &&
-                    <span className="w-20 text-right">₨ {it.price.toLocaleString()}</span> ||
-                    <span className="w-20 text-right">₨ {it.purchasePrice.toLocaleString()}</span>
+                    <span className="w-20 text-right">Rs {it.price.toLocaleString()}</span> ||
+                    <span className="w-20 text-right">Rs {it.purchasePrice.toLocaleString()}</span>
                   }
                   <span className="w-20 text-right font-semibold">
-                    ₨ {type == "sale" ? (it.quantity * it.price).toLocaleString() : (it.quantity * it.purchasePrice).toLocaleString()}
+                    Rs {type == "sale" ? (it.quantity * it.price).toLocaleString() : (it.quantity * it.purchasePrice).toLocaleString()}
                   </span>
                 </div>
               ))}
@@ -308,7 +308,7 @@ const SalesListPage = () => {
               <div className="flex justify-between items-baseline font-bold text-xl">
                 <span>TOTAL:</span>
                 <span className="text-green-600">
-                  ₨ {type == "sale" ? selectedSale.totalAmount.toLocaleString() : selectedSale.total.toLocaleString()}
+                  Rs {type == "sale" ? selectedSale.totalAmount.toLocaleString() : selectedSale.total.toLocaleString()}
                 </span>
               </div>
             </div>
