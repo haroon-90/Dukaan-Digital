@@ -23,11 +23,11 @@ const ContactUs = () => {
                             <div className="space-y-4">
                                 <div className="flex items-center space-x-3">
                                     <span className="text-blue-600 text-xl">📞</span>
-                                    <p><b>Phone:</b> +92 300 1234567</p>
+                                    <p><b>Phone:</b> +92 300 9530640</p>
                                 </div>
                                 <div className="flex items-center space-x-3">
                                     <span className="text-blue-600 text-xl">📧</span>
-                                    <p><b>Email:</b> <a href="mailto:support@dukaandigital.com" className="text-blue-600 hover:underline">support@dukaandigital.com</a></p>
+                                    <p><b>Email:</b> <a href="mailto:haroonboy90@gmail.com" className="text-blue-600 hover:underline">support@dukaandigital.com</a></p>
                                 </div>
                                 <div className="flex items-center space-x-3">
                                     <span className="text-blue-600 text-xl">📍</span>
@@ -35,7 +35,7 @@ const ContactUs = () => {
                                 </div>
                                 <div className="flex items-center space-x-3">
                                     <span className="text-blue-600 text-xl">🌐</span>
-                                    <p><b>Website:</b> <a href="http://www.dukaandigital.com" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">www.dukaandigital.com</a></p>
+                                    <p><b>Website:</b> <a href="https://haroon-90.github.io/Dukaan-Digital/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">www.dukaandigital.pk</a></p>
                                 </div>
                             </div>
                         </div>
@@ -74,7 +74,7 @@ const ContactUs = () => {
                                     type="text"
                                     id="name"
                                     className="w-full mt-2 p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400 focus:outline-none"
-                                    placeholder="e.g., Muhammad Ali"
+                                    placeholder="e.g., Haroon"
                                 />
                             </div>
                             <div>

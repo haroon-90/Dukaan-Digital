@@ -88,7 +88,7 @@ const TermsAndConditions = () => {
 
             <h2 className="text-xl font-semibold mt-8 mb-4">9. Contact Information</h2>
             <p>
-                If you have any questions or concerns about these Terms, please contact us at: <b>support@dukaandigital.com</b>
+                If you have any questions or concerns about these Terms, please contact us at: <b><a href="mailto:haroonboy90@gmail.com" className="text-blue-600 hover:underline">contact@dukaandigital.com</a></b>
             </p>
         </div>
     );

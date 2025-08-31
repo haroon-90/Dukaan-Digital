@@ -6,6 +6,7 @@ import ProtectedRoute from "./ProtectedRoute.jsx"
 import DashboardLayout from "./layout/DashboardLayout.jsx"
 import AuthLayout from "./layout/AuthLayout.jsx"
 import AboutLayout from "./layout/AboutLayout.jsx"
+import AdminLayout from "./layout/AdminLayout.jsx"
 
 // About
 import AboutUs from "../pages/About/AboutUs.jsx"
@@ -16,6 +17,10 @@ import TermaAndConditions from "../pages/about/TermaAndConditions.jsx"
 // Auth Pages
 import LoginPage from "../pages/auth/LoginPage.jsx"
 import RegisterPage from "../pages/auth/RegisterPage.jsx"
+
+// Admin
+import Admindashboard from "../pages/admin/admindashboard.jsx"
+import AdminPage from "../pages/admin/AdminPage.jsx"
 
 // Dashboard
 import DashboardPage from "../pages/dashboard/DashboardPage.jsx"
@@ -53,7 +58,6 @@ export default function AppRouter() {
       {/* Auth Layout Routes */}
       <Route element={<AuthLayout />}>
         <Route path="/login" element={<LoginPage />} />
-        <Route path="/register" element={<RegisterPage />} />
       </Route>
 
       {/* Auth Layout Routes */}
@@ -64,12 +68,21 @@ export default function AppRouter() {
         <Route path="/contactus" element={<ContactUs />} />
       </Route>
 
+      {/* Admin Routes */}
+      <Route element={<ProtectedRoute role="admin" />}>
+        <Route element={<AdminLayout />}>
+          <Route path="/admin" element={<Admindashboard />} />
+          {/* <Route path="/admin" element={<AdminPage />} /> */}
+          <Route path="/register" element={<RegisterPage />} />
+        </Route>
+      </Route>
+
       {/* Protected Routes */}
-      <Route element={<ProtectedRoute />}>
+      <Route element={<ProtectedRoute role="manager" />}>
         <Route element={<DashboardLayout />}>
 
           {/* Dashboard */}
-          <Route path="/" element={<DashboardPage />} />
+          <Route path="/manager" element={<DashboardPage />} />
 
           {/* Profile */}
           <Route path="profile">

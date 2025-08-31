@@ -33,8 +33,8 @@ const RegisterPage = () => {
       if (response.data) {
         toast.success("Account registered successfully!");
         setTimeout(() => {
-          navigate('/login');
-        }, 2000);
+          navigate('/admin');
+        }, 200);
       }
     } catch (err) {
       toast.error("Registration failed!")
@@ -45,15 +45,15 @@ const RegisterPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-linear-60 from-blue-400 via-blue-100 to-blue-400 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-white flex flex-col justify-center py-12 sm:px-6 lg:px-8">
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-4xl">
-        <div className="bg-white py-8 px-6 shadow-lg rounded-3xl sm:px-10">
+        <div className="bg-white py-8 px-6 shadow-lg rounded-3xl sm:px-10 border-1 border-gray-200">
           <div className="sm:mx-auto sm:w-full sm:max-w-4xl">
             <div className="flex justify-center mb-4">
               <img className='h-14' src={DukaanDigital} alt="DukaanDigital" />
             </div>
             <h2 className="mt-2 mb-6 text-center text-xl font-extrabold text-blue-500">
-              Start your journey with us today!
+              Register a new Account!
             </h2>
           </div>
           {error && (
@@ -195,15 +195,15 @@ const RegisterPage = () => {
                 {loading ? 'Registering...' : 'Register'}
               </button>
             </div>
-            <div className="text-center text-sm text-gray-600">
+            {/* <div className="text-center text-sm text-gray-600">
               Already have an account?{' '}
               <span
                 className="text-blue-600 hover:text-blue-500 cursor-pointer font-medium"
                 onClick={() => navigate('/login')}
               >
-                Login
+                Logins
               </span>
-            </div>
+            </div> */}
           </form>
         </div>
       </div>

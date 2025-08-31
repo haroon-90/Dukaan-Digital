@@ -30,7 +30,7 @@ const Dashboard = () => {
         try {
             const res = await getDashboard();
             setsummary(res.data.summary);
-            setsalesData(res.data.salesData);
+            setsalesData(res.data.salesData.reverse());
             setLowStock(res.data.lowStock);
             setloading(false);
         } catch (err) {

@@ -30,7 +30,7 @@ const LoginPage = () => {
         toast.success('Login successfully!');
         const USER = response.data.user;
         setUser(USER);
-        navigate('/');
+        navigate('/manager');
       } else {
         setError('Invalid login response')
       }
@@ -97,7 +97,7 @@ const LoginPage = () => {
               {loading ? 'Logging in...' : 'Login'}
             </button>
           </div>
-          <p className="text-center text-gray-600 text-sm mt-4">
+          {/* <p className="text-center text-gray-600 text-sm mt-4">
             Don't have an account?{" "}
             <span
               className="text-blue-600 font-medium cursor-pointer hover:underline"
@@ -105,7 +105,7 @@ const LoginPage = () => {
             >
               Register
             </span>
-          </p>
+          </p> */}
         </form>
       </div>
     </div>

@@ -10,40 +10,25 @@ import {
     ShoppingBag,
 } from "lucide-react";
 
-const Sidebar = ({ toggleSidebar }) => {
+const AdminSidebar = ({ toggleSidebar }) => {
     const navigate = useNavigate();
     const location = useLocation();
 
     const menuItems = [
         {
-            label: "Dashboard",
-            path: "/manager",
+            label: "Admin1",
+            path: "/admin",
             icon: <LayoutDashboard size={20} />,
         },
         {
-            label: "Products",
-            path: "/products",
+            label: "Create Account",
+            path: "/register",
             icon: <Package size={20} />,
         },
         {
-            label: "Sales",
+            label: "Admin3",
             path: "/sales",
             icon: <ShoppingCart size={20} />,
-        },
-        {
-            label: "Purchase",
-            path: "/purchase",
-            icon: <ShoppingBag size={20} />,
-        },
-        {
-            label: "Expenses",
-            path: "/expenses",
-            icon: <ReceiptIcon size={20} />,
-        },
-        {
-            label: "Credits",
-            path: "/udhaar",
-            icon: <HandCoins size={20} />,
         },
         {
             label: "Reports",
@@ -97,4 +82,4 @@ const Sidebar = ({ toggleSidebar }) => {
     );
 };
 
-export default Sidebar;
+export default AdminSidebar;

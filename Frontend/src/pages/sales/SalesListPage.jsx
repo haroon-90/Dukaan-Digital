@@ -134,9 +134,10 @@ const SalesListPage = () => {
   //   fetchSales(newFilterType);
   // }
 
-  const RenderTable = ({ title, data }) => (
-    <div className="relative bg-white shadow-md rounded-lg p-4 border border-blue-200">
-      <h2 className="text-xl font-semibold text-blue-700 mb-4">{title}</h2>
+  // <div className="relative bg-white shadow-md rounded-lg p-4 border border-blue-200">
+  //   <h2 className="text-xl font-semibold text-blue-700 mb-4">{title}</h2>
+  const RenderTable = ({ data }) => (
+    <div>
       {data.length === 0 ? (
         <p className="text-blue-500">No records found</p>
       ) : (
@@ -192,17 +193,6 @@ const SalesListPage = () => {
     <div className="relative p-6 space-y-6 min-h-screen bg-white">
       <div className="flex md:justify-between items-center flex-wrap gap-2 justify-center">
         <div className="flex items-center justify-center flex-wrap gap-4">
-          {/* <div className="flex items-center flex-wrap gap-1">
-            <label className="font-semibold text-blue-700">Type:</label>
-            <select
-              value={filterType}
-              onChange={(e) => handleFilter(e)}
-              className="border border-blue-300 rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-blue-400"
-            >
-              <option value="sale">Sale</option>
-              <option value="purchase">Purchase</option>
-            </select>
-          </div> */}
           <div className="flex items-center flex-wrap gap-1">
             <label className="font-semibold text-blue-700">Start Date:</label>
             <input
@@ -238,23 +228,23 @@ const SalesListPage = () => {
         </button>
       </div>
 
-      {loading &&
-        // <div className="flex justify-center items-center py-6">
-        //   <div className="w-12 h-12 border-4 border-t-4 border-gray-200 border-t-blue-500 rounded-full animate-spin"></div>
-        // </div>
-        <Loader />
-      }
+      <div className="relative bg-white shadow-md rounded-lg p-4 border border-blue-200">
+        <h2 className="text-xl font-semibold text-blue-700 mb-4">{type === "sale" ? "Sales Records" : "Purchase Records"}</h2>
 
-      {!loading && (
-        <>
-          {type === "sale" && (
-            <RenderTable title="Sales Records" data={sales} />
-          )}
-          {type === "purchase" && (
-            <RenderTable title="Purchase Records" data={purchases} />
-          )}
-        </>
-      )}
+        {loading &&
+          <Loader />
+        }
+        {!loading && (
+          <>
+            {type === "sale" && (
+              <RenderTable data={sales} />
+            )}
+            {type === "purchase" && (
+              <RenderTable data={purchases} />
+            )}
+          </>
+        )}
+      </div>
 
       {showDetails && selectedSale && (
         <div className="absolute top-0 inset-0 flex items-center justify-center bg-black/70 z-50 backdrop-blur-sm p-4 font-mono print:p-0">

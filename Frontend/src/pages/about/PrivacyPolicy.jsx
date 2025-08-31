@@ -123,7 +123,7 @@ const PrivacyPolicy = () => {
           If you have any questions about this Privacy Policy, your data, or our privacy practices, please contact our support team at:
         </p>
         <p className="mt-2 text-blue-700 font-medium">
-          support@dukaandigital.com
+          <a href="mailto:haroonboy90@gmail.com" className="text-blue-600 hover:underline">support@dukaandigital.com</a>
         </p>
       </section>
     </div>
