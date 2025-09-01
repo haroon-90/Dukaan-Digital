@@ -9,3 +9,10 @@
 * to quantity type kr k jb sale icon p click krty han to sale to add ho jatii hy but usi time hi udr b minus ho janii chhaiyee
 * Create handler for dashboard
 * AI integration
+
+
+
+
+1. admin profile bnani ha (show karni ha frontend pr our edit ka option b dena
+2. dashboard get request bnani ha (sara data fetch kar k show krana ha shop list)
+3. users ko edit delete ka option dena (our status change ka option b alag sa handler bnana is k liya)

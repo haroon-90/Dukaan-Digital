@@ -50,13 +50,16 @@ import ExpenseFormPage from "../pages/expenses/ExpenseFormPage.jsx"
 // Reports
 import Reporthomepage from "../pages/reports/Reporthomepage.jsx"
 
+import { Navigate } from "react-router-dom"
+
 export default function AppRouter() {
 
   return (
-    <Routes>
+    <Routes path="/">
 
       {/* Auth Layout Routes */}
       <Route element={<AuthLayout />}>
+        <Route path="/" element={<Navigate to="/login" replace />} />
         <Route path="/login" element={<LoginPage />} />
       </Route>
 

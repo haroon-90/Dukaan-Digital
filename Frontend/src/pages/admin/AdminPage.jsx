@@ -1,374 +1,297 @@
-import React, { useState } from "react";
+import { useNavigate } from 'react-router-dom'
+import React, { useEffect, useMemo, useState } from "react";
 import {
     Users,
-    Shield,
     Store,
-    BarChart,
-    Settings,
-    FileText,
-    Bell,
+    Shield,
+    DollarSign,
+    PlusCircle,
+    RefreshCw,
     Search,
-    Menu,
-    Activity,
-    UserCheck,
-    TrendingUp,
-    Clock,
-    Cpu,
+    Download,
+    Upload,
+    AlertTriangle,
+    Settings,
+    Edit2,
+    Trash2
 } from "lucide-react";
-import {
-    PieChart,
-    Pie,
-    Cell,
-    Bar,
-    BarChart as BarChartRe,
-    XAxis,
-    YAxis,
-    Tooltip,
-    ResponsiveContainer,
-    LineChart,
-    Line,
-    CartesianGrid,
-    Legend,
-} from "recharts";
 
-// Sidebar Menu Items
-const menuItems = [
-    { id: "users", label: "Users", icon: <Users size={18} /> },
-    { id: "roles", label: "Roles", icon: <Shield size={18} /> },
-    { id: "shops", label: "Shops", icon: <Store size={18} /> },
-    { id: "reports", label: "Reports", icon: <BarChart size={18} /> },
-    { id: "settings", label: "Settings", icon: <Settings size={18} /> },
-    { id: "logs", label: "Logs", icon: <FileText size={18} /> },
-];
+const admindashboard = () => {
+    const navigate = useNavigate();
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState("");
+    const [query, setQuery] = useState("");
 
-// Dummy Users
-const dummyUsers = [
-    { id: 1, name: "Ali Khan", email: "ali@example.com", role: "Manager" },
-    { id: 2, name: "Sara Malik", email: "sara@example.com", role: "Manager" },
-    { id: 3, name: "Admin User", email: "admin@example.com", role: "Admin" },
-    { id: 4, name: "Zara Ahmed", email: "zara@example.com", role: "Manager" },
-    { id: 5, name: "Bilal", email: "bilal@example.com", role: "Admin" },
-];
+    // Dummy stats
+    const [stats, setStats] = useState({
+        managers: 5,
+        shops: 12,
+        salesToday: 126,
+        revenueToday: 84500,
+    });
 
-const dummyRoles = [
-    { id: 1, role: "Admin", permissions: "Full Access: Users, Shops, Reports, Settings, Logs" },
-    { id: 2, role: "Manager", permissions: "Manage Shops, View Reports, Limited Logs" },
-];
+    // Dummy managers
+    const [managers, setManagers] = useState([
+        {
+            id: "m1",
+            name: "Ahsan Raza",
+            email: "ahsan@dukaan.pk",
+            phone: "‪+92 300 1234567‬",
+            shop: "Raza Store",
+            status: "active",
+            createdAt: "2025-08-15",
+        },
+        {
+            id: "m2",
+            name: "Sana Khan",
+            email: "sana@dukaan.pk",
+            phone: "‪+92 311 9876543‬",
+            shop: "SK Mart",
+            status: "pending",
+            createdAt: "2025-08-20",
+        },
+        {
+            id: "m3",
+            name: "Bilal Ahmed",
+            email: "bilal@dukaan.pk",
+            phone: "‪+92 333 1010101‬",
+            shop: "Bilal Kirana",
+            status: "suspended",
+            createdAt: "2025-08-05",
+        },
+    ]);
 
-const dummyShops = [
-    { id: 1, name: "SuperMart", owner: "Ali Khan", status: "Active" },
-    { id: 2, name: "City Store", owner: "Sara Malik", status: "Inactive" },
-    { id: 3, name: "MegaMart", owner: "Admin User", status: "Active" },
-    { id: 4, name: "QuickBuy", owner: "Zara Ahmed", status: "Pending" },
-];
+    // Simulated fetch (API ke badle abhi fake delay)
+    useEffect(() => {
+        let mounted = true;
+        (async () => {
+            try {
+                setLoading(true);
+                setError("");
+                await new Promise((r) => setTimeout(r, 400));
+                if (!mounted) return;
+                setLoading(false);
+            } catch (e) {
+                setLoading(false);
+                setError("Failed to fetch dashboard data");
+            }
+        })();
+        return () => {
+            mounted = false;
+        };
+    }, []);
 
-const dummyReports = [
-    { name: "Sales", value: 120000 },
-    { name: "Purchases", value: 85000 },
-    { name: "Expenses", value: 50000 },
-    { name: "Profit", value: 35000 },
-];
+    // Search filter
+    const filteredManagers = useMemo(() => {
+        const q = query.trim().toLowerCase();
+        if (!q) return managers;
+        return managers.filter((m) =>
+            [m.name, m.email, m.phone, m.shop, m.status]
+                .filter(Boolean)
+                .some((f) => String(f).toLowerCase().includes(q))
+        );
+    }, [query, managers]);
 
-const monthlyPerformance = [
-    { month: "Jan", sales: 4000, expenses: 2400 },
-    { month: "Feb", sales: 3000, expenses: 2210 },
-    { month: "Mar", sales: 5000, expenses: 2290 },
-    { month: "Apr", sales: 4780, expenses: 2000 },
-    { month: "May", sales: 5890, expenses: 2181 },
-    { month: "Jun", sales: 4390, expenses: 2500 },
-];
-
-const dummyLogs = [
-    { id: 1, action: "Ali created a shop", time: "2 mins ago" },
-    { id: 2, action: "Sara updated a product", time: "15 mins ago" },
-    { id: 3, action: "Admin generated a sales report", time: "1 hr ago" },
-    { id: 4, action: "Zara removed a shop", time: "3 hrs ago" },
-    { id: 5, action: "Bilal changed system settings", time: "1 day ago" },
-];
-
-const COLORS = ["#3b82f6", "#10b981", "#f59e0b", "#ef4444"];
-
-const AdminPage = () => {
-    const [active, setActive] = useState("users");
-
-    // Dynamic Summary
-    const totalUsers = dummyUsers.length;
-    const totalManagers = dummyUsers.filter((u) => u.role === "Manager").length;
-    const totalShops = dummyShops.length;
-
-    // Content Switch
-    const renderContent = () => {
-        switch (active) {
-            case "users":
-                return (
-                    <div className="p-6">
-                        <h2 className="text-2xl font-bold mb-4">👥 Users Management</h2>
-                        <p className="mb-4 text-gray-600">
-                            Manage all system users, assign roles, and track activity.
-                        </p>
-                        <table className="w-full bg-white rounded-lg shadow overflow-hidden">
-                            <thead>
-                                <tr className="bg-gray-100 text-left">
-                                    <th className="p-3">ID</th>
-                                    <th className="p-3">Name</th>
-                                    <th className="p-3">Email</th>
-                                    <th className="p-3">Role</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {dummyUsers.map((u) => (
-                                    <tr key={u.id} className="border-b hover:bg-gray-50">
-                                        <td className="p-3">{u.id}</td>
-                                        <td className="p-3">{u.name}</td>
-                                        <td className="p-3">{u.email}</td>
-                                        <td
-                                            className={`p-3 font-semibold ${u.role === "Admin" ? "text-blue-600" : "text-green-600"
-                                                }`}
-                                        >
-                                            {u.role}
-                                        </td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                    </div>
-                );
-
-            case "roles":
-                return (
-                    <div className="p-6">
-                        <h2 className="text-2xl font-bold mb-6">🛡 Roles & Permissions</h2>
-                        <div className="grid grid-cols-2 gap-6">
-                            {dummyRoles.map((r) => (
-                                <div
-                                    key={r.id}
-                                    className="p-6 bg-white rounded-lg shadow hover:shadow-md transition"
-                                >
-                                    <h3 className="font-bold text-lg text-blue-600">{r.role}</h3>
-                                    <p className="text-gray-600 mt-2">{r.permissions}</p>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-                );
-
-            case "shops":
-                return (
-                    <div className="p-6">
-                        <h2 className="text-2xl font-bold mb-4">🏪 Shops Management</h2>
-                        <p className="mb-4 text-gray-600">Track shops and their status.</p>
-                        <table className="w-full bg-white rounded-lg shadow overflow-hidden">
-                            <thead>
-                                <tr className="bg-gray-100 text-left">
-                                    <th className="p-3">Shop</th>
-                                    <th className="p-3">Owner</th>
-                                    <th className="p-3">Status</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {dummyShops.map((s) => (
-                                    <tr key={s.id} className="border-b hover:bg-gray-50">
-                                        <td className="p-3">{s.name}</td>
-                                        <td className="p-3">{s.owner}</td>
-                                        <td
-                                            className={`p-3 font-semibold ${s.status === "Active"
-                                                    ? "text-green-600"
-                                                    : s.status === "Inactive"
-                                                        ? "text-red-600"
-                                                        : "text-yellow-500"
-                                                }`}
-                                        >
-                                            {s.status}
-                                        </td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                    </div>
-                );
-
-            case "reports":
-                return (
-                    <div className="p-6 grid grid-cols-2 gap-6">
-                        {/* Bar Chart */}
-                        <div className="p-6 bg-white rounded-lg shadow">
-                            <h3 className="font-semibold mb-4">📊 Sales Overview</h3>
-                            <ResponsiveContainer width="100%" height={250}>
-                                <BarChartRe data={dummyReports}>
-                                    <XAxis dataKey="name" />
-                                    <YAxis />
-                                    <Tooltip />
-                                    <Bar dataKey="value" fill="#3b82f6" />
-                                </BarChartRe>
-                            </ResponsiveContainer>
-                        </div>
-                        {/* Pie Chart */}
-                        <div className="p-6 bg-white rounded-lg shadow">
-                            <h3 className="font-semibold mb-4">📈 Distribution</h3>
-                            <ResponsiveContainer width="100%" height={250}>
-                                <PieChart>
-                                    <Pie
-                                        data={dummyReports}
-                                        cx="50%"
-                                        cy="50%"
-                                        outerRadius={80}
-                                        fill="#8884d8"
-                                        dataKey="value"
-                                        label
-                                    >
-                                        {dummyReports.map((_, i) => (
-                                            <Cell key={i} fill={COLORS[i % COLORS.length]} />
-                                        ))}
-                                    </Pie>
-                                </PieChart>
-                            </ResponsiveContainer>
-                        </div>
-                        {/* Line Chart */}
-                        <div className="col-span-2 p-6 bg-white rounded-lg shadow">
-                            <h3 className="font-semibold mb-4">📅 Monthly Performance</h3>
-                            <ResponsiveContainer width="100%" height={300}>
-                                <LineChart data={monthlyPerformance}>
-                                    <CartesianGrid strokeDasharray="3 3" />
-                                    <XAxis dataKey="month" />
-                                    <YAxis />
-                                    <Tooltip />
-                                    <Legend />
-                                    <Line type="monotone" dataKey="sales" stroke="#3b82f6" />
-                                    <Line type="monotone" dataKey="expenses" stroke="#ef4444" />
-                                </LineChart>
-                            </ResponsiveContainer>
-                        </div>
-                    </div>
-                );
-
-            case "settings":
-                return (
-                    <div className="p-6 space-y-6">
-                        <h2 className="text-2xl font-bold">⚙ System Settings</h2>
-                        <div className="p-4 bg-white rounded-lg shadow space-y-4">
-                            <div className="flex items-center justify-between">
-                                <span>Enable Notifications</span>
-                                <input type="checkbox" />
-                            </div>
-                            <div className="flex items-center justify-between">
-                                <span>Dark Mode</span>
-                                <input type="checkbox" />
-                            </div>
-                            <div>
-                                <label className="block text-sm mb-1">Admin Email</label>
-                                <input
-                                    type="text"
-                                    defaultValue="admin@example.com"
-                                    className="border rounded px-3 py-2 w-full"
-                                />
-                            </div>
-                        </div>
-                    </div>
-                );
-
-            case "logs":
-                return (
-                    <div className="p-6">
-                        <h2 className="text-2xl font-bold mb-4">📝 System Logs</h2>
-                        <div className="space-y-3">
-                            {dummyLogs.map((l) => (
-                                <div
-                                    key={l.id}
-                                    className="p-3 bg-white rounded-lg shadow border-l-4 border-blue-500"
-                                >
-                                    <p>{l.action}</p>
-                                    <span className="text-sm text-gray-500">{l.time}</span>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-                );
-
-            default:
-                return <div className="p-6">Welcome Admin</div>;
-        }
+    // Status badge helper
+    const statusBadge = (status) => {
+        const base = "px-2 py-1 text-xs rounded-full border inline-flex items-center gap-1";
+        if (status === "active")
+            return <span className={`${base} border-green-300 bg-green-50`}>● Active</span >;
+        if (status === "pending")
+            return <span className={`${base} border-amber-300 bg-amber-50`}>● Pending</span >;
+        return <span className={`${base} border-rose-300 bg-rose-50`}>● Suspended</span>;
     };
 
+    // Currency helper
+    const currency = (n) =>
+        new Intl.NumberFormat(undefined, {
+            style: "currency",
+            currency: "PKR",
+            maximumFractionDigits: 0,
+        }).format(n);
+
     return (
-        <div className="flex h-screen bg-gray-100">
-            {/* Sidebar */}
-            <aside className="w-64 bg-white shadow-lg hidden md:block">
-                <div className="p-4 font-bold text-xl border-b text-blue-600">
-                    Admin Panel
-                </div>
-                <nav className="p-4 space-y-2">
-                    {menuItems.map((item) => (
-                        <button
-                            key={item.id}
-                            onClick={() => setActive(item.id)}
-                            className={`flex items-center w-full px-3 py-2 rounded-lg text-sm ${active === item.id
-                                    ? "bg-blue-500 text-white"
-                                    : "text-gray-700 hover:bg-gray-200"
-                                }`}
-                        >
-                            {item.icon}
-                            <span className="ml-2">{item.label}</span>
-                        </button>
-                    ))}
-                </nav>
-            </aside>
-
-            {/* Main Content */}
-            <main className="flex-1 overflow-auto">
-                {/* Topbar */}
-                <header className="flex items-center justify-between bg-white shadow px-6 py-3 sticky top-0 z-10">
+        <div className="min-h-screen w-full bg-slate-50">
+            {/* Top Bar */}
+            <div className="sticky top-0 z-10 bg-white border-b border-slate-200">
+                <div className="mx-auto max-w-7xl px-4 py-3 flex items-center justify-between gap-3">
                     <div className="flex items-center gap-3">
-                        <Search className="text-gray-500" />
-                        <input
-                            type="text"
-                            placeholder="Search..."
-                            className="border rounded px-3 py-1 text-sm"
-                        />
+                        <Shield className="text-blue-600 w-6 h-6" />
+                        <div className="font-semibold text-blue-600">Admin Dashboard</div>
+                        <span className="text-xs text-slate-500 hidden sm:inline">
+                            (Manage managers, shops & system)
+                        </span>
                     </div>
-                    <div className="flex items-center gap-4">
-                        <Bell className="text-gray-600 cursor-pointer" />
-                        <img
-                            src="https://i.pravatar.cc/40"
-                            alt="avatar"
-                            className="w-8 h-8 rounded-full"
-                        />
-                        <Menu className="md:hidden cursor-pointer" />
+                    <div className="flex items-center gap-2 text-blue-600">
+                        <button
+                            onClick={() => window.location.reload()}
+                            className="inline-flex items-center gap-2 rounded-lg border border-blue-300 bg-white px-3 py-2 text-sm hover:bg-slate-50"
+                        >
+                            <RefreshCw className="w-4 h-4" /> Refresh
+                        </button>
                     </div>
-                </header>
+                </div>
+            </div>
 
-                {/* Dashboard Summary */}
-                {active === "users" && (
-                    <div className="grid grid-cols-4 gap-6 p-6">
-                        <div className="bg-white rounded-lg shadow p-4 text-center">
-                            <Users className="mx-auto text-blue-500" />
-                            <h4 className="text-gray-500">Total Users</h4>
-                            <p className="text-2xl font-bold">{totalUsers}</p>
-                        </div>
-                        <div className="bg-white rounded-lg shadow p-4 text-center">
-                            <UserCheck className="mx-auto text-green-500" />
-                            <h4 className="text-gray-500">Managers</h4>
-                            <p className="text-2xl font-bold text-green-600">
-                                {totalManagers}
-                            </p>
-                        </div>
-                        <div className="bg-white rounded-lg shadow p-4 text-center">
-                            <Store className="mx-auto text-yellow-500" />
-                            <h4 className="text-gray-500">Shops</h4>
-                            <p className="text-2xl font-bold text-blue-600">{totalShops}</p>
-                        </div>
-                        <div className="bg-white rounded-lg shadow p-4 text-center">
-                            <TrendingUp className="mx-auto text-purple-500" />
-                            <h4 className="text-gray-500">System Uptime</h4>
-                            <p className="text-2xl font-bold text-purple-600">99.9%</p>
+            {/* Content */}
+            <div className="mx-auto max-w-7xl p-4 md:p-6">
+                {/* Error Banner */}
+                {error && (
+                    <div className="mb-4 flex items-start gap-3 rounded-xl border border-amber-200 bg-amber-50 p-3 text-amber-800">
+                        <AlertTriangle className="mt-0.5 h-5 w-5" />
+                        <div>
+                            <div className="font-medium">Heads up</div>
+                            <div className="text-sm">{error}</div>
                         </div>
                     </div>
                 )}
 
-                {/* Page Content */}
-                <div>{renderContent()}</div>
-            </main>
+                {/* Stats */}
+                <div className="grid md:grid-cols-4 grid-cols-2 gap-4 mb-6">
+                    {/* <StatCard icon={Users} label="Total Managers" value={stats.managers} loading={loading} /> */}
+                    <StatCard icon={Store} label="Total Shops" value={stats.shops} loading={loading} />
+                    {/* <StatCard icon={DollarSign} label="Sales (Today)" value={stats.salesToday} loading={loading} />
+                    <StatCard icon={DollarSign} label="Revenue (Today)" value={currency(stats.revenueToday)} loading={loading} /> */}
+                </div>
+
+                {/* Actions */}
+                <div className="flex flex-col md:flex-row gap-3 mb-6 text-blue-600">
+                    <button onClick={() => navigate("/register")} className="inline-flex items-center justify-center gap-2 rounded-xl bg-blue-600 text-white px-4 py-3 text-sm hover:bg-blue-700">
+                        <PlusCircle className="w-4 h-4" /> Add Shop
+                    </button>
+                    <button className="inline-flex items-center justify-center gap-2 rounded-xl border border-blue-300 bg-white px-4 py-3 text-sm hover:bg-blue-50">
+                        <Settings className="w-4 h-4" /> Roles & Permissions
+                    </button>
+                    <div className="flex-1" />
+                    <div className="flex items-center gap-2">
+                        <button className="inline-flex items-center gap-2 rounded-xl border border-blue-200 bg-white px-3 py-2 text-sm hover:bg-blue-50">
+                            <Upload className="w-4 h-4" /> Import
+                        </button>
+                        <button className="inline-flex items-center gap-2 rounded-xl border border-blue-200 bg-white px-3 py-2 text-sm hover:bg-blue-50">
+                            <Download className="w-4 h-4" /> Export
+                        </button>
+                    </div>
+                </div>
+
+                {/* Search */}
+                <div className="mb-4 flex items-center gap-2">
+                    <div className="relative w-full md:w-80">
+                        <Search className="absolute left-3 top-2.5 h-4 w-4 text-blue-600" />
+                        <input
+                            value={query}
+                            onChange={(e) => setQuery(e.target.value)}
+                            placeholder="Search managers, shops, phone..."
+                            className="w-full rounded-xl border border-slate-200 bg-white py-2 pl-9 pr-3 text-sm outline-none placeholder:text-slate-400 focus:border-blue-600"
+                        />
+                    </div>
+                </div>
+
+                {/* Table */}
+                <div className="overflow-hidden rounded-2xl border border-blue-200 bg-white">
+                    {/* <div className="px-4 py-3 text-blue-600 border-b border-blue-200 flex items-center justify-between">
+                        <div className="font-semibold">Managers</div>
+                        <div className="text-xs">{filteredManagers.length} results</div>
+                    </div> */}
+
+                    <div className="overflow-x-auto">
+                        <table className="min-w-full text-sm">
+                            <thead className="bg-blue-50 text-blue-600">
+                                <tr>
+                                    <Th className="px-4 py-2.5">Name</Th>
+                                    <Th className="hidden md:table-cell px-4 py-2.5">Email</Th>
+                                    <Th className="hidden md:table-cell px-4 py-2.5">Phone</Th>
+                                    <Th className="px-4 py-2.5">Shop</Th>
+                                    <Th className="px-4 py-2.5">Status</Th>
+                                    <Th className="px-4 py-2.5">Created</Th>
+                                    <Th className="text-right px-4 py-2.5">Actions</Th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {filteredManagers.map((m) => (
+                                    <tr key={m.id} className="border-t border-blue-100 hover:bg-blue-50/50">
+                                        <Td className="px-4 py-2.5">
+                                            <div className="font-medium text-blue-800">{m.name}</div>
+                                            <div className="text-xs text-blue-500 md:hidden">{m.email}</div>
+                                            <div className="text-xs text-blue-500 md:hidden">{m.phone}</div>
+                                        </Td>
+                                        <Td className="hidden md:table-cell px-4 py-2.5">{m.email}</Td>
+                                        <Td className="hidden md:table-cell px-4 py-2.5">{m.phone}</Td>
+                                        <Td className="px-4 py-2.5">{m.shop}</Td>
+                                        <Td className="px-4 py-2.5">{statusBadge(m.status)}</Td>
+                                        <Td className="px-4 py-2.5">{m.createdAt}</Td>
+                                        <Td className="px-4 py-2.5">
+                                            <div className="flex items-center justify-end gap-2 md:gap-4">
+                                                <Edit2 className="w-4 h-4 text-blue-600 hover:text-blue-800 cursor-pointer" />
+                                                {/* <button className="rounded-lg border border-blue-200 px-2.5 py-1.5 text-xs hover:bg-blue-50">
+                                                    Edit
+                                                </button> */}
+                                                {/* {m.status !== "active" ? (
+                                                    <button className="rounded-lg border border-emerald-200 bg-emerald-50 px-2.5 py-1.5 text-xs text-emerald-700 hover:bg-emerald-100">
+                                                        Activate
+                                                    </button>
+                                                ) : (
+                                                    <button className="rounded-lg border border-rose-200 bg-rose-50 px-2.5 py-1.5 text-xs text-rose-700 hover:bg-rose-100">
+                                                        Suspend
+                                                    </button>
+                                                )} */}
+                                                {/* <button className="rounded-lg border border-blue-200 px-2.5 py-1.5 text-xs hover:bg-blue-50">
+                                                    Delete
+                                                </button> */}
+                                                <Trash2 className="w-4 h-4 text-rose-600 hover:text-rose-800 cursor-pointer" />
+                                            </div>
+                                        </Td>
+                                    </tr>
+                                ))}
+                                {filteredManagers.length === 0 && (
+                                    <tr>
+                                        <td colSpan={7} className="px-4 py-10 text-center text-blue-500">
+                                            No results.
+                                        </td>
+                                    </tr>
+                                )}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
         </div>
     );
 };
 
-export default AdminPage;
+function StatCard({ icon: Icon, label, value, loading }) {
+    return (
+        <div className="rounded-2xl border border-slate-200 bg-white p-4">
+            <div className="flex items-center gap-3">
+                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-600 text-white">
+                    <Icon className="h-5 w-5" />
+                </div>
+                <div>
+                    <div className="text-xs uppercase tracking-wide text-slate-500">{label}</div>
+                    <div className="text-xl font-semibold text-slate-800">
+                        {loading ? <span className="animate-pulse">…</span> : value}
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+}
+
+function Th({ children, className = "" }) {
+    return (
+        <th
+            className={`px - 4 py-3 text-left text-xs font-semibold uppercase tracking-wider ${className}`}
+        >
+            {children}
+        </th >
+    );
+}
+
+function Td({ children, className = "" }) {
+    return (
+        <td className={`px - 4 py-3 align-middle text-slate-700 ${className}`}>
+            {children}
+        </td >
+    );
+}
+
+export default admindashboard
