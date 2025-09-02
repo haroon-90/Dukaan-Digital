@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import { updateProfile } from "../../services/profileServices.js";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
+import { FaUser, FaPhone, FaLock } from 'react-icons/fa';
+
 
 const EditProfilePage = () => {
   const navigate = useNavigate();
@@ -59,60 +61,89 @@ const EditProfilePage = () => {
   };
 
   return (
-    <div className="p-6 font-sans bg-gray-100 min-h-screen">
-      <div className="max-w-lg mx-auto bg-white rounded-2xl shadow-xl p-8 border border-blue-200">
-        <h1 className="text-center text-3xl font-bold text-blue-700 mb-6">Edit Profile</h1>
-        {loading &&
-          <div className="flex justify-center items-center py-6">
-            <div className="w-12 h-12 border-4 border-t-4 border-gray-200 border-t-blue-500 rounded-full animate-spin"></div>
-          </div>
-        }
-        {!loading && (
-          <form onSubmit={handleSubmit} className="space-y-6">
-            <div>
-              <label className="block text-blue-800 font-semibold mb-1">Name</label>
-              <input
-                type="text"
-                name="name"
-                value={form.name}
-                onChange={handleChange}
-                className="w-full border-2 border-blue-200 rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400 transition-colors"
-                placeholder="Enter your name"
-              />
+    <div className="flex items-center justify-center p-6 min-h-screen bg-gray-100 font-sans">
+            <div className="w-full max-w-xl mx-auto bg-white rounded-3xl shadow-2xl overflow-hidden transform transition-all duration-300 hover:shadow-blue-500/20">
+                <div className="p-8">
+                    <h1 className="text-center text-4xl font-extrabold text-blue-700 mb-2">Edit Profile</h1>
+                    <p className="text-center text-gray-500 text-sm mb-8">Update your personal information.</p>
+
+                    {/* Loading State */}
+                    {loading ? (
+                        <div className="flex justify-center items-center py-12">
+                            <div className="w-16 h-16 border-4 border-t-4 border-gray-200 border-t-blue-500 rounded-full animate-spin"></div>
+                        </div>
+                    ) : (
+                        <form onSubmit={handleSubmit} className="space-y-6">
+                            {/* Name Input */}
+                            <div className="relative">
+                                <label htmlFor="name" className="block text-blue-800 font-semibold mb-2">Name</label>
+                                <div className="relative flex items-center">
+                                    <FaUser className="absolute left-4 text-blue-400 z-10" />
+                                    <input
+                                        type="text"
+                                        id="name"
+                                        name="name"
+                                        value={form.name}
+                                        onChange={handleChange}
+                                        className="w-full pl-12 pr-4 py-3 bg-gray-50 border border-blue-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-300 transition-all duration-300 text-gray-900 placeholder:text-gray-400"
+                                        placeholder="Enter your full name"
+                                        disabled={loading}
+                                    />
+                                </div>
+                            </div>
+
+                            {/* Phone Input */}
+                            <div className="relative">
+                                <label htmlFor="phone" className="block text-blue-800 font-semibold mb-2">Phone</label>
+                                <div className="relative flex items-center">
+                                    <FaPhone className="absolute left-4 text-blue-400 z-10" />
+                                    <input
+                                        type="tel"
+                                        id="phone"
+                                        name="phone"
+                                        value={form.phone}
+                                        onChange={handleChange}
+                                        className="w-full pl-12 pr-4 py-3 bg-gray-50 border border-blue-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-300 transition-all duration-300 text-gray-900 placeholder:text-gray-400"
+                                        placeholder="Enter your phone number"
+                                        disabled={loading}
+                                    />
+                                </div>
+                            </div>
+
+                            {/* New Password Input */}
+                            <div className="relative">
+                                <label htmlFor="password" className="block text-blue-800 font-semibold mb-2">New Password</label>
+                                <div className="relative flex items-center">
+                                    <FaLock className="absolute left-4 text-blue-400 z-10" />
+                                    <input
+                                        type="password"
+                                        id="password"
+                                        name="password"
+                                        value={form.password}
+                                        onChange={handleChange}
+                                        className="w-full pl-12 pr-4 py-3 bg-gray-50 border border-blue-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-300 transition-all duration-300 text-gray-900 placeholder:text-gray-400"
+                                        placeholder="Leave blank to keep current password"
+                                        disabled={loading}
+                                    />
+                                </div>
+                            </div>
+
+                            {/* Submit Button */}
+                            <button
+                                type="submit"
+                                disabled={loading}
+                                className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 mt-4 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform active:scale-95 disabled:bg-blue-400 disabled:shadow-none disabled:cursor-not-allowed disabled:transform-none"
+                            >
+                                {loading ? "Saving..." : "Save Changes"}
+                            </button>
+                        </form>
+                    )}
+                    <div className="mt-8 text-center">
+                        <span className="text-sm text-gray-600 font-medium">To make any other changes, please contact your administrator.</span>
+                    </div>
+                </div>
             </div>
-            <div>
-              <label className="block text-blue-800 font-semibold mb-1">Phone</label>
-              <input
-                type="text"
-                name="phone"
-                value={form.phone}
-                onChange={handleChange}
-                className="w-full border-2 border-blue-200 rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400 transition-colors"
-                placeholder="Enter your phone number"
-              />
-            </div>
-            <div>
-              <label className="block text-blue-800 font-semibold mb-1">New Password</label>
-              <input
-                type="password"
-                name="password"
-                value={form.password}
-                onChange={handleChange}
-                className="w-full border-2 border-blue-200 rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400 transition-colors"
-                placeholder="Leave blank to keep current password"
-              />
-            </div>
-            <button
-              type="submit"
-              disabled={loading}
-              className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-xl transition duration-300 transform hover:scale-105 disabled:bg-blue-400 disabled:scale-100 disabled:cursor-not-allowed"
-            >
-              {loading ? "Saving..." : "Save Changes"}
-            </button>
-          </form>
-        )}
-      </div>
-    </div>
+        </div>
   );
 };
 

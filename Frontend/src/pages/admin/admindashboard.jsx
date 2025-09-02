@@ -1,88 +1,56 @@
 import { useNavigate } from 'react-router-dom'
-import React, { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
-    Users,
     Store,
     Shield,
-    DollarSign,
     PlusCircle,
     RefreshCw,
     Search,
-    Download,
-    Upload,
     AlertTriangle,
-    Settings,
     Edit2,
-    Trash2
+    Trash2,
+    CheckCircle ,
+    Ban 
 } from "lucide-react";
+import toast from "react-hot-toast";
+import { getAdminDashboard, deleteUserProfile, editUserStatus } from '../../services/adminServices.js';
 
 const Admindashboard = () => {
     const navigate = useNavigate();
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
     const [query, setQuery] = useState("");
+    const [shops, setshops] = useState(0);
 
-    const [stats, setStats] = useState({
-        managers: 5,
-        shops: 12,
-        salesToday: 126,
-        revenueToday: 84500,
-    });
+    const [managers, setManagers] = useState([]);
 
-    const [managers, setManagers] = useState([
-        {
-            id: "m1",
-            name: "Ahsan Raza",
-            email: "ahsan@dukaan.pk",
-            phone: "+92 300 1234567",
-            shop: "Raza Store",
-            status: "active",
-            createdAt: "2025-08-15",
-        },
-        {
-            id: "m2",
-            name: "Sana Khan",
-            email: "sana@dukaan.pk",
-            phone: "+92 311 9876543",
-            shop: "SK Mart",
-            status: "pending",
-            createdAt: "2025-08-20",
-        },
-        {
-            id: "m3",
-            name: "Bilal Ahmed",
-            email: "bilal@dukaan.pk",
-            phone: "+92 333 1010101",
-            shop: "Bilal Kirana",
-            status: "suspended",
-            createdAt: "2025-08-05",
-        },
-    ]);
+    const fetchDashboard = async () => {
+        try {
+            setLoading(true);
+            setError("");
+            const response = await getAdminDashboard();
+            console.log(response.data);
+            setManagers(response.data.shops);
+            setshops(response.data.totalShops);
+            setLoading(false);
+            toast.success("Data Refreshed!");
+        } catch (err) {
+            console.error(err);
+            setError("Failed to fetch dashboard data");
+            setLoading(false);
+            toast.error("Failed to refresh data");
+        }
+    };
 
     useEffect(() => {
-        let mounted = true;
-        (async () => {
-            try {
-                setLoading(true);
-                setError("");
-                await new Promise((r) => setTimeout(r, 400));
-                if (!mounted) return;
-                setLoading(false);
-            } catch (e) {
-                setLoading(false);
-                setError("Failed to fetch dashboard data");
-            }
-        })();
-        return () => {
-            mounted = false;
-        };
+        fetchDashboard();
     }, []);
 
     const filteredManagers = useMemo(() => {
         const q = query.trim().toLowerCase();
         if (!q) return managers;
         return managers.filter((m) =>
-            [m.name, m.email, m.phone, m.shop, m.status]
+            [m.name, m.email, m.phone, m.shopname, m.status]
                 .filter(Boolean)
                 .some((f) => String(f).toLowerCase().includes(q))
         );
@@ -92,24 +60,45 @@ const Admindashboard = () => {
         const base = "px-2 py-1 text-xs rounded-full border inline-flex items-center gap-1";
         if (status === "active")
             return <span className={`${base} border-green-300 bg-green-50`}>● Active</span>;
-        if (status === "pending")
-            return <span className={`${base} border-amber-300 bg-amber-50`}>● Pending</span>;
-        return <span className={`${base} border-rose-300 bg-rose-50`}>● Suspended</span>;
+        if (status === "suspended")
+            return <span className={`${base} border-rose-300 bg-rose-50`}>● Suspended</span>;
     };
 
-    const currency = (n) =>
-        new Intl.NumberFormat(undefined, {
-            style: "currency",
-            currency: "PKR",
-            maximumFractionDigits: 0,
-        }).format(n);
+    const handleDelete = async (e) => {
+        try {
+            if (confirm("Are you sure you want to delete this manager? This action cannot be undone.")) {
+                const deleted = await deleteUserProfile(e._id);
+                if (deleted) {
+                    console.log("Profile deleted seccessfully")
+                    fetchDashboard();
+                }
+            }
+        } catch (err) {
+            toast.error('Failed to fetch profile!')
+            console.error('Error fetching profile:', err);
+        }
+    }
+
+    const handlestatusupdate = async (e) => {
+        try {
+            const updated = await editUserStatus(e._id);
+            if (updated) {
+                console.log("Profile status updated seccessfully")
+                fetchDashboard();
+            }
+        }
+        catch (err) {
+            toast.error('Failed to fetch profile!')
+            console.error('Error fetching profile:', err);
+        }
+    }
 
     return (
         <div className="min-h-screen w-full bg-slate-50">
             <div className="sticky top-0 z-10 bg-white border-b border-slate-200">
                 <div className="mx-auto max-w-7xl px-4 py-3 flex items-center justify-between gap-3">
                     <div className="flex items-center gap-3">
-                        <Shield className="text-blue-600 w-6 h-6" />
+                        <Shield onClick={() => navigate('/adminprofile')} className="cursor-pointer text-blue-600 w-6 h-6" />
                         <div className="font-semibold text-blue-600">Admin Dashboard</div>
                         <span className="text-xs text-slate-500 hidden sm:inline">
                             (Manage managers, shops & system)
@@ -142,7 +131,7 @@ const Admindashboard = () => {
                 )}
 
                 <div className="flex justify-between sm:flex-wrap gap-4 mb-6">
-                    <StatCard icon={Store} label="Total Shops" value={stats.shops} loading={loading} />
+                    <StatCard icon={Store} label="Total Shops" value={shops} loading={loading} />
                     {/* <button onClick={() => navigate("/register")} className="inline-flex items-center justify-center gap-2 rounded-xl bg-blue-600 text-white px-4 py-3 text-sm hover:bg-blue-700">
                         <PlusCircle className="w-4 h-4" /> Add Shop
                     </button> */}
@@ -177,7 +166,7 @@ const Admindashboard = () => {
                             </thead>
                             <tbody>
                                 {filteredManagers.map((m) => (
-                                    <tr key={m.id} className="border-t border-blue-100 hover:bg-blue-50/50">
+                                    <tr key={m._id} className="border-t border-blue-100 hover:bg-blue-50/50">
                                         <Td className="px-4 py-2.5">
                                             <div className="font-medium text-blue-800">{m.name}</div>
                                             <div className="text-xs text-blue-500 md:hidden">{m.email}</div>
@@ -185,22 +174,22 @@ const Admindashboard = () => {
                                         </Td>
                                         <Td className="hidden md:table-cell px-4 py-2.5">{m.email}</Td>
                                         <Td className="hidden md:table-cell px-4 py-2.5">{m.phone}</Td>
-                                        <Td className="px-4 py-2.5">{m.shop}</Td>
-                                        <Td className="px-4 py-2.5">{statusBadge(m.status)}</Td>
-                                        <Td className="px-4 py-2.5">{m.createdAt}</Td>
+                                        <Td className="px-4 py-2.5">{m.shopname}</Td>
+                                        <Td className="px-4 py-2.5 text-nowrap">{statusBadge(m.status)}</Td>
+                                        <Td className="px-4 py-2.5">{new Date(m.createdAt).toLocaleDateString()}</Td>
                                         <Td className="px-4 py-2.5">
                                             <div className="flex items-center justify-end gap-2 md:gap-4">
                                                 {m.status !== "active" ? (
-                                                    <button className="rounded-lg border border-emerald-200 bg-emerald-50 px-2.5 py-1.5 text-xs text-emerald-700 hover:bg-emerald-100">
-                                                        Activate
+                                                    <button title="Activate" onClick={() => handlestatusupdate(m)} className="text-emerald-700 hover:text-emerald-900">
+                                                        <CheckCircle size={16} />
                                                     </button>
                                                 ) : (
-                                                    <button className="rounded-lg border border-rose-200 bg-rose-50 px-2.5 py-1.5 text-xs text-rose-700 hover:bg-rose-100">
-                                                        Suspend
+                                                    <button title="Suspend" onClick={() => handlestatusupdate(m)} className=" text-rose-600 hover:text-rose-800">
+                                                        <Ban size={16} />
                                                     </button>
                                                 )}
-                                                <Edit2 className="w-4 h-4 text-blue-600 hover:text-blue-800 cursor-pointer" />
-                                                <Trash2 className="w-4 h-4 text-rose-600 hover:text-rose-800 cursor-pointer" />
+                                                <Edit2 onClick={() => navigate('/admin/profile/edit', { state: { data: m } })} className="w-4 h-4 text-blue-600 hover:text-blue-800 cursor-pointer" />
+                                                <Trash2 onClick={() => handleDelete(m)} className="w-4 h-4 text-rose-600 hover:text-rose-800 cursor-pointer" />
                                             </div>
                                         </Td>
                                     </tr>

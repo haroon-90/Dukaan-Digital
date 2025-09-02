@@ -20,7 +20,7 @@ import RegisterPage from "../pages/auth/RegisterPage.jsx"
 
 // Admin
 import Admindashboard from "../pages/admin/admindashboard.jsx"
-import AdminPage from "../pages/admin/AdminPage.jsx"
+import EditProfile from "../pages/admin/EditProfile.jsx"
 
 // Dashboard
 import DashboardPage from "../pages/dashboard/DashboardPage.jsx"
@@ -59,7 +59,7 @@ export default function AppRouter() {
 
       {/* Auth Layout Routes */}
       <Route element={<AuthLayout />}>
-        <Route path="/" element={<Navigate to="/login" replace />} />
+        <Route path="/" element={<Navigate to="/login" replace />} />
         <Route path="/login" element={<LoginPage />} />
       </Route>
 
@@ -75,8 +75,9 @@ export default function AppRouter() {
       <Route element={<ProtectedRoute role="admin" />}>
         <Route element={<AdminLayout />}>
           <Route path="/admin" element={<Admindashboard />} />
-          {/* <Route path="/admin" element={<AdminPage />} /> */}
           <Route path="/register" element={<RegisterPage />} />
+          <Route path="/adminprofile" element={<ProfilePage />} />
+          <Route path="/admin/profile/edit" element={<EditProfile />} />
         </Route>
       </Route>
 

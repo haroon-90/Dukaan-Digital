@@ -15,7 +15,7 @@ const DashboardLayout = () => {
         <div className="flex flex-col min-h-screen font-sans bg-gray-100">
             <Navbar toggleSidebar={toggleSidebar} />
 
-            <div className="relative flex-1 overflow-y-auto md:rounded-2xl md:rounded-r-none rounded-2xl">
+            <div className="relative flex-1 overflow-y-auto">
                 <Outlet />
             </div>
 

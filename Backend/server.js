@@ -12,6 +12,7 @@ import UdhaarRoutes from './routes/UdhaarRoutes.js'
 import ExpenseRoutes from './routes/ExpenseRoutes.js'
 import ReportRoutes from './routes/ReportRoutes.js'
 import Dashboard from './routes/DashboardRoutes.js'
+import AdminRoutes from './routes/AdminRoutes.js'
 
 dotenv.config();
 
@@ -38,6 +39,7 @@ app.use('/api/udhaar', UdhaarRoutes)
 app.use('/api/expense', ExpenseRoutes)
 app.use('/api/report', ReportRoutes)
 app.use('/api/dashboard', Dashboard)
+app.use('/api/admin', AdminRoutes)
 
 const PORT = process.env.PORT || 5000;
 mongoose.connect(process.env.MONGODB_URL)

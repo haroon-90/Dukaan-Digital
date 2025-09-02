@@ -38,7 +38,11 @@ const ProfilePage = () => {
   }
 
   const handleEdit = async () => {
-    navigate("/profile/edit")
+    if(profile.role === "admin"){
+      navigate('/admin/profile/edit', { state: { data: profile } })
+    } else {
+      navigate('/profile/edit');
+    }
   }
 
   useEffect(() => {
@@ -86,18 +90,23 @@ const ProfilePage = () => {
             {<Trash2 size={18} />}
           </div>
           <div className="w-fit mx-auto mb-2 p-2 rounded-full bg-white flex items-center justify-center font-bold text-2xl shadow-lg">
-            <h1 className='text-black Logo-font'>{profile.shopname || JSON.parse(sessionStorage.getItem("user")).shopname}</h1>
+            {profile.role !== "admin" ?
+              <h1 className='text-black Logo-font'>{profile.shopname || JSON.parse(sessionStorage.getItem("user")).shopname}</h1>
+              : <User className='text-black' size={40} />
+            }
           </div>
           <h2 className="text-xl font-semibold">{profile.name || JSON.parse(sessionStorage.getItem("user")).name}</h2>
           <p className="text-sm opacity-80 capitalize">{profile.role || JSON.parse(sessionStorage.getItem("user")).role}</p>
         </div>
 
         <div className="p-6 space-y-4">
-          <ProfileDetail icon={<User size={18} />} label="Name" value={profile.name || JSON.parse(sessionStorage.getItem("user")).name} />
+          {/* <ProfileDetail icon={<User size={18} />} label="Name" value={profile.name || JSON.parse(sessionStorage.getItem("user")).name} /> */}
           <ProfileDetail icon={<Mail size={18} />} label="Email" value={profile.email || JSON.parse(sessionStorage.getItem("user")).email} />
           <ProfileDetail icon={<Phone size={18} />} label="Phone" value={profile.phone || JSON.parse(sessionStorage.getItem("user")).phone} />
           <ProfileDetail icon={<MapPinned size={18} />} label="Address" value={profile.address || JSON.parse(sessionStorage.getItem("user")).address} />
-          <ProfileDetail icon={<Store size={18} />} label="Shop Name" value={profile.shopname || JSON.parse(sessionStorage.getItem("user")).shopname} />
+          {profile.role !== "admin" &&
+            <ProfileDetail icon={<Store size={18} />} label="Shop Name" value={profile.shopname || JSON.parse(sessionStorage.getItem("user")).shopname} />
+          }
           <ProfileDetail icon={<Briefcase size={18} />} label="Role" value={profile.role || JSON.parse(sessionStorage.getItem("user")).role} />
           <ProfileDetail
             icon={<Calendar size={18} />}
@@ -118,7 +127,7 @@ function ProfileDetail({ icon, label, value }) {
       </div>
       <div>
         <p className="text-xs text-gray-500">{label}</p>
-        <p className="text-gray-800 font-medium capitalize">{value || "Not Provided"}</p>
+        <p className={`text-gray-800 font-medium ${label != "Email" && "capitalize"}`}>{value || "Not Provided"}</p>
       </div>
     </div>
   );
