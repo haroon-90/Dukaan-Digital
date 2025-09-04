@@ -74,12 +74,9 @@ const UdhaarFormPage = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-6 bg-linear-60 from-blue-400 via-blue-100 to-blue-400">
-      <div className="bg-white shadow-2xl rounded-3xl w-full max-w-lg p-8">
+    <div className="min-h-screen flex items-center justify-center p-6 bg-white">
+      <div className="bg-white border border-blue-500 shadow-2xl rounded-3xl w-full max-w-lg p-8">
         <div className="flex flex-col items-center mb-6">
-          <div className="bg-blue-600 p-4 rounded-full text-white mb-4 shadow-md">
-            {isEdit ? <FaCreditCard className="text-3xl" /> : <FaPlusCircle className="text-3xl" />}
-          </div>
           <h2 className="text-3xl font-extrabold text-blue-700 text-center">
             {isEdit ? "Edit Credit" : "Add Credit"}
           </h2>

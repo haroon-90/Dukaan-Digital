@@ -9,8 +9,8 @@ import {
     AlertTriangle,
     Edit2,
     Trash2,
-    CheckCircle ,
-    Ban 
+    CheckCircle,
+    Ban
 } from "lucide-react";
 import toast from "react-hot-toast";
 import { getAdminDashboard, deleteUserProfile, editUserStatus } from '../../services/adminServices.js';

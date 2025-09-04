@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { addExpense } from '../../services/expenseServices.js';
 import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
-import { FaDollarSign, FaFileAlt, FaTag, FaPlus } from 'react-icons/fa';
+import { FaDollarSign, FaFileAlt, FaTag } from 'react-icons/fa';
 
 const ExpenseFormPage = () => {
   const navigate = useNavigate();
@@ -49,16 +49,11 @@ const ExpenseFormPage = () => {
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen p-6 bg-linear-60 from-blue-400 via-blue-100 to-blue-400">
+    <div className="flex justify-center items-center min-h-screen p-6 bg-white">
       <form
         onSubmit={handleSubmit}
-        className="bg-white shadow-2xl rounded-3xl p-8 w-full max-w-lg "
+        className="bg-white border border-blue-500 shadow-2xl rounded-3xl p-8 w-full max-w-lg "
       >
-        <div className="flex justify-center mb-6">
-          <div className="bg-blue-600 p-4 rounded-full text-white">
-            <FaPlus className="text-3xl" />
-          </div>
-        </div>
         <h2 className="text-3xl font-bold text-blue-700 mb-2 text-center">
           Add New Expense
         </h2>

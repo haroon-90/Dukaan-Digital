@@ -3,7 +3,7 @@ import { toast } from 'react-hot-toast'; // Assuming you have react-hot-toast in
 import { addPurchase } from '../../services/purchaseServices.js';
 import { getProducts } from '../../services/productServices.js';
 import Dukaan_Digital from '../../assets/Dukaan_Digital.svg'
-import { FaBoxes, FaDollarSign, FaTag, FaCheckCircle, FaTrashAlt, FaTruck, FaStore, FaWeightHanging } from 'react-icons/fa';
+import { FaBoxes, FaDollarSign, FaTag, FaCheckCircle, FaTrashAlt,  FaStore, FaWeightHanging } from 'react-icons/fa';
 
 const PurchaseFormPage = () => {
   const [products, setProducts] = useState([]);
@@ -192,15 +192,12 @@ const PurchaseFormPage = () => {
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-linear-60 from-blue-400 via-blue-100 to-blue-400 p-6">
+    <div className="flex justify-center items-center min-h-screen bg-white p-6">
       <form
         onSubmit={handlePurchase}
         className="bg-white shadow-2xl rounded-3xl p-8 w-full max-w-2xl"
       >
         <div className="flex flex-col items-center mb-6">
-          <div className="bg-blue-600 p-4 rounded-full text-white mb-4 shadow-md">
-            <FaTruck className="text-3xl" />
-          </div>
           <h1 className="text-3xl font-extrabold text-blue-700 text-center">New Purchase</h1>
         </div>
 
