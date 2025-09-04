@@ -128,14 +128,6 @@ const SalesListPage = () => {
     }
   }
 
-  // const handleFilter = (e) => {
-  //   const newFilterType = e.target.value;
-  //   setFilterType(newFilterType);
-  //   fetchSales(newFilterType);
-  // }
-
-  // <div className="relative bg-white shadow-md rounded-lg p-4 border border-blue-200">
-  //   <h2 className="text-xl font-semibold text-blue-700 mb-4">{title}</h2>
   const RenderTable = ({ data }) => (
     <div>
       {data.length === 0 ? (
@@ -213,7 +205,7 @@ const SalesListPage = () => {
           </div>
         </div>
         <button
-          className="px-4 py-1 bg-blue-600 hover:bg-blue-700 transition text-white rounded flex items-center gap-2"
+          className="px-4 py-1 bg-blue-600 hover:bg-blue-700 transition text-white rounded-lg flex items-center gap-2"
           onClick={() => {
             type === "sale" && navigate("/sales/new")
             type === "purchase" && navigate("/purchase/new")

@@ -5,132 +5,141 @@ import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 
 const ProfilePage = () => {
-  const navigate = useNavigate();
-  const [profile, setProfile] = useState({});
-  const [confirmDelete, setconfirmDelete] = useState(false);
+    const navigate = useNavigate();
+    const [profile, setProfile] = useState({});
+    const [confirmDelete, setConfirmDelete] = useState(false);
+    const [loading, setLoading] = useState(false); // Add loading state
 
-  const fetchProfile = async () => {
-    try {
-      const response = await getProfile();
-      console.log(response.data);
-      setProfile(response.data);
-    } catch (error) {
-      console.error('Error fetching profile:', error);
-    }
-  };
-
-  const handleDelete = async () => {
-    try {
-      setconfirmDelete(true);
-      if (confirmDelete) {
-        const deleted = await deleteProfile();
-        if (deleted) {
-          console.log("Profile deleted seccessfully")
-          sessionStorage.clear();
-          setconfirmDelete(false);
-          navigate('/login')
+    const fetchProfile = async () => {
+        try {
+            const response = await getProfile();
+            console.log(response.data);
+            setProfile(response.data);
+        } catch (error) {
+            console.error('Error fetching profile:', error);
         }
-      }
-    } catch (err) {
-      toast.error('Failed to fetch profile!')
-      console.error('Error fetching profile:', err);
-    }
-  }
+    };
 
-  const handleEdit = async () => {
-    if(profile.role === "admin"){
-      navigate('/admin/profile/edit', { state: { data: profile } })
-    } else {
-      navigate('/profile/edit');
-    }
-  }
-
-  useEffect(() => {
-    fetchProfile();
-  }, []);
-
-  return (
-    <div className="relative p-6 min-h-screen font-sans bg-gray-50">
-      {confirmDelete &&
-        <div className="absolute inset-0 z-50 flex items-center justify-center bg-gray-900/50 bg-opacity-70 backdrop-blur-sm transition-opacity duration-300">
-          <div className="w-11/12 max-w-md transform rounded-xl bg-white p-8 text-center shadow-2xl transition-all duration-300 sm:w-full">
-            <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-red-100">
-              <Trash2 className='text-red-600' size={30} />
-            </div>
-            <h2 className="mt-6 text-2xl font-bold leading-tight text-gray-900">Confirm Account Deletion</h2>
-            <p className="mt-2 text-sm text-gray-500">
-              Are you absolutely sure you want to delete your account? This action is <span className='font-bold text-black'>irreversible</span> and will permanently remove all your data, including your shop, <span className="font-bold text-black">{profile.shopname}</span>.
-            </p>
-
-            <div className="mt-6 flex flex-col-reverse justify-end gap-3 sm:flex-row">
-              <button
-                onClick={() => setconfirmDelete(false)}
-                className="rounded-lg border border-gray-300 px-5 py-2.5 text-sm font-medium text-gray-700 transition-colors duration-200 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={handleDelete}
-                className="rounded-lg bg-red-600 px-5 py-2.5 text-sm font-medium text-white transition-colors duration-200 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
-              >
-                Yes, I'm sure. Delete my account.
-              </button>
-            </div>
-          </div>
-        </div>
-      }
-      <div className="max-w-lg mx-auto bg-white rounded-2xl shadow-xl overflow-hidden">
-        <div className="relative bg-blue-600 p-6 text-center text-white">
-          <div className='absolute z-10 top-25 right-4 cursor-pointer text-indigo-600 bg-indigo-100 p-2 rounded-full'
-            onClick={() => handleEdit()}>
-            {<Edit2 size={18} />}
-          </div>
-          <div className='absolute top-4 right-4 cursor-pointer text-indigo-600 bg-indigo-100 p-2 rounded-full'
-            onClick={() => handleDelete()}>
-            {<Trash2 size={18} />}
-          </div>
-          <div className="w-fit mx-auto mb-2 p-2 rounded-full bg-white flex items-center justify-center font-bold text-2xl shadow-lg">
-            {profile.role !== "admin" ?
-              <h1 className='text-black Logo-font'>{profile.shopname || JSON.parse(sessionStorage.getItem("user")).shopname}</h1>
-              : <User className='text-black' size={40} />
+    const handleDelete = async () => {
+        setLoading(true); // Set loading to true
+        try {
+            const deleted = await deleteProfile();
+            if (deleted) {
+                console.log("Profile deleted successfully");
+                sessionStorage.clear();
+                setConfirmDelete(false);
+                navigate('/login');
             }
-          </div>
-          <h2 className="text-xl font-semibold">{profile.name || JSON.parse(sessionStorage.getItem("user")).name}</h2>
-          <p className="text-sm opacity-80 capitalize">{profile.role || JSON.parse(sessionStorage.getItem("user")).role}</p>
-        </div>
+        } catch (err) {
+            toast.error('Failed to fetch profile!');
+            console.error('Error fetching profile:', err);
+        } finally {
+            setLoading(false); // Reset loading
+            setConfirmDelete(false);
+        }
+    };
 
-        <div className="p-6 space-y-4">
-          {/* <ProfileDetail icon={<User size={18} />} label="Name" value={profile.name || JSON.parse(sessionStorage.getItem("user")).name} /> */}
-          <ProfileDetail icon={<Mail size={18} />} label="Email" value={profile.email || JSON.parse(sessionStorage.getItem("user")).email} />
-          <ProfileDetail icon={<Phone size={18} />} label="Phone" value={profile.phone || JSON.parse(sessionStorage.getItem("user")).phone} />
-          <ProfileDetail icon={<MapPinned size={18} />} label="Address" value={profile.address || JSON.parse(sessionStorage.getItem("user")).address} />
-          {profile.role !== "admin" &&
-            <ProfileDetail icon={<Store size={18} />} label="Shop Name" value={profile.shopname || JSON.parse(sessionStorage.getItem("user")).shopname} />
-          }
-          <ProfileDetail icon={<Briefcase size={18} />} label="Role" value={profile.role || JSON.parse(sessionStorage.getItem("user")).role} />
-          <ProfileDetail
-            icon={<Calendar size={18} />}
-            label="Joined On"
-            value={new Date(profile.createdAt).toLocaleDateString()}
-          />
+    const handleEdit = () => {
+        if(profile.role === "admin"){
+            navigate('/admin/profile/edit', { state: { data: profile } })
+        } else {
+            navigate('/profile/edit');
+        }
+    };
+
+    useEffect(() => {
+        fetchProfile();
+    }, []);
+
+    return (
+        <div className="relative p-6 min-h-screen font-sans bg-gradient-to-br from-blue-400 via-blue-100 to-blue-400">
+            {confirmDelete &&
+                <div className="absolute inset-0 z-50 flex items-center justify-center bg-gray-900/50 bg-opacity-70 backdrop-blur-sm transition-opacity duration-300">
+                    <div className="w-11/12 max-w-md transform rounded-xl bg-white p-8 text-center shadow-2xl transition-all duration-300 sm:w-full">
+                        <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-red-100">
+                            <Trash2 className='text-red-600' size={30} />
+                        </div>
+                        <h2 className="mt-6 text-2xl font-bold leading-tight text-gray-900">Confirm Account Deletion</h2>
+                        <p className="mt-2 text-sm text-gray-500">
+                            Are you absolutely sure you want to delete your account? This action is <span className='font-bold text-black'>irreversible</span> and will permanently remove all your data, including your shop, <span className="font-bold text-black">{profile.shopname}</span>.
+                        </p>
+
+                        <div className="mt-6 flex flex-col-reverse justify-end gap-3 sm:flex-row">
+                            <button
+                                onClick={() => setConfirmDelete(false)}
+                                className="rounded-lg border border-gray-300 px-5 py-2.5 text-sm font-medium text-gray-700 transition-colors duration-200 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2"
+                            >
+                                Cancel
+                            </button>
+                            <button
+                                onClick={handleDelete}
+                                className="rounded-lg bg-red-600 px-5 py-2.5 text-sm font-medium text-white transition-colors duration-200 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
+                            >
+                                {loading ? 'Deleting...' : 'Yes, I\'m sure. Delete my account.'}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            }
+            <div className="max-w-lg mx-auto bg-white rounded-2xl shadow-xl overflow-hidden">
+                <div className="relative bg-blue-600 p-6 text-center text-white">
+                    <div className="w-fit mx-auto mb-2 p-2 rounded-full bg-white flex items-center justify-center font-bold text-2xl shadow-lg">
+                        {profile.role !== "admin" ?
+                            <h1 className='text-black Logo-font'>{profile.shopname || JSON.parse(sessionStorage.getItem("user")).shopname}</h1>
+                            : <User className='text-black' size={40} />
+                        }
+                    </div>
+                    <h2 className="text-xl font-semibold">{profile.name || JSON.parse(sessionStorage.getItem("user")).name}</h2>
+                    <p className="text-sm opacity-80 capitalize">{profile.role || JSON.parse(sessionStorage.getItem("user")).role}</p>
+                </div>
+
+                <div className="p-6 space-y-4">
+                    <ProfileDetail icon={<Mail size={18} />} label="Email" value={profile.email || JSON.parse(sessionStorage.getItem("user")).email} />
+                    <ProfileDetail icon={<Phone size={18} />} label="Phone" value={profile.phone || JSON.parse(sessionStorage.getItem("user")).phone} />
+                    <ProfileDetail icon={<MapPinned size={18} />} label="Address" value={profile.address || JSON.parse(sessionStorage.getItem("user")).address} />
+                    {profile.role !== "admin" &&
+                        <ProfileDetail icon={<Store size={18} />} label="Shop Name" value={profile.shopname || JSON.parse(sessionStorage.getItem("user")).shopname} />
+                    }
+                    <ProfileDetail icon={<Briefcase size={18} />} label="Role" value={profile.role || JSON.parse(sessionStorage.getItem("user")).role} />
+                    <ProfileDetail
+                        icon={<Calendar size={18} />}
+                        label="Joined On"
+                        value={new Date(profile.createdAt).toLocaleDateString()}
+                    />
+                </div>
+                
+                {/* --- Action Buttons --- */}
+                <div className="p-6 pt-0 flex gap-4">
+                    <button
+                        onClick={handleEdit}
+                        className="w-full flex-1 flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 rounded-lg transition duration-200"
+                    >
+                        <Edit2 size={18} /> Edit Profile
+                    </button>
+                    <button
+                        onClick={() => setConfirmDelete(true)}
+                        className="w-full flex-1 flex items-center justify-center gap-2 bg-red-600 hover:bg-red-700 text-white font-medium py-2 rounded-lg transition duration-200"
+                    >
+                        <Trash2 size={18} /> Delete Account
+                    </button>
+                </div>
+            </div>
         </div>
-      </div>
-    </div>
-  );
+    );
 };
 
 function ProfileDetail({ icon, label, value }) {
-  return (
-    <div className="flex items-center gap-3">
-      <div className="text-indigo-600 bg-indigo-100 p-2 rounded-full">
-        {icon}
-      </div>
-      <div>
-        <p className="text-xs text-gray-500">{label}</p>
-        <p className={`text-gray-800 font-medium ${label != "Email" && "capitalize"}`}>{value || "Not Provided"}</p>
-      </div>
-    </div>
-  );
+    return (
+        <div className="flex items-center gap-3">
+            <div className="text-indigo-600 bg-indigo-100 p-2 rounded-full">
+                {icon}
+            </div>
+            <div>
+                <p className="text-xs text-gray-500">{label}</p>
+                <p className={`text-gray-800 font-medium ${label != "Email" && "capitalize"}`}>{value || "Not Provided"}</p>
+            </div>
+        </div>
+    );
 }
 
 export default ProfilePage;

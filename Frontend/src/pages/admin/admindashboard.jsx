@@ -21,7 +21,6 @@ const Admindashboard = () => {
     const [error, setError] = useState("");
     const [query, setQuery] = useState("");
     const [shops, setshops] = useState(0);
-
     const [managers, setManagers] = useState([]);
 
     const fetchDashboard = async () => {

@@ -258,7 +258,7 @@ const ProductListPage = () => {
         />
         {!isSale &&
           <button
-            className="px-4 py-1 bg-blue-600 hover:bg-blue-700 transition text-white rounded flex items-center gap-2"
+            className="px-4 py-1 bg-blue-600 hover:bg-blue-700 transition text-white rounded-lg flex items-center gap-2"
             onClick={() => {
               navigate("/products/new");
             }}>
@@ -269,7 +269,7 @@ const ProductListPage = () => {
         {cart.length > 0 && (
           <button
             onClick={ShowCart}
-            className="bg-blue-600 flex items-center gap-2 text-white px-4 py-1 rounded"
+            className="bg-blue-600 flex items-center gap-2 text-white px-4 py-1 rounded-lg"
           >
             <span className="flex items-center gap-2">
               <ShoppingCart size={20} /> Sale
@@ -304,7 +304,6 @@ const ProductListPage = () => {
                     "Unit",
                     ...(isSale ? ["Sale"] : []),
                     ...(isSale ? [] : ["Created At"]),
-                    // "Created At",
                     ...(isSale ? [] : ["Actions"]),
                   ].map((header, i) => (
                     <th key={i} className="px-4 py-3">

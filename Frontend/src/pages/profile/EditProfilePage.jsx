@@ -3,7 +3,7 @@ import { updateProfile } from "../../services/profileServices.js";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { FaUser, FaPhone, FaLock } from 'react-icons/fa';
-
+import Loader from "../loader/loader.jsx";
 
 const EditProfilePage = () => {
   const navigate = useNavigate();
@@ -51,7 +51,7 @@ const EditProfilePage = () => {
 
         setTimeout(() => {
           navigate('/profile');
-        }, 2000);
+        }, 100);
       }
     } catch (err) {
       toast.error(err.response?.data?.message || "Failed to update profile");
@@ -61,7 +61,7 @@ const EditProfilePage = () => {
   };
 
   return (
-    <div className="flex items-center justify-center p-6 min-h-screen bg-gray-100 font-sans">
+    <div className="flex items-center justify-center p-6 min-h-screen bg-linear-60 from-blue-400 via-blue-100 to-blue-400 font-sans">
             <div className="w-full max-w-xl mx-auto bg-white rounded-3xl shadow-2xl overflow-hidden transform transition-all duration-300 hover:shadow-blue-500/20">
                 <div className="p-8">
                     <h1 className="text-center text-4xl font-extrabold text-blue-700 mb-2">Edit Profile</h1>
@@ -69,9 +69,10 @@ const EditProfilePage = () => {
 
                     {/* Loading State */}
                     {loading ? (
-                        <div className="flex justify-center items-center py-12">
-                            <div className="w-16 h-16 border-4 border-t-4 border-gray-200 border-t-blue-500 rounded-full animate-spin"></div>
-                        </div>
+                        // <div className="flex justify-center items-center py-12">
+                        //     <div className="w-16 h-16 border-4 border-t-4 border-gray-200 border-t-blue-500 rounded-full animate-spin"></div>
+                        // </div>
+                        <Loader/>
                     ) : (
                         <form onSubmit={handleSubmit} className="space-y-6">
                             {/* Name Input */}

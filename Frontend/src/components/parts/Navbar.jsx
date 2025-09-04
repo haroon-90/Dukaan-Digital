@@ -18,13 +18,15 @@ const Navbar = ({ toggleSidebar }) => {
                             </svg>
                         </button>
                     </div>
-                    <div className="flex-shrink-0 p-2 pl-0 md:pl-8">
+                    <div onClick={() => window.location.reload()}
+                     className="flex-shrink-0 p-2 pl-0 md:pl-8 cursor-pointer">
                         <img className="h-18 p-2 invert" src={Dukaan_Digital} alt="Dukaan_Digital" />
                     </div>
                     <div className="md:flex items-center space-x-8">
                         <button
                             onClick={() => { sessionStorage.clear(); navigate('/login') }}
-                            className='px-2 py-1 flex gap-2 items-center font-bold cursor-pointer bg-red-600 hover:bg-blue-600 hover:text-red-600 rounded-lg text-white transition-colors'
+                            title="Logout"
+                            className='px-2 py-1 flex gap-2 items-center font-bold cursor-pointer bg-white hover:bg-blue-600 hover:text-white rounded-lg text-blue-600 transition-colors'
                         >
                             <LogOut size={18} /><span className='hidden md:flex'> Logout</span>
                         </button>

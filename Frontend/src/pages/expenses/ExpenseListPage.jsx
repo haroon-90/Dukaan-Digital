@@ -52,7 +52,7 @@ const ExpenseListPage = () => {
       <div className="flex justify-end mb-2">
         <button
           onClick={() => navigate('/expenses/new')}
-          className='px-4 py-1 bg-blue-600 hover:bg-blue-700 text-white rounded flex items-center gap-2 transition'
+          className='px-4 py-1 bg-blue-600 hover:bg-blue-700 text-white rounded-lg flex items-center gap-2 transition'
         >
           <FileText size={18} /> Add Expense
         </button>
