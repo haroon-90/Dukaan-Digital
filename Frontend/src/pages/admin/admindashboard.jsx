@@ -32,7 +32,7 @@ const Admindashboard = () => {
             setManagers(response.data.shops);
             setshops(response.data.totalShops);
             setLoading(false);
-            toast.success("Data Refreshed!");
+            // toast.success("Data Refreshed!");
         } catch (err) {
             console.error(err);
             setError("Failed to fetch dashboard data");
@@ -112,7 +112,7 @@ const Admindashboard = () => {
                             <RefreshCw className="w-4 h-4" /> <span className="hidden sm:inline">Refresh</span>
                         </button>
                         <button onClick={() => navigate("/register")} title='Add Shop' className="inline-flex  items-center justify-center gap-2 rounded-lg border border-white bg-blue-600 text-white px-3 py-2 text-sm hover:bg-white hover:text-blue-600 hover:border-blue-600">
-                            <PlusCircle className="w-4 h-4" /> <span className="hidden sm:inline">Add Shop</span>
+                            <PlusCircle className="w-4 h-4" /> <span className="hidden sm:inline">Add User</span>
                         </button>
                     </div>
                 </div>

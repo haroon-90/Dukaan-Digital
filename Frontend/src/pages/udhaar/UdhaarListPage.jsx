@@ -16,15 +16,9 @@ const UdhaarListPage = () => {
     try {
       setloading(true);
       const res = await getUdhaarlist();
-      if (res.data && res.data.length > 0) {
-        setUdhaarList(res.data.reverse());
-        toast.success("Data Refreshed")
-        setloading(false);
-      } else {
-        toast.error("Failed to refresh Credit record");
-        setUdhaarList([]);
-        setloading(false);
-      }
+      setUdhaarList(res.data.reverse());
+      // toast.success("Data Refreshed")
+      setloading(false);
     } catch (err) {
       toast.error("Failed to refresh Credit record");
       console.error("Error fetching udhaar list", err);

@@ -15,7 +15,7 @@ const ExpenseListPage = () => {
       const res = await getExpense();
       if (res.data && res.data.length > 0) {
         setExpenseList(res.data.reverse());
-        toast.success("Data refreshed!");
+        // toast.success("Data refreshed!");
       } else {
         setExpenseList([]);
       }

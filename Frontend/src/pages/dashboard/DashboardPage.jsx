@@ -10,6 +10,7 @@ import {
 import { ShoppingCart, HandCoins, DollarSign, Receipt, MessageCircleWarning, Eye, EyeOff, Sparkles, PartyPopper, CheckCircle2, TrendingUp } from "lucide-react";
 import { getDashboard } from "../../services/dashboardServices";
 import Loader from "../loader/loader";
+import toast from "react-hot-toast";
 
 const Card = ({ children, className = "" }) => (
     <div className={`rounded-2xl shadow-md ${className}`}>{children}</div>
@@ -30,10 +31,11 @@ const Dashboard = () => {
         try {
             const res = await getDashboard();
             setsummary(res.data.summary);
-            setsalesData(res.data.salesData.reverse());
+            setsalesData(res.data.salesData);
             setLowStock(res.data.lowStock);
             setloading(false);
         } catch (err) {
+            toast.error("Failed to refresh data!")
             console.log(err);
         }
     }
