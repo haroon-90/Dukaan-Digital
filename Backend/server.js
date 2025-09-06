@@ -2,6 +2,7 @@ import express from "express";
 import cors from 'cors';
 import dotenv from 'dotenv';
 import mongoose from "mongoose";
+import ServerlessHttp from "serverless-http";
 
 import AuthRoutes from './routes/authRoutes.js'
 import ProfileRoutes from './routes/profileRoute.js'
@@ -20,8 +21,7 @@ const app = express();
 
 app.use(express.json());
 app.use(cors({
-    origin: 'https://haroon-90.github.io',// Allow requests from your frontend origin
-    // origin: 'http://localhost:5173',// Allow requests from your frontend origin
+    origin: ['https://haroon-90.github.io', 'http://localhost:5173'],// Allow requests from your frontend origin
     credentials: true // Allow sending and receiving cookies/authentication headers
 }));
 
@@ -52,4 +52,5 @@ mongoose.connect(process.env.MONGODB_URL)
         console.log("Error connecting with MongoDB");
     })
 
-export default app;
+const handler = serverless(app);
+export default handler;
