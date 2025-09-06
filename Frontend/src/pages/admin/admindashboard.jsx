@@ -152,7 +152,7 @@ const Admindashboard = () => {
 
                     <div className="overflow-x-auto">
                         <table className="min-w-full text-sm">
-                            <thead className="bg-blue-50 text-blue-600">
+                            <thead className="bg-blue-600 text-white">
                                 <tr>
                                     <Th className="px-4 py-2.5">Name</Th>
                                     <Th className="hidden md:table-cell px-4 py-2.5">Email</Th>
