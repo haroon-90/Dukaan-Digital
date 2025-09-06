@@ -41,14 +41,16 @@ app.use('/api/report', ReportRoutes)
 app.use('/api/dashboard', Dashboard)
 app.use('/api/admin', AdminRoutes)
 
-const PORT = process.env.PORT || 5000;
+// const PORT = process.env.PORT || 5000;
 mongoose.connect(process.env.MONGODB_URL)
     .then(() => {
         console.log("MongoDB connected");
-        app.listen(PORT, () => {
-            console.log(`Server is running at http://localhost:${PORT}`);
-        });
+        // app.listen(PORT, () => {
+        //     console.log(`Server is running at http://localhost:${PORT}`);
+        // });
     })
     .catch(() => {
         console.log("Error connecting with MongoDB");
     })
+
+export default app;

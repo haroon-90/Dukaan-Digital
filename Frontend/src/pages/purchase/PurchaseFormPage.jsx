@@ -195,7 +195,7 @@ const PurchaseFormPage = () => {
     <div className="flex justify-center items-center min-h-screen bg-white p-6">
       <form
         onSubmit={handlePurchase}
-        className="bg-white shadow-2xl rounded-3xl p-8 w-full max-w-2xl"
+        className="bg-white border border-blue-500 shadow-2xl rounded-3xl p-8 w-full max-w-2xl"
       >
         <div className="flex flex-col items-center mb-6">
           <h1 className="text-3xl font-extrabold text-blue-700 text-center">New Purchase</h1>
