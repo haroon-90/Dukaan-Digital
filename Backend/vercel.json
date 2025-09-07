@@ -1,6 +1,16 @@
 {
   "version": 2,
   "routes": [
-    { "src": "/api/(.*)", "dest": "/api/index.js" }
-  ]
+    {
+      "src": "/api/(.*)",
+      "dest": "/api/index.js"
+    }
+  ],
+  "functions": {
+    "api/index.js": {
+      "maxDuration": 10,
+      "memory": 1024,
+      "maxLambdaSize": "50mb"
+    }
+  }
 }

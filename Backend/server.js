@@ -1,5 +1,6 @@
 import express from "express";
 import cors from "cors";
+import dotenv from 'dotenv';
 import mongoose from "mongoose";
 
 import AuthRoutes from './routes/authRoutes.js'
@@ -12,7 +13,9 @@ import ExpenseRoutes from './routes/ExpenseRoutes.js'
 import ReportRoutes from './routes/ReportRoutes.js'
 import Dashboard from './routes/DashboardRoutes.js'
 import AdminRoutes from './routes/AdminRoutes.js'
+import OTPRoutes from './routes/otpRoutes.js'
 
+dotenv.config();
 const app = express();
 
 app.use(express.json());
@@ -39,6 +42,7 @@ app.use("/api/expense", ExpenseRoutes);
 app.use("/api/report", ReportRoutes);
 app.use("/api/dashboard", Dashboard);
 app.use("/api/admin", AdminRoutes);
+app.use("/api/otp", OTPRoutes);
 
 app.get("/test-env", (req, res) => {
   res.json({
@@ -50,5 +54,10 @@ app.get("/test-env", (req, res) => {
 mongoose.connect(process.env.MONGODB_URL)
   .then(() => console.log("MongoDB connected"))
   .catch(() => console.log("Error connecting with MongoDB"));
+
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
+});
 
 export default app;

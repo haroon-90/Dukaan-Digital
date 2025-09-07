@@ -1,9 +1,9 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "https://dukaan-digital.vercel.app/api",
+  // baseURL: "https://dukaan-digital.vercel.app/api",
+  baseURL: "http://localhost:5000/api",
   headers: { "Content-Type": "application/json" },
-  // baseURL: "http://localhost:5000/api",
 });
 
 // Request: Har request ke saath token bhejna
