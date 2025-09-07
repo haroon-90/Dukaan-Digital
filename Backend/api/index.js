@@ -1,6 +1,6 @@
 import express from "express";
 import cors from 'cors';
-import dotenv from 'dotenv';
+// import dotenv from 'dotenv';
 import mongoose from "mongoose";
 import serverless from "serverless-http";
 
@@ -15,7 +15,7 @@ import ReportRoutes from '../routes/ReportRoutes.js'
 import Dashboard from '../routes/DashboardRoutes.js'
 import AdminRoutes from '../routes/AdminRoutes.js'
 
-dotenv.config();
+// dotenv.config();
 
 const app = express();
 
