@@ -22,7 +22,7 @@ const app = express();
 app.use(express.json());
 app.use(cors({
     origin: ['https://haroon-90.github.io', 'http://localhost:5173'],// Allow requests from your frontend origin
-    credentials: true // Allow sending and receiving cookies/authentication headers
+    credentials: true
 }));
 
 app.get('/', (_, res) => {
@@ -40,13 +40,13 @@ app.use('/api/report', ReportRoutes)
 app.use('/api/dashboard', Dashboard)
 app.use('/api/admin', AdminRoutes)
 
-// const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5000;
 mongoose.connect(process.env.MONGODB_URL)
     .then(() => {
         console.log("MongoDB connected");
-        // app.listen(PORT, () => {
-        //     console.log(`Server is running at http://localhost:${PORT}`);
-        // });
+        app.listen(PORT, () => {
+            console.log(`Server is running at http://localhost:${PORT}`);
+        });
     })
     .catch(() => {
         console.log("Error connecting with MongoDB");
