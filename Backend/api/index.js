@@ -4,16 +4,16 @@ import dotenv from 'dotenv';
 import mongoose from "mongoose";
 import serverless from "serverless-http";
 
-import AuthRoutes from './routes/authRoutes.js'
-import ProfileRoutes from './routes/profileRoute.js'
-import ProductRoutes from './routes/ProductRoutes.js'
-import SalesRoutes from './routes/SalesRoutes.js'
-import PurchaseRoutes from './routes/PurchaseRoutes.js'
-import UdhaarRoutes from './routes/UdhaarRoutes.js'
-import ExpenseRoutes from './routes/ExpenseRoutes.js'
-import ReportRoutes from './routes/ReportRoutes.js'
-import Dashboard from './routes/DashboardRoutes.js'
-import AdminRoutes from './routes/AdminRoutes.js'
+import AuthRoutes from '../routes/authRoutes.js'
+import ProfileRoutes from '../routes/profileRoute.js'
+import ProductRoutes from '../routes/ProductRoutes.js'
+import SalesRoutes from '../routes/SalesRoutes.js'
+import PurchaseRoutes from '../routes/PurchaseRoutes.js'
+import UdhaarRoutes from '../routes/UdhaarRoutes.js'
+import ExpenseRoutes from '../routes/ExpenseRoutes.js'
+import ReportRoutes from '../routes/ReportRoutes.js'
+import Dashboard from '../routes/DashboardRoutes.js'
+import AdminRoutes from '../routes/AdminRoutes.js'
 
 dotenv.config();
 
