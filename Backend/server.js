@@ -20,7 +20,7 @@ const app = express();
 
 app.use(express.json());
 app.use(cors({
-    origin: ['https://haroon-90.github.io', 'http://localhost:5173'],// Allow requests from your frontend origin
+    origin: ['https://haroon-90.github.io', 'https://haroon-90.github.io/', 'http://localhost:5173'],// Allow requests from your frontend origin
     credentials: true // Allow sending and receiving cookies/authentication headers
 }));
 
