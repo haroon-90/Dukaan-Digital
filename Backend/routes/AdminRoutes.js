@@ -1,7 +1,7 @@
 import express from "express";
 import { GetAdminDashboard, getAdminProfile, updateshop, editUserstatus, deleteshop } from "../controllers/adminController.js";
 import Auth from "../middlewares/Auth.js";
-import AdminAuth from "../middlewares/AdminAuth.js";
+import AdminAuth from "../middlewares/adminAuth.js";
 
 const router = express.Router();
 
