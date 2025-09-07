@@ -1,4 +1,4 @@
-import api from "./Api";
+import api from "./api";
 
 export const getAdminDashboard = () => api.get("/admin");
 export const editUserStatus = (id) => api.post(`/admin/status/${id}`, {});

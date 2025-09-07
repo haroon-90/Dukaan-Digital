@@ -1,3 +1,3 @@
-import api from "./Api";
+import api from "./api";
 
 export const getDashboard = () => api.get("/dashboard");

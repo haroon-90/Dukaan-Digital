@@ -1,4 +1,4 @@
-import api from "./Api";
+import api from "./api";
 
 export const addPurchase = (data) => api.post('/purchase', data)
 export const getPurchases = (data) => api.post('/purchase/all', data)
