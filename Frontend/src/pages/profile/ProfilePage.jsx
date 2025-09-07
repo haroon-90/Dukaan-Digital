@@ -81,7 +81,7 @@ const ProfilePage = () => {
                         </div>
                         <h2 className="mt-6 text-2xl font-bold text-gray-900">Confirm Account Deletion</h2>
                         <p className="mt-2 text-sm text-gray-500">
-                            Are you absolutely sure you want to delete your account? This action is <span className="font-bold text-black">irreversible</span> and will permanently remove all your data, including your shop, <span className="font-bold text-black">{user.shopname || "N/A"}</span>.
+                            Are you absolutely sure you want to delete your account? This action is <span className="font-bold text-black">irreversible</span> and will permanently remove all your data<span className={`${user.role === "admin" ? "hidden" : ""}`}>, including your shop, <span className="font-bold text-black">{user.shopname || "N/A"}</span></span>.
                         </p>
                         <div className="mt-8 flex flex-col-reverse justify-end gap-3 sm:flex-row">
                             <button

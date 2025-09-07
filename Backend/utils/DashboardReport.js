@@ -152,7 +152,7 @@ const DashboardReport = async (userId) => {
   // Single queries (fast)
   // -------------------------
   const [Udhaars, allExpenses, allSales, products] = await Promise.all([
-    Udhaar.find({ userId, status: "pending" }),
+    Udhaar.find({ userId, status: "pending", createdAt : { $gte : currentDate.getMonth()} }),
 
     Expense.find({
       userId,
