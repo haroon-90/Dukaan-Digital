@@ -25,8 +25,6 @@ app.use(cors({
   credentials: true
 }));
 
-app.options("*", cors()); // Preflight handle
-
 app.get("/", (_, res) => {
   res.send("Welcome to server");
 });
