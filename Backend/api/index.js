@@ -1,6 +1,6 @@
 import express from "express";
 import cors from 'cors';
-// import dotenv from 'dotenv';
+import dotenv from 'dotenv';
 import mongoose from "mongoose";
 import serverless from "serverless-http";
 
@@ -15,7 +15,7 @@ import ReportRoutes from '../routes/ReportRoutes.js'
 import Dashboard from '../routes/DashboardRoutes.js'
 import AdminRoutes from '../routes/AdminRoutes.js'
 
-// dotenv.config();
+dotenv.config();
 
 const app = express();
 
@@ -39,6 +39,12 @@ app.use('/api/expense', ExpenseRoutes)
 app.use('/api/report', ReportRoutes)
 app.use('/api/dashboard', Dashboard)
 app.use('/api/admin', AdminRoutes)
+app.get("/test-env", (req, res) => {
+  res.json({
+    mongo: process.env.MONGODB_URL ? "found" : "missing",
+    jwt: process.env.SECRET_KEY ? "found" : "missing",
+  });
+});
 
 const PORT = process.env.PORT || 5000;
 mongoose.connect(process.env.MONGODB_URL)
