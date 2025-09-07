@@ -38,6 +38,12 @@ app.use('/api/expense', ExpenseRoutes)
 app.use('/api/report', ReportRoutes)
 app.use('/api/dashboard', Dashboard)
 app.use('/api/admin', AdminRoutes)
+ app.get("/test-env", (req, res) => {
+  res.json({
+    mongo: process.env.MONGODB_URL ? "found" : "missing",
+    jwt: process.env.SECRET_KEY ? "found" : "missing",
+  });
+});
 
 // const PORT = process.env.PORT || 5000;
 mongoose.connect(process.env.MONGODB_URL)
