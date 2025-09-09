@@ -3,6 +3,7 @@ import { getProfile, deleteProfile } from '../../services/profileServices.js';
 import { User, Mail, Phone, Briefcase, Store, Calendar, Edit2, Trash2, MapPinned } from "lucide-react";
 import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
+import { FaArrowLeft } from 'react-icons/fa';
 
 // Reusable component for displaying a single profile detail
 const ProfileDetail = ({ icon, label, value }) => {
@@ -105,6 +106,17 @@ const ProfilePage = () => {
             {/* Profile Card */}
             <div className="w-full max-w-4xl rounded-3xl bg-white shadow-2xl overflow-hidden">
                 {/* Header Section */}
+
+                <div className='w-full bg-blue-600'>
+                    <button
+                        onClick={() => navigate(-1)}
+                        type="button"
+                        className="flex items-center translate-2 gap-2 px-4 py-2 bg-gray-100 text-gray-700 rounded-full shadow-sm hover:bg-gray-200 hover:shadow-md transition-all duration-300"
+                    >
+                        <FaArrowLeft className="text-blue-600" />
+                        <span className="font-medium">Back</span>
+                    </button>
+                </div>
                 <div className="bg-blue-600 p-8 text-white flex flex-col items-center">
                     <div className="mb-4 flex h-24 w-24 items-center justify-center rounded-full bg-white text-4xl font-bold text-blue-600 shadow-lg">
                         {user.role === "admin" ? <User size={48} /> : (user.shopname?.charAt(0) || user.name?.charAt(0))}

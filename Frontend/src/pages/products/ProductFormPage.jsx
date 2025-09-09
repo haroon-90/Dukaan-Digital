@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { addProduct, getProductById, updateProduct } from '../../services/productServices.js';
 import { useParams, useNavigate } from "react-router-dom";
 import { toast } from 'react-hot-toast';
-import { FaTag, FaBoxes, FaDollarSign, FaWeightHanging, FaCube } from 'react-icons/fa';
+import { FaTag, FaBoxes, FaDollarSign, FaWeightHanging, FaCube, FaArrowLeft } from 'react-icons/fa';
 
 const ProductFormPage = () => {
   const { id } = useParams();
@@ -69,11 +69,19 @@ const ProductFormPage = () => {
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen p-6 bg-white">
+    <div className=" flex justify-center items-center min-h-screen p-6 bg-white">
       <form
         onSubmit={handleSubmit}
-        className="bg-white border border-blue-500 shadow-2xl rounded-3xl p-8 w-full max-w-lg transform transition-all duration-300 hover:scale-[1.01]"
+        className="bg-white border border-blue-500 shadow-2xl rounded-3xl p-8 w-full max-w-lg"
       >
+        <button
+          onClick={() => navigate(-1)}
+          type="button"
+          className="flex items-center -translate-4 gap-2 px-4 py-2 bg-gray-100 text-gray-700 rounded-full shadow-sm hover:bg-gray-200 hover:shadow-md transition-all duration-300"
+        >
+          <FaArrowLeft className="text-blue-600" />
+          <span className="font-medium">Back</span>
+        </button>
         <div className="flex flex-col items-center mb-6">
           <h2 className="text-3xl font-extrabold text-blue-700 text-center">
             {id ? "Edit Product" : "Add New Product"}
@@ -116,7 +124,7 @@ const ProductFormPage = () => {
           <div>
             <label className="block text-blue-800 font-semibold mb-2">Purchase Price</label>
             <div className="relative flex items-center">
-              <FaDollarSign className="absolute left-4 text-blue-400 z-10" />
+              <span className="absolute left-4 text-blue-400 z-10 font-bold">₨</span>
               <input
                 name="purchasePrice"
                 value={product.purchasePrice}
@@ -132,7 +140,7 @@ const ProductFormPage = () => {
           <div>
             <label className="block text-blue-800 font-semibold mb-2">Selling Price</label>
             <div className="relative flex items-center">
-              <FaDollarSign className="absolute left-4 text-blue-400 z-10" />
+              <span className="absolute left-4 text-blue-400 z-10 font-bold">₨</span>
               <input
                 name="sellingPrice"
                 value={product.sellingPrice}

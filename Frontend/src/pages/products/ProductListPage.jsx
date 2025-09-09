@@ -167,7 +167,7 @@ const ProductListPage = () => {
     <div className="relative p-6 bg-white min-h-screen">
       {showSaleModal && (
         <div className="absolute inset-0 flex items-start justify-center bg-black/60 z-50 backdrop-blur-sm p-4 print:p-0">
-          <div className="bg-white p-8 max-h-[100%] min-h-[90vh] rounded-xl overflow-auto shadow-2xl w-full max-w-lg font-mono text-gray-800 print:shadow-none print:border-0 print:rounded-none print:p-0">
+          <div className="bg-white p-8 max-h-[100%] rounded-xl overflow-auto shadow-2xl w-full max-w-lg font-mono text-gray-800 print:shadow-none print:border-0 print:rounded-none print:p-0">
             <div className="text-center pb-4 mb-4 border-b border-dashed border-gray-400 print:border-solid print:mb-2">
               <h2 className="text-2xl font-bold text-blue-700 tracking-wide">
                 {JSON.parse(sessionStorage.getItem("user")).shopname}

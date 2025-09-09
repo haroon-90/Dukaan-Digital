@@ -7,55 +7,50 @@ const uri = "mongodb+srv://haroonboy90_db_user:haroon786db@dukaandigital.cobhiya
 mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 
 // Dummy userId (replace with a valid ObjectId from your database)
-const userId = "68b1489d1eb72753b82d19ac";
+const userId = "68be738f8051ff94501f95f0";
 const today = new Date().toISOString().split("T")[0];
 
 const purchases = [
   {
     userId,
-    suppliername: "Bakery Supplies Hub",
-    category: "Bakery",
+    suppliername: "Tech World Electronics",
+    category: "Mobiles & Accessories",
     date: today,
     items: [
-      { itemname: "White Bread Loaf", purchasePrice: 120, quantity: 50, unit: "loaf" },
-      { itemname: "Brown Bread Loaf", purchasePrice: 140, quantity: 40, unit: "loaf" },
-      { itemname: "Whole Wheat Bread", purchasePrice: 150, quantity: 30, unit: "loaf" },
-      { itemname: "Croissant", purchasePrice: 60, quantity: 100, unit: "piece" },
-      { itemname: "Doughnut", purchasePrice: 50, quantity: 120, unit: "piece" },
-      { itemname: "Plain Cake Rusk", purchasePrice: 200, quantity: 25, unit: "pack" },
-      { itemname: "Chocolate Chip Cookies", purchasePrice: 180, quantity: 30, unit: "pack" },
-      { itemname: "Cream Roll", purchasePrice: 40, quantity: 80, unit: "piece" },
-      { itemname: "Pound Cake", purchasePrice: 250, quantity: 20, unit: "loaf" },
-      { itemname: "Pastry", purchasePrice: 80, quantity: 60, unit: "piece" }
+      { itemname: "Samsung Galaxy A15", purchasePrice: 45000, quantity: 10, unit: "piece" },
+      { itemname: "iPhone 13 128GB", purchasePrice: 145000, quantity: 5, unit: "piece" },
+      { itemname: "Infinix Hot 12", purchasePrice: 32000, quantity: 8, unit: "piece" },
+      { itemname: "Oppo Reno 8", purchasePrice: 65000, quantity: 6, unit: "piece" },
+      { itemname: "Fast Charging Cable (Type-C)", purchasePrice: 500, quantity: 50, unit: "piece" },
+      { itemname: "Original Samsung Charger", purchasePrice: 2500, quantity: 30, unit: "piece" },
+      { itemname: "Wireless Earbuds", purchasePrice: 3500, quantity: 20, unit: "piece" }
     ]
   },
   {
     userId,
-    suppliername: "Flour & Sugar Wholesalers",
-    category: "Bakery Ingredients",
+    suppliername: "Electro Wholesale Hub",
+    category: "Home Appliances",
     date: today,
     items: [
-      { itemname: "All-Purpose Flour (Maida)", purchasePrice: 150, quantity: 50, unit: "kg" },
-      { itemname: "Baking Powder", purchasePrice: 80, quantity: 10, unit: "pack" },
-      { itemname: "Active Dry Yeast", purchasePrice: 120, quantity: 15, unit: "pack" },
-      { itemname: "White Sugar", purchasePrice: 135, quantity: 40, unit: "kg" },
-      { itemname: "Baking Chocolate (Slab)", purchasePrice: 450, quantity: 20, unit: "kg" },
-      { itemname: "Vanilla Essence (100ml)", purchasePrice: 220, quantity: 10, unit: "bottle" },
-      { itemname: "Icing Sugar", purchasePrice: 160, quantity: 15, unit: "kg" },
-      { itemname: "Baking Soda", purchasePrice: 60, quantity: 10, unit: "pack" }
+      { itemname: "Haier LED TV 43 inch", purchasePrice: 48000, quantity: 4, unit: "piece" },
+      { itemname: "Orient Refrigerator 14 cu.ft", purchasePrice: 95000, quantity: 3, unit: "piece" },
+      { itemname: "Kenwood Washing Machine", purchasePrice: 38000, quantity: 5, unit: "piece" },
+      { itemname: "Philips Electric Kettle", purchasePrice: 4500, quantity: 15, unit: "piece" },
+      { itemname: "Gree Inverter AC 1.5 Ton", purchasePrice: 125000, quantity: 2, unit: "piece" },
+      { itemname: "Microwave Oven Dawlance", purchasePrice: 22000, quantity: 4, unit: "piece" }
     ]
   },
   {
     userId,
-    suppliername: "Specialty Baked Goods Co.",
-    category: "Bakery",
+    suppliername: "Smart Gadgets Suppliers",
+    category: "Electronics & Gadgets",
     date: today,
     items: [
-      { itemname: "Sourdough Bread", purchasePrice: 350, quantity: 10, unit: "loaf" },
-      { itemname: "Multigrain Bread", purchasePrice: 200, quantity: 20, unit: "loaf" },
-      { itemname: "Red Velvet Cupcake", purchasePrice: 90, quantity: 50, unit: "piece" },
-      { itemname: "Chocolate Fudge Brownie", purchasePrice: 110, quantity: 40, unit: "piece" },
-      { itemname: "Walnut Brownie", purchasePrice: 130, quantity: 30, unit: "piece" }
+      { itemname: "Bluetooth Speaker", purchasePrice: 2500, quantity: 25, unit: "piece" },
+      { itemname: "Power Bank 20000mAh", purchasePrice: 4000, quantity: 20, unit: "piece" },
+      { itemname: "Smart Watch Series 7", purchasePrice: 7500, quantity: 15, unit: "piece" },
+      { itemname: "Laptop HP i5 11th Gen", purchasePrice: 125000, quantity: 5, unit: "piece" },
+      { itemname: "Dell Monitor 24 inch", purchasePrice: 35000, quantity: 6, unit: "piece" }
     ]
   }
 ];
@@ -77,17 +72,17 @@ const insertData = async () => {
             itemname: item.itemname,
             category: p.category,
             purchasePrice: item.purchasePrice,
-            sellingPrice: Math.round(item.purchasePrice * 1.2), // 20% markup for bakery items
+            sellingPrice: Math.round(item.purchasePrice * 1.15), // 15% markup for electronics
             quantity: item.quantity,
             unit: item.unit
           });
         }
       }
     }
-    console.log("✅ Bakery purchases and products added successfully!");
+    console.log("✅ Electronics purchases and products added successfully!");
     process.exit(0);
   } catch (err) {
-    console.error("❌ Error adding bakery data:", err);
+    console.error("❌ Error adding electronics data:", err);
     process.exit(1);
   }
 };

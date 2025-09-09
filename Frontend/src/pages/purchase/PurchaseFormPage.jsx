@@ -1,11 +1,13 @@
 import { useState, useEffect } from 'react';
-import { toast } from 'react-hot-toast'; // Assuming you have react-hot-toast installed
+import { toast } from 'react-hot-toast';
 import { addPurchase } from '../../services/purchaseServices.js';
 import { getProducts } from '../../services/productServices.js';
 import Dukaan_Digital from '../../assets/Dukaan_Digital.svg'
-import { FaBoxes, FaDollarSign, FaTag, FaCheckCircle, FaTrashAlt,  FaStore, FaWeightHanging } from 'react-icons/fa';
+import { useNavigate } from 'react-router-dom';
+import { FaBoxes, FaTag, FaCheckCircle, FaTrashAlt, FaStore, FaWeightHanging, FaArrowLeft } from 'react-icons/fa';
 
 const PurchaseFormPage = () => {
+  const navigate = useNavigate();
   const [products, setProducts] = useState([]);
   const [purchaseDetails, setPurchaseDetails] = useState({
     suppliername: '',
@@ -192,11 +194,20 @@ const PurchaseFormPage = () => {
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-white p-6">
+    <div className="relative flex justify-center items-center min-h-screen bg-white p-6">
       <form
         onSubmit={handlePurchase}
         className="bg-white border border-blue-500 shadow-2xl rounded-3xl p-8 w-full max-w-2xl"
       >
+        <button
+          onClick={() => navigate(-1)}
+          type="button"
+          className="absolute flex items-center -translate-4 gap-2 px-4 py-2 bg-gray-100 text-gray-700 rounded-full shadow-sm hover:bg-gray-200 hover:shadow-md transition-all duration-300"
+        >
+          <FaArrowLeft className="text-blue-600" />
+          <span className="font-medium">Back</span>
+        </button>
+
         <div className="flex flex-col items-center mb-6">
           <h1 className="text-3xl font-extrabold text-blue-700 text-center">New Purchase</h1>
         </div>
@@ -254,7 +265,7 @@ const PurchaseFormPage = () => {
             <div>
               <label htmlFor="purchasePrice" className="block text-blue-800 font-semibold mb-2">Purchase Price</label>
               <div className="relative flex items-center">
-                <FaDollarSign className="absolute left-4 text-blue-400 z-10" />
+                <span className="absolute left-4 text-blue-400 z-10 font-bold">₨</span>
                 <input
                   type="number"
                   id="purchasePrice"
@@ -269,7 +280,7 @@ const PurchaseFormPage = () => {
             <div>
               <label htmlFor="sellingPrice" className="block text-blue-800 font-semibold mb-2">Selling Price</label>
               <div className="relative flex items-center">
-                <FaDollarSign className="absolute left-4 text-blue-400 z-10" />
+                <span className="absolute left-4 text-blue-400 z-10 font-bold">₨</span>
                 <input
                   type="number"
                   id="sellingPrice"
