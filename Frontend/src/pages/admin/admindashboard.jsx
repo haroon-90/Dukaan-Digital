@@ -20,8 +20,8 @@ const Admindashboard = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
     const [query, setQuery] = useState("");
-    const [shops, setshops] = useState(0);
     const [managers, setManagers] = useState([]);
+    const [admins, setAdmins] = useState([])
 
     const fetchDashboard = async () => {
         try {
@@ -29,8 +29,8 @@ const Admindashboard = () => {
             setError("");
             const response = await getAdminDashboard();
             console.log(response.data);
-            setManagers(response.data.shops);
-            setshops(response.data.totalShops);
+            setManagers((response.data.shops).filter((shop) => shop.role === "manager"));
+            setAdmins((response.data.shops).filter((shop) => shop.role === "admin"));
             setLoading(false);
             // toast.success("Data Refreshed!");
         } catch (err) {
@@ -129,84 +129,106 @@ const Admindashboard = () => {
                     </div>
                 )}
 
-                <div className="flex justify-between sm:flex-wrap gap-4 mb-6">
-                    <StatCard icon={Store} label="Total Shops" value={shops} loading={loading} />
-                    {/* <button onClick={() => navigate("/register")} className="inline-flex items-center justify-center gap-2 rounded-xl bg-blue-600 text-white px-4 py-3 text-sm hover:bg-blue-700">
-                        <PlusCircle className="w-4 h-4" /> Add Shop
-                    </button> */}
+                <div className="flex sm:flex-wrap gap-4 mb-6">
+                    <StatCard icon={Store} label="Total Shops" value={managers.length} loading={loading} />
+                    <StatCard icon={Shield} label="Total Admins" value={admins.length} loading={loading} />
                 </div>
 
-                <div className="mb-4 flex items-center gap-2">
-                    <div className="relative w-full md:w-80">
-                        <Search className="absolute left-3 top-2.5 h-4 w-4 text-blue-600" />
-                        <input
-                            value={query}
-                            onChange={(e) => setQuery(e.target.value)}
-                            placeholder="Search managers, shops, phone..."
-                            className="w-full min-w-[30vw] rounded-xl border border-slate-200 bg-white py-2 pl-9 pr-3 text-sm outline-none placeholder:text-slate-400 focus:border-blue-600"
-                        />
+
+                <div className='p-2 border rounded-2xl border-blue-200 bg-white'>
+                    <div className="text-lg font-semibold text-blue-700 text-center mb-4">Managers</div>
+                    <div className="mb-4 flex items-center gap-2">
+                        <div className="relative w-full md:w-80">
+                            <Search className="absolute left-3 top-2.5 h-4 w-4 text-blue-600" />
+                            <input
+                                value={query}
+                                onChange={(e) => setQuery(e.target.value)}
+                                placeholder="Search managers, shops, phone..."
+                                className="w-full min-w-[30vw] rounded-xl border border-slate-200 bg-white py-2 pl-9 pr-3 text-sm outline-none placeholder:text-slate-400 focus:border-blue-600"
+                            />
+                        </div>
                     </div>
+                    {managers.length === 0 ? (
+                        <div className="my-10 text-center text-blue-500">
+                            No shops found. Click on "Add User" to create one.
+                        </div>
+                    ) :
+                        <Usertable filtered={filteredManagers} handleDelete={handleDelete} statusBadge={statusBadge} handlestatusupdate={handlestatusupdate} navigate={navigate} isadmin={false} />
+                    }
                 </div>
 
-                <div className="overflow-hidden rounded-2xl border border-blue-200 bg-white">
-
-                    <div className="overflow-x-auto">
-                        <table className="min-w-full text-sm">
-                            <thead className="bg-blue-600 text-white">
-                                <tr>
-                                    <Th className="px-4 py-2.5">Name</Th>
-                                    <Th className="hidden md:table-cell px-4 py-2.5">Email</Th>
-                                    <Th className="hidden md:table-cell px-4 py-2.5">Phone</Th>
-                                    <Th className="px-4 py-2.5">Shop</Th>
-                                    <Th className="px-4 py-2.5">Status</Th>
-                                    <Th className="px-4 py-2.5">Created</Th>
-                                    <Th className="text-right px-4 py-2.5">Actions</Th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {filteredManagers.map((m) => (
-                                    <tr key={m._id} className="border-t border-blue-100 hover:bg-blue-50/50">
-                                        <Td className="px-4 py-2.5">
-                                            <div className="font-medium text-blue-800">{m.name}</div>
-                                            <div className="text-xs text-blue-500 md:hidden">{m.email}</div>
-                                            <div className="text-xs text-blue-500 md:hidden">{m.phone}</div>
-                                        </Td>
-                                        <Td className="hidden md:table-cell px-4 py-2.5">{m.email}</Td>
-                                        <Td className="hidden md:table-cell px-4 py-2.5">{m.phone}</Td>
-                                        <Td className="px-4 py-2.5">{m.shopname}</Td>
-                                        <Td className="px-4 py-2.5 text-nowrap">{statusBadge(m.status)}</Td>
-                                        <Td className="px-4 py-2.5">{new Date(m.createdAt).toLocaleDateString()}</Td>
-                                        <Td className="px-4 py-2.5">
-                                            <div className="flex items-center justify-end gap-2 md:gap-4">
-                                                {m.status !== "active" ? (
-                                                    <button title="Activate" onClick={() => handlestatusupdate(m)} className="text-emerald-700 hover:text-emerald-900">
-                                                        <CheckCircle size={16} />
-                                                    </button>
-                                                ) : (
-                                                    <button title="Suspend" onClick={() => handlestatusupdate(m)} className=" text-rose-600 hover:text-rose-800">
-                                                        <Ban size={16} />
-                                                    </button>
-                                                )}
-                                                <Edit2 onClick={() => navigate('/admin/profile/edit', { state: { data: m } })} className="w-4 h-4 text-blue-600 hover:text-blue-800 cursor-pointer" />
-                                                <Trash2 onClick={() => handleDelete(m)} className="w-4 h-4 text-rose-600 hover:text-rose-800 cursor-pointer" />
-                                            </div>
-                                        </Td>
-                                    </tr>
-                                ))}
-                                {filteredManagers.length === 0 && (
-                                    <tr>
-                                        <td colSpan={7} className="px-4 py-10 text-center text-blue-500">
-                                            No results.
-                                        </td>
-                                    </tr>
-                                )}
-                            </tbody>
-                        </table>
-                    </div>
+                <div className="my-6" />
+                <div className='p-2 border rounded-2xl border-blue-200 bg-white'>
+                    <div className="text-lg font-semibold text-blue-700 text-center mb-4">Admins</div>
+                    <Usertable filtered={admins} handleDelete={handleDelete} statusBadge={statusBadge} handlestatusupdate={handlestatusupdate} navigate={navigate} isadmin={true} />
                 </div>
             </div>
         </div>
     );
+};
+
+const Usertable = ({ filtered, handlestatusupdate, statusBadge, handleDelete, navigate, isadmin }) => {
+    return (
+        <div className="overflow-hidden rounded-2xl border border-blue-600 bg-white">
+
+            <div className="overflow-x-auto">
+                <table className="min-w-full text-sm">
+                    <thead className="bg-blue-600 text-white">
+                        <tr>
+                            <Th className="px-4 py-2.5">Name</Th>
+                            <Th className="hidden md:table-cell px-4 py-2.5">Email</Th>
+                            <Th className="hidden md:table-cell px-4 py-2.5">Phone</Th>
+                            {isadmin === true && <Th className="px-4 py-2.5">Address</Th>}
+                            {isadmin === false && <Th className="px-4 py-2.5">Shop</Th>}
+                            {isadmin === false && <Th className="px-4 py-2.5">Status</Th>}
+                            <Th className="px-4 py-2.5">Date Added</Th>
+                            {isadmin === false && <Th className="text-right px-4 py-2.5">Actions</Th>}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {filtered.map((m) => (
+                            <tr key={m._id} className="border-t border-blue-100 hover:bg-blue-50/50">
+                                <Td className="px-4 py-2.5">
+                                    <div className="font-medium text-blue-800">{m.name}</div>
+                                    <div className="text-xs text-blue-500 md:hidden">{m.email}</div>
+                                    <div className="text-xs text-blue-500 md:hidden">{m.phone}</div>
+                                </Td>
+                                <Td className="hidden md:table-cell px-4 py-2.5">{m.email}</Td>
+                                <Td className="hidden md:table-cell px-4 py-2.5">{m.phone}</Td>
+                                {isadmin === true && <Td className="px-4 py-2.5">{m.address}</Td>}
+                                {isadmin === false && <Td className="px-4 py-2.5">{m.shopname}</Td>}
+                                {isadmin === false && <Td className="px-4 py-2.5 text-nowrap">{statusBadge(m.status)}</Td>}
+                                <Td className="px-4 py-2.5">{new Date(m.createdAt).toLocaleDateString()}</Td>
+                                {isadmin === false &&
+                                    <Td className="px-4 py-2.5">
+                                        <div className="flex items-center justify-end gap-2 md:gap-4">
+                                            {m.status !== "active" ? (
+                                                <button title="Activate" onClick={() => handlestatusupdate(m)} className="text-emerald-700 hover:text-emerald-900">
+                                                    <CheckCircle size={16} />
+                                                </button>
+                                            ) : (
+                                                <button title="Suspend" onClick={() => handlestatusupdate(m)} className=" text-rose-600 hover:text-rose-800">
+                                                    <Ban size={16} />
+                                                </button>
+                                            )}
+                                            <Edit2 onClick={() => navigate('/admin/profile/edit', { state: { data: m } })} className="w-4 h-4 text-blue-600 hover:text-blue-800 cursor-pointer" />
+                                            <Trash2 onClick={() => handleDelete(m)} className="w-4 h-4 text-rose-600 hover:text-rose-800 cursor-pointer" />
+                                        </div>
+                                    </Td>}
+                            </tr>
+                        ))}
+                        {filtered.length === 0 && (
+                            <tr>
+                                <td colSpan={7} className="px-4 py-10 text-center text-blue-500">
+                                    No results.
+                                </td>
+                            </tr>
+                        )}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    )
 };
 
 function StatCard({ icon: Icon, label, value, loading }) {
