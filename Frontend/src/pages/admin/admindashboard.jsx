@@ -15,6 +15,7 @@ import {
 import toast from "react-hot-toast";
 import { getAdminDashboard, deleteUserProfile, editUserStatus } from '../../services/adminServices.js';
 
+const isYou = JSON.parse(sessionStorage.getItem("user")).id;
 const Admindashboard = () => {
     const navigate = useNavigate();
     const [loading, setLoading] = useState(true);
@@ -189,7 +190,7 @@ const Usertable = ({ filtered, handlestatusupdate, statusBadge, handleDelete, na
                         {filtered.map((m) => (
                             <tr key={m._id} className="border-t border-blue-100 hover:bg-blue-50/50">
                                 <Td className="px-4 py-2.5">
-                                    <div className="font-medium text-blue-800">{m.name}</div>
+                                    <div className="font-medium text-blue-800">{m.name}<span className={`${isYou !== m._id ? "hidden" : "inline-flex"} text-black ml-1 px-2 py-1 text-xs rounded-full border items-center gap-1 border-green-300 bg-green-50`}>You</span></div>
                                     <div className="text-xs text-blue-500 md:hidden">{m.email}</div>
                                     <div className="text-xs text-blue-500 md:hidden">{m.phone}</div>
                                 </Td>
