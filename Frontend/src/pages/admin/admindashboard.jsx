@@ -15,7 +15,7 @@ import {
 import toast from "react-hot-toast";
 import { getAdminDashboard, deleteUserProfile, editUserStatus } from '../../services/adminServices.js';
 
-const isYou = JSON.parse(sessionStorage.getItem("user")).id;
+const isYou = JSON.parse(sessionStorage.getItem("user"))?.id || "";
 const Admindashboard = () => {
     const navigate = useNavigate();
     const [loading, setLoading] = useState(true);
