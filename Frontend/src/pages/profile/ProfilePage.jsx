@@ -5,20 +5,17 @@ import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import { FaArrowLeft } from 'react-icons/fa';
 
-// Reusable component for displaying a single profile detail
-const ProfileDetail = ({ icon, label, value }) => {
-    return (
-        <div className="flex items-center gap-4 text-gray-700">
-            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-blue-100 text-blue-600">
-                {icon}
-            </div>
-            <div className="flex flex-col">
-                <span className="text-xs font-medium text-gray-500">{label}</span>
-                <span className="text-base font-semibold text-gray-900">{value || "Not Provided"}</span>
-            </div>
+const ProfileDetail = ({ icon, label, value }) => (
+    <div className="flex items-center gap-4 rounded-full bg-gray-50 px-4 py-3 shadow-sm">
+        <div className="flex h-12 min-w-12 items-center justify-center rounded-full bg-blue-100 text-blue-600">
+            {icon}
         </div>
-    );
-};
+        <div className="flex flex-col">
+            <span className="text-xs font-medium text-gray-500">{label}</span>
+            <span className="text-base font-semibold text-gray-900">{value || "Not Provided"}</span>
+        </div>
+    </div>
+);
 
 const ProfilePage = () => {
     const navigate = useNavigate();
@@ -30,9 +27,7 @@ const ProfilePage = () => {
         try {
             const response = await getProfile();
             setProfile(response.data);
-            console.log(response.data);
         } catch (error) {
-            console.error('Error fetching profile:', error);
             toast.error('Failed to fetch profile!');
         }
     };
@@ -48,7 +43,6 @@ const ProfilePage = () => {
             }
         } catch (err) {
             toast.error('Failed to delete profile!');
-            console.error('Error deleting profile:', err);
         } finally {
             setLoading(false);
             setConfirmDelete(false);
@@ -67,7 +61,6 @@ const ProfilePage = () => {
         fetchProfile();
     }, []);
 
-    // Fallback data if profile is not fully loaded
     const user = profile._id ? profile : JSON.parse(sessionStorage.getItem("user")) || {};
 
     return (
@@ -105,55 +98,49 @@ const ProfilePage = () => {
 
             {/* Profile Card */}
             <div className="w-full max-w-4xl rounded-3xl bg-white shadow-2xl overflow-hidden">
-                {/* Header Section */}
-
-                <div className='w-full bg-blue-600'>
+                {/* Header */}
+                <div className="bg-blue-600 p-6 flex items-center justify-between">
                     <button
                         onClick={() => navigate(-1)}
-                        type="button"
-                        className="flex items-center translate-2 gap-2 px-4 py-2 bg-gray-100 text-gray-700 rounded-full shadow-sm hover:bg-gray-200 hover:shadow-md transition-all duration-300"
+                        className="flex items-center gap-2 bg-white/90 px-3 py-1.5 rounded-full text-gray-700 hover:bg-white shadow"
                     >
                         <FaArrowLeft className="text-blue-600" />
-                        <span className="font-medium">Back</span>
+                        <span className="text-sm font-medium">Back</span>
                     </button>
                 </div>
-                <div className="bg-blue-600 p-8 text-white flex flex-col items-center">
-                    <div className="mb-4 flex h-24 w-24 items-center justify-center rounded-full bg-white text-4xl font-bold text-blue-600 shadow-lg">
-                        {user.role === "admin" ? <User size={48} /> : (user.shopname?.charAt(0) || user.name?.charAt(0))}
+
+                {/* Avatar + Name */}
+                <div className="bg-blue-600 flex flex-col items-center text-white -mt-12 px-6 pb-4">
+                    <div className="h-24 w-24 flex items-center justify-center rounded-full bg-white text-blue-600 shadow-lg text-3xl font-bold">
+                        {user.role === "admin" ? <User size={40} /> : (user.shopname?.charAt(0) || user.name?.charAt(0))}
                     </div>
-                    <h2 className="text-3xl font-bold tracking-tight text-center">{user.name}</h2>
-                    <p className="mt-1 text-sm opacity-80 capitalize">{user.role}</p>
+                    <h2 className="mt-4 text-2xl font-bold">{user.name}</h2>
+                    <p className="text-sm capitalize">{user.role}</p>
                 </div>
 
-                {/* Details Section */}
-                <div className="p-8">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-y-6 gap-x-10">
-                        <ProfileDetail icon={<Mail size={20} />} label="Email" value={user.email} />
-                        <ProfileDetail icon={<Phone size={20} />} label="Phone" value={user.phone} />
-                        <ProfileDetail icon={<MapPinned size={20} />} label="Address" value={user.address} />
-                        {user.role !== "admin" && (
-                            <ProfileDetail icon={<Store size={20} />} label="Shop Name" value={user.shopname} />
-                        )}
-                        <ProfileDetail icon={<Briefcase size={20} />} label="Role" value={user.role} />
-                        <ProfileDetail
-                            icon={<Calendar size={20} />}
-                            label="Joined On"
-                            value={user.createdAt ? new Date(user.createdAt).toLocaleDateString() : 'N/A'}
-                        />
-                    </div>
+                {/* Details */}
+                <div className="px-8 py-8 grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <ProfileDetail icon={<Mail size={20} />} label="Email" value={user.email} />
+                    <ProfileDetail icon={<Phone size={20} />} label="Phone" value={user.phone} />
+                    <ProfileDetail icon={<MapPinned size={20} />} label="Address" value={user.address} />
+                    {user.role !== "admin" && (
+                        <ProfileDetail icon={<Store size={20} />} label="Shop Name" value={user.shopname} />
+                    )}
+                    <ProfileDetail icon={<Briefcase size={20} />} label="Role" value={user.role} />
+                    <ProfileDetail icon={<Calendar size={20} />} label="Joined On" value={user.createdAt ? new Date(user.createdAt).toLocaleDateString() : 'N/A'} />
                 </div>
 
-                {/* Action Buttons */}
-                <div className="border-t border-gray-200 p-8 flex flex-col sm:flex-row gap-4">
+                {/* Actions */}
+                <div className="px-8 py-6 border-t border-gray-100 flex flex-col sm:flex-row gap-4">
                     <button
                         onClick={handleEdit}
-                        className="w-full flex-1 flex items-center justify-center gap-2 rounded-full bg-blue-600 px-6 py-3 text-white font-medium transition duration-200 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                        className="flex-1 flex items-center justify-center gap-2 rounded-full bg-blue-600 px-6 py-3 text-white font-medium hover:bg-blue-700"
                     >
                         <Edit2 size={18} /> Edit Profile
                     </button>
                     <button
                         onClick={() => setConfirmDelete(true)}
-                        className="w-full flex-1 flex items-center justify-center gap-2 rounded-full border border-red-600 px-6 py-3 font-medium text-red-600 transition duration-200 hover:bg-red-50 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
+                        className="flex-1 flex items-center justify-center gap-2 rounded-full border border-red-600 px-6 py-3 font-medium text-red-600 hover:bg-red-50"
                     >
                         <Trash2 size={18} /> Delete Account
                     </button>
