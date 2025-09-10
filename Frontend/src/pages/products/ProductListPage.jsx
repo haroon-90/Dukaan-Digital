@@ -254,7 +254,7 @@ const ProductListPage = () => {
           placeholder="Search product..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-          className="flex-1 px-2 py-1 min-w-10 border border-blue-300 rounded focus:outline-none"
+          className="flex-1 px-2 py-1 min-w-10 border border-blue-300 rounded-lg focus:outline-none"
         />
         {!isSale &&
           <button

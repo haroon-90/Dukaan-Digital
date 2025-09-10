@@ -194,7 +194,7 @@ const PurchaseFormPage = () => {
   };
 
   return (
-    <div className="relative flex justify-center items-center min-h-screen bg-white p-6">
+    <div className="flex justify-center items-center min-h-screen bg-white p-6">
       <form
         onSubmit={handlePurchase}
         className="bg-white border border-blue-500 shadow-2xl rounded-3xl p-8 w-full max-w-2xl"
@@ -202,7 +202,7 @@ const PurchaseFormPage = () => {
         <button
           onClick={() => navigate(-1)}
           type="button"
-          className="absolute flex items-center -translate-4 gap-2 px-4 py-2 bg-gray-100 text-gray-700 rounded-full shadow-sm hover:bg-gray-200 hover:shadow-md transition-all duration-300"
+          className="flex items-center -translate-4 gap-2 px-4 py-2 bg-gray-100 text-gray-700 rounded-full shadow-sm hover:bg-gray-200 hover:shadow-md transition-all duration-300"
         >
           <FaArrowLeft className="text-blue-600" />
           <span className="font-medium">Back</span>

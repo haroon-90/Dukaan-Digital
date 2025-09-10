@@ -13,6 +13,7 @@ import {
     Ban
 } from "lucide-react";
 import toast from "react-hot-toast";
+import Loader from '../loader/loader.jsx'
 import { getAdminDashboard, deleteUserProfile, editUserStatus } from '../../services/adminServices.js';
 
 const isYou = JSON.parse(sessionStorage.getItem("user"))?.id || "";
@@ -36,7 +37,7 @@ const Admindashboard = () => {
             // toast.success("Data Refreshed!");
         } catch (err) {
             console.error(err);
-            setError("Failed to fetch dashboard data");
+            setError(err.msj || "Failed to fetch dashboard data");
             setLoading(false);
             toast.error("Failed to refresh data");
         }
@@ -130,14 +131,14 @@ const Admindashboard = () => {
                     </div>
                 )}
 
-                <div className="flex sm:flex-wrap gap-4 mb-6">
+                <div className="flex flex-wrap gap-4 mb-6">
                     <StatCard icon={Store} label="Total Shops" value={managers.length} loading={loading} />
                     <StatCard icon={Shield} label="Total Admins" value={admins.length} loading={loading} />
                 </div>
 
 
                 <div className='p-2 border rounded-2xl border-blue-200 bg-white'>
-                    <div className="text-lg font-semibold text-blue-700 text-center mb-4">Managers</div>
+                    <div className="text-lg font-semibold text-blue-700 flex items-center justify-center gap-2 mb-4"><Store />Shops</div>
                     <div className="mb-4 flex items-center gap-2">
                         <div className="relative w-full md:w-80">
                             <Search className="absolute left-3 top-2.5 h-4 w-4 text-blue-600" />
@@ -149,19 +150,32 @@ const Admindashboard = () => {
                             />
                         </div>
                     </div>
-                    {managers.length === 0 ? (
+                    {managers.length === 0 && !loading ? (
                         <div className="my-10 text-center text-blue-500">
-                            No shops found. Click on "Add User" to create one.
+                            {/* No shops found. Click on "Add User" to create one. */}
+                            {error}
                         </div>
-                    ) :
+                    ) : (loading ? (
+                        <div className="my-10">
+                            <Loader />
+                        </div>
+                    ) : (
                         <Usertable filtered={filteredManagers} handleDelete={handleDelete} statusBadge={statusBadge} handlestatusupdate={handlestatusupdate} navigate={navigate} isadmin={false} />
+                    ))
                     }
                 </div>
 
                 <div className="my-6" />
                 <div className='p-2 border rounded-2xl border-blue-200 bg-white'>
-                    <div className="text-lg font-semibold text-blue-700 text-center mb-4">Admins</div>
-                    <Usertable filtered={admins} handleDelete={handleDelete} statusBadge={statusBadge} handlestatusupdate={handlestatusupdate} navigate={navigate} isadmin={true} />
+                    <div className="text-lg font-semibold text-blue-700 flex items-center justify-center gap-2 mb-4"><Shield />Admins</div>
+                    {loading ? (
+                        <div className="my-10">
+                            <Loader />
+                        </div>
+                    ) : (
+                        <Usertable filtered={admins} handleDelete={handleDelete} statusBadge={statusBadge} handlestatusupdate={handlestatusupdate} navigate={navigate} isadmin={true} />
+                    )
+                    }
                 </div>
             </div>
         </div>
@@ -171,18 +185,17 @@ const Admindashboard = () => {
 const Usertable = ({ filtered, handlestatusupdate, statusBadge, handleDelete, navigate, isadmin }) => {
     return (
         <div className="overflow-hidden rounded-2xl border border-blue-600 bg-white">
-
             <div className="overflow-x-auto">
                 <table className="min-w-full text-sm">
                     <thead className="bg-blue-600 text-white">
                         <tr>
-                            <Th className="px-4 py-2.5">Name</Th>
+                            <Th className="px-4 py-2.5">{isadmin === true ? "Name" : "Manager"}</Th>
                             <Th className="hidden md:table-cell px-4 py-2.5">Email</Th>
                             <Th className="hidden md:table-cell px-4 py-2.5">Phone</Th>
                             {isadmin === true && <Th className="px-4 py-2.5">Address</Th>}
                             {isadmin === false && <Th className="px-4 py-2.5">Shop</Th>}
-                            {isadmin === false && <Th className="px-4 py-2.5">Status</Th>}
                             <Th className="px-4 py-2.5">Date Added</Th>
+                            {isadmin === false && <Th className="px-4 py-2.5">Status</Th>}
                             {isadmin === false && <Th className="text-right px-4 py-2.5">Actions</Th>}
                         </tr>
                     </thead>
@@ -198,22 +211,22 @@ const Usertable = ({ filtered, handlestatusupdate, statusBadge, handleDelete, na
                                 <Td className="hidden md:table-cell px-4 py-2.5">{m.phone}</Td>
                                 {isadmin === true && <Td className="px-4 py-2.5">{m.address}</Td>}
                                 {isadmin === false && <Td className="px-4 py-2.5">{m.shopname}</Td>}
-                                {isadmin === false && <Td className="px-4 py-2.5 text-nowrap">{statusBadge(m.status)}</Td>}
                                 <Td className="px-4 py-2.5">{new Date(m.createdAt).toLocaleDateString()}</Td>
+                                {isadmin === false && <Td className="px-4 py-2.5 text-nowrap">{statusBadge(m.status)}</Td>}
                                 {isadmin === false &&
                                     <Td className="px-4 py-2.5">
                                         <div className="flex items-center justify-end gap-2 md:gap-4">
                                             {m.status !== "active" ? (
-                                                <button title="Activate" onClick={() => handlestatusupdate(m)} className="text-emerald-700 hover:text-emerald-900">
+                                                <button title="Activate" onClick={() => handlestatusupdate(m)} className="text-emerald-700 hover:text-emerald-900 hover:bg-emerald-200 rounded-lg p-1">
                                                     <CheckCircle size={16} />
                                                 </button>
                                             ) : (
-                                                <button title="Suspend" onClick={() => handlestatusupdate(m)} className=" text-rose-600 hover:text-rose-800">
+                                                <button title="Suspend" onClick={() => handlestatusupdate(m)} className=" text-rose-600 hover:text-rose-800 hover:bg-rose-200 rounded-lg p-1">
                                                     <Ban size={16} />
                                                 </button>
                                             )}
-                                            <Edit2 onClick={() => navigate('/admin/profile/edit', { state: { data: m } })} className="w-4 h-4 text-blue-600 hover:text-blue-800 cursor-pointer" />
-                                            <Trash2 onClick={() => handleDelete(m)} className="w-4 h-4 text-rose-600 hover:text-rose-800 cursor-pointer" />
+                                            <Edit2 onClick={() => navigate('/admin/profile/edit', { state: { data: m } })} className="text-blue-600 hover:text-blue-800 cursor-pointer hover:bg-blue-200 rounded-lg p-1" />
+                                            <Trash2 onClick={() => handleDelete(m)} className="text-rose-600 hover:text-rose-800 cursor-pointer hover:bg-rose-200 rounded-lg p-1" />
                                         </div>
                                     </Td>}
                             </tr>

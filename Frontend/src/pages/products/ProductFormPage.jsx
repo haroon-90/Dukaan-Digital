@@ -69,7 +69,7 @@ const ProductFormPage = () => {
   };
 
   return (
-    <div className=" flex justify-center items-center min-h-screen p-6 bg-white">
+    <div className="flex justify-center items-center min-h-screen p-6 bg-white">
       <form
         onSubmit={handleSubmit}
         className="bg-white border border-blue-500 shadow-2xl rounded-3xl p-8 w-full max-w-lg"

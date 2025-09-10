@@ -79,7 +79,7 @@ const UdhaarFormPage = () => {
         <button
           onClick={() => navigate(-1)}
           type="button"
-          className="absolute flex items-center -translate-4 gap-2 px-4 py-2 bg-gray-100 text-gray-700 rounded-full shadow-sm hover:bg-gray-200 hover:shadow-md transition-all duration-300"
+          className="flex items-center -translate-4 gap-2 px-4 py-2 bg-gray-100 text-gray-700 rounded-full shadow-sm hover:bg-gray-200 hover:shadow-md transition-all duration-300"
         >
           <FaArrowLeft className="text-blue-600" />
           <span className="font-medium">Back</span>
