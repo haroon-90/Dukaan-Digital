@@ -24,8 +24,8 @@ const Dashboard = () => {
     const [ishide, setishide] = useState(true);
     const [loading, setloading] = useState(true);
     const [summary, setsummary] = useState()
-    const [salesData, setsalesData] = useState()
-    const [lowStock, setLowStock] = useState()
+    const [salesData, setsalesData] = useState([])
+    const [lowStock, setLowStock] = useState([])
 
     const fetchData = async () => {
         try {
@@ -37,6 +37,7 @@ const Dashboard = () => {
         } catch (err) {
             toast.error("Failed to refresh data!")
             console.log(err);
+            setloading(false);
         }
     }
 
@@ -72,7 +73,7 @@ const Dashboard = () => {
                                 <div>
                                     <p className="text-sm">Sales</p>
                                     <h2 className="text-2xl font-bold">
-                                        {ishide ? "*****" : `₨ ${summary.sales.toLocaleString()}`}
+                                        {ishide ? "*****" : `₨ ${summary?.sales.toLocaleString()}` || "---"}
                                     </h2>
                                 </div>
                                 <ShoppingCart size={40} />
@@ -84,7 +85,7 @@ const Dashboard = () => {
                                 <div>
                                     <p className="text-sm">Profit</p>
                                     <h2 className="text-2xl font-bold">
-                                        {ishide ? "*****" : `₨ ${summary.profit.toLocaleString()}`}
+                                        {ishide ? "*****" : `₨ ${summary?.profit.toLocaleString()}` || "---"}
                                     </h2>
                                 </div>
                                 <DollarSign size={40} />
@@ -96,7 +97,7 @@ const Dashboard = () => {
                                 <div>
                                     <p className="text-sm">Expenses</p>
                                     <h2 className="text-2xl font-bold">
-                                        {ishide ? "*****" : `₨ ${summary.expenses.toLocaleString()}`}
+                                        {ishide ? "*****" : `₨ ${summary?.expenses.toLocaleString()}` || "---"}
                                     </h2>
                                 </div>
                                 <Receipt size={40} />
@@ -108,7 +109,7 @@ const Dashboard = () => {
                                 <div>
                                     <p className="text-sm">Credit</p>
                                     <h2 className="text-2xl font-bold">
-                                        {ishide ? "*****" : `₨ ${summary.credit.toLocaleString()}`}
+                                        {ishide ? "*****" : `₨ ${summary?.credit.toLocaleString()}` || "---"}
                                     </h2>
                                 </div>
                                 <HandCoins size={40} />
@@ -117,27 +118,31 @@ const Dashboard = () => {
                     </div>
 
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-                        <Card>
-                            <CardContent>
-                                <h2 className="text-lg font-semibold mb-4">Sales vs Expenses</h2>
-                                <ResponsiveContainer width="100%" height={250}>
-                                    <BarChart data={salesData}>
-                                        <XAxis dataKey="month" />
-                                        <YAxis />
-                                        <Tooltip />
-                                        <Bar dataKey="sales" fill="#4F46E5" />
-                                        <Bar dataKey="expenses" fill="#F59E0B" />
-                                    </BarChart>
-                                </ResponsiveContainer>
-                            </CardContent>
-                        </Card>
+                        {!salesData || salesData.length === 0 ? <div className="flex items-center justify-center p-6 bg-white rounded-2xl shadow-md">
+                            <p className="text-gray-500">No sales data available</p>
+                        </div> :
+                            <Card>
+                                <CardContent>
+                                    <h2 className="text-lg font-semibold mb-4">Sales vs Expenses</h2>
+                                    <ResponsiveContainer width="100%" height={250}>
+                                        <BarChart data={salesData}>
+                                            <XAxis dataKey="month" />
+                                            <YAxis />
+                                            <Tooltip />
+                                            <Bar dataKey="sales" fill="#4F46E5" />
+                                            <Bar dataKey="expenses" fill="#F59E0B" />
+                                        </BarChart>
+                                    </ResponsiveContainer>
+                                </CardContent>
+                            </Card>
+                        }
 
                         <Card className="rounded-xl">
                             <CardContent >
                                 <h2 className="text-lg font-semibold mb-4 flex items-center gap-2">
                                     <MessageCircleWarning className="text-red-600" size={18} /> Low Stock Alerts
                                 </h2>
-                                {lowStock.length === 0 &&
+                                {lowStock?.length === 0 &&
                                     <li className="relative p-6 rounded-xl shadow-md bg-green-600 text-white">
                                         <div className="absolute -top-2 -right-2 bg-white/20 backdrop-blur-sm rounded-full p-2">
                                             <Sparkles size={18} />
@@ -156,13 +161,13 @@ const Dashboard = () => {
                                     </li>
                                 }
                                 <ul className="space-y-2">
-                                    {lowStock.map((item, index) => (
+                                    {lowStock?.map((item, index) => (
                                         <li
                                             key={index}
                                             className="not-even:bg-red-100 p-0.5 rounded flex justify-between text-red-600 font-medium"
                                         >
-                                            <span>{item.item}</span>
-                                            <span>{item.qty} left</span>
+                                            <span>{item.item || "---"}</span>
+                                            <span>{item.qty || "---"} left</span>
                                         </li>
                                     ))}
                                 </ul>

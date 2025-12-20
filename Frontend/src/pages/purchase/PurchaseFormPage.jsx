@@ -23,6 +23,7 @@ const PurchaseFormPage = () => {
   });
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [isNewProduct, setIsNewProduct] = useState(false);
+  const [processing, setProcessing] = useState(false);
 
   const loadProducts = async () => {
     try {
@@ -169,15 +170,18 @@ const PurchaseFormPage = () => {
     }
 
     try {
+      setProcessing(true);
       const res = await addPurchase(purchaseDetails);
       toast.success(res.data.message || "Purchased");
       setPurchaseDetails({
         suppliername: '',
         items: [],
       });
+      setProcessing(false);
     } catch (err) {
       toast.error('Failed to record purchase');
       console.error('Error adding purchase:', err);
+      setProcessing(false);
     }
   };
 
@@ -415,10 +419,11 @@ const PurchaseFormPage = () => {
         <div className="mt-6">
           <button
             type="submit"
-            className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform active:scale-95 disabled:bg-blue-400 disabled:shadow-none disabled:transform-none disabled:cursor-not-allowed"
-            disabled={!purchaseDetails.suppliername || purchaseDetails.items.length === 0}
+            className={` w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform active:scale-95 disabled:bg-blue-400 disabled:shadow-none disabled:transform-none disabled:cursor-not-allowed`}
+            disabled={!purchaseDetails.suppliername || processing || purchaseDetails.items.length === 0}
           >
-            Purchase
+            {processing ? 'Processing...' : 'Purchase'}
+            {/* Purchase */}
           </button>
         </div>
       </form>

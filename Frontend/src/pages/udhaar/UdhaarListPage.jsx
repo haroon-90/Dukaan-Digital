@@ -139,9 +139,11 @@ const UdhaarListPage = () => {
                       <td className="px-4 py-2">
                         {new Date(item.createdAt).toLocaleDateString()}
                       </td>
-                      <td className="px-4 py-2 flex justify-between items-center">
-                        <button onClick={() => handleEdit(item)} className="text-blue-600"><Edit2 size={18} /></button>
-                        <button onClick={() => handleDelete(item)} className="text-red-500"><Trash2 size={18} /></button>
+                      <td className="px-4 py-2">
+                        <div className="flex justify-between items-center gap-2">
+                          <button onClick={() => handleEdit(item)} className="text-blue-600"><Edit2 size={18} /></button>
+                          <button onClick={() => handleDelete(item)} className="text-red-500"><Trash2 size={18} /></button>
+                        </div>
                       </td>
                     </tr>
                   ))

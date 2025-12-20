@@ -95,6 +95,7 @@ const ProductListPage = () => {
     };
 
     try {
+      setloading(true);
       const res = await createsale(payload);
       console.log("Sale Created:", res.data);
       toast.success("Sale Created")
@@ -107,6 +108,7 @@ const ProductListPage = () => {
     } catch (err) {
       toast.error("Failed to create Sale")
       console.error("Error creating record:", err);
+      setloading(false);
     }
   };
 
@@ -240,9 +242,10 @@ const ProductListPage = () => {
               </button>
               <button
                 onClick={confirmSaleOrPurchase}
-                className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                disabled={cart.length === 0 || loading}
               >
-                Confirm Sale
+                {loading ? 'Processing...' : 'Confirm Sale'}
               </button>
             </div>
           </div>

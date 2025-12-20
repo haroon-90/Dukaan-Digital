@@ -112,10 +112,11 @@ const ProfilePage = () => {
                 {/* Avatar + Name */}
                 <div className="bg-blue-600 flex flex-col items-center text-white -mt-12 px-6 pb-4">
                     <div className="h-24 w-24 flex items-center justify-center rounded-full bg-white text-blue-600 shadow-lg text-3xl font-bold">
-                        {user.role === "admin" ? <User size={40} /> : (user.shopname?.charAt(0) || user.name?.charAt(0))}
+                         <User size={40} />
                     </div>
-                    <h2 className="mt-4 text-2xl font-bold">{user.name}</h2>
+                    <h2 className="mt-4 text-2xl text-center font-bold">{user.name}</h2>
                     <p className="text-sm capitalize">{user.role}</p>
+                    <p className="px-4 py-1 mt-2 rounded-full shadow-sm bg-white font-semibold text-blue-600 capitalize">{user.shopname}</p>
                 </div>
 
                 {/* Details */}

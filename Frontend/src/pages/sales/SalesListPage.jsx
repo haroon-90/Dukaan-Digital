@@ -158,7 +158,7 @@ const SalesListPage = () => {
                   <td className="px-4 py-3 font-semibold text-green-600">
                     Rs {item.totalAmount ? item.totalAmount : item.total}
                   </td>
-                  <td className="px-4 py-3 flex justify-around">
+                  <td className="px-4 py-3 gap-2 flex justify-around">
                     <button
                       onClick={() => handleViewDetails(item)}
                       className="flex items-center gap-1 text-blue-600 hover:text-blue-800 transition"

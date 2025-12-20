@@ -1,8 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { getReport } from "../../services/reportServices.js";
 import ReportReceipt from "./ReportReceipt.jsx";
 import toast from "react-hot-toast";
 import { BarChart3 } from "lucide-react";
+import { toPng } from 'html-to-image';
+import { useReactToPrint } from 'react-to-print'
+import { jsPDF } from "jspdf";
 
 const Reporthomepage = () => {
   const today = new Date().toISOString().split("T")[0]; // YYYY-MM-DD
@@ -13,6 +16,35 @@ const Reporthomepage = () => {
   const [selectedType, setSelectedType] = useState("date");
   const [loading, setLoading] = useState(false);
   const [report, setReport] = useState(null);
+
+  const receiptRef = useRef(null);
+
+  const downloadReceipt = async () => {
+    if (!receiptRef.current) {
+      toast.error("Receipt not found")
+      return
+    }
+    try {
+      const receipt = await toPng(receiptRef.current, {
+        quality: 1,
+        pixelRatio: 2,
+      })
+      const link = document.createElement("a")
+      link.download = selectedType === "date" ? date : month + "_report.png"
+      link.href = receipt
+      link.click()
+    } catch (err) {
+      console.error(err)
+      toast.error("Failed to download receipt")
+    }
+  };
+
+  const downloadReceiptpdf = useReactToPrint({
+    contentRef: receiptRef,
+    documentTitle: selectedType === "date" ? date : month + "_report.pdf",
+    onAfterPrint: () => toast.success("Receipt downloaded successfully"),
+    onPrintError: () => toast.error("Failed to download receipt"),
+  });
 
   const handleSubmit = async () => {
     setLoading(true);
@@ -120,10 +152,26 @@ const Reporthomepage = () => {
         </div>
       </div>
       {report && (
-        <ReportReceipt
-          report={report}
-          period={selectedType === "date" ? date : month}
-        />
+        <div className="flex flex-col items-center pt-4 gap-2 ">
+          <button
+            onClick={downloadReceipt}
+            className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            Download PNG
+          </button>
+          <button
+            onClick={downloadReceiptpdf}
+            className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            Download PDF
+          </button>
+          <div ref={receiptRef}>
+            <ReportReceipt
+              report={report}
+              period={selectedType === "date" ? date : month}
+            />
+          </div>
+        </div>
       )}
     </div>
   );
