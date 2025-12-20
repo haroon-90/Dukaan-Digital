@@ -22,7 +22,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use(cors({
-  origin: ['https://haroon-90.github.io', 'http://localhost:5173'],
+  origin: ['https://haroon-90.github.io', 'http://localhost:5173', 'http://dukaan-digital-view.vercel.app'],
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"],
   credentials: true
@@ -57,7 +57,7 @@ mongoose.connect(process.env.MONGODB_URL)
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
+  console.log(`Server is running on port ${PORT}`);
 });
 
 export default app;
