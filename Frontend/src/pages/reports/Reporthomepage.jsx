@@ -1,5 +1,5 @@
 import React, { useState, useRef } from "react";
-import { getReport } from "../../services/reportServices";
+import { getReport } from "../../services/reportServices.js";
 import ReportReceipt from "./ReportReceipt.jsx";
 import toast from "react-hot-toast";
 import { BarChart3 } from "lucide-react";

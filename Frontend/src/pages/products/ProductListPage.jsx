@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { getProducts, deleteProducts } from "../../services/productServices";
-import { createsale } from "../../services/saleService";
+import { getProducts, deleteProducts } from "../../services/productServices.js";
+import { createsale } from "../../services/saleService.js";
 import { Edit2, Trash2, ShoppingCart, Eye, Package } from "lucide-react";
 import toast from "react-hot-toast";
 import Loader from "../loader/loader.jsx";

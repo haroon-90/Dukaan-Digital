@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { getExpense, deleteExpense } from '../../services/expenseServices';
+import { getExpense, deleteExpense } from '../../services/expenseServices.js';
 import { Trash2, FileText } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { toast } from 'react-hot-toast';
-import { addPurchase } from '../../services/purchaseServices';
-import { getProducts } from '../../services/productServices';
+import { addPurchase } from '../../services/purchaseServices.js';
+import { getProducts } from '../../services/productServices.js';
 import Dukaan_Digital from '../../assets/Dukaan_Digital.svg'
 import { useNavigate } from 'react-router-dom';
 import { FaBoxes, FaTag, FaCheckCircle, FaTrashAlt, FaStore, FaWeightHanging, FaArrowLeft } from 'react-icons/fa';

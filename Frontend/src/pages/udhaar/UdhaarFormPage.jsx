@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { addUdhaar, getUdhaarById, updateUdhaar } from "../../services/udhaarServices";
+import { addUdhaar, getUdhaarById, updateUdhaar } from "../../services/udhaarServices.js";
 import { useNavigate, useParams } from "react-router-dom";
 import toast from "react-hot-toast";
 import { FaUser, FaPhone, FaCommentAlt, FaCheckCircle, FaArrowLeft } from 'react-icons/fa';

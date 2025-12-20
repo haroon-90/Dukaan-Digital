@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getUdhaarlist, deleteUdhaar } from "../../services/udhaarServices";
+import { getUdhaarlist, deleteUdhaar } from "../../services/udhaarServices.js";
 import { Trash2, Edit2, HandCoins } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";

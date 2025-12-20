@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 // import { addProduct, getProductById, updateProduct } from '../../services/productServices.js';
-import { addProduct, getProductById, updateProduct } from '../../services/productServices';
+import { addProduct, getProductById, updateProduct } from '../../services/productServices.js';
 import { useParams, useNavigate } from "react-router-dom";
 import { toast } from 'react-hot-toast';
 import { FaTag, FaBoxes, FaWeightHanging, FaCube, FaArrowLeft } from 'react-icons/fa';

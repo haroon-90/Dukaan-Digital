@@ -8,7 +8,7 @@ import {
     ResponsiveContainer,
 } from "recharts";
 import { ShoppingCart, HandCoins, DollarSign, Receipt, MessageCircleWarning, Eye, EyeOff, Sparkles, PartyPopper, CheckCircle2, TrendingUp } from "lucide-react";
-import { getDashboard } from "../../services/dashboardServices";
+import { getDashboard } from "../../services/dashboardServices.js";
 import Loader from "../loader/loader";
 import toast from "react-hot-toast";
 

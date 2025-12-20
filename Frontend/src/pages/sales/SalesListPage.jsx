@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { getsales, deletesale } from "../../services/saleService";
-import { getPurchases, deletePurchase } from "../../services/purchaseServices";
+import { getsales, deletesale } from "../../services/saleService.js";
+import { getPurchases, deletePurchase } from "../../services/purchaseServices.js";
 import { Eye, ShoppingCart, Trash2, ShoppingBag } from "lucide-react";
 import { useNavigate, useLocation } from "react-router-dom";
 import toast from "react-hot-toast";
