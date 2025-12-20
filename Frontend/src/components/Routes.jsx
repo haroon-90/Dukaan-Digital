@@ -9,7 +9,7 @@ import AboutLayout from "./layout/AboutLayout.jsx"
 import AdminLayout from "./layout/AdminLayout.jsx"
 
 // About
-import AboutUs from "../pages/About/AboutUs.jsx"
+import AboutUs from "../pages/about/AboutUs.jsx"
 import ContactUs from "../pages/about/ContactUs.jsx"
 import PrivacyPolicy from "../pages/about/PrivacyPolicy.jsx"
 import TermaAndConditions from "../pages/about/TermaAndConditions.jsx"
