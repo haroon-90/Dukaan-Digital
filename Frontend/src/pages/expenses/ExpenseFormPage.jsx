@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { addExpense } from '../../services/expenseServices.js';
+import { addExpense } from '../../services/expenseServices';
 import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import { FaFileAlt, FaTag, FaArrowLeft } from 'react-icons/fa';

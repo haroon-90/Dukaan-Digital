@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { getProfile, deleteProfile } from '../../services/profileServices.js';
+import { getProfile, deleteProfile } from '../../services/profileServices';
 import { User, Mail, Phone, Briefcase, Store, Calendar, Edit2, Trash2, MapPinned } from "lucide-react";
 import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';

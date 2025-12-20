@@ -14,7 +14,7 @@ import {
 } from "lucide-react";
 import toast from "react-hot-toast";
 import Loader from '../loader/loader.jsx'
-import { getAdminDashboard, deleteUserProfile, editUserStatus } from '../../services/adminServices.js';
+import { getAdminDashboard, deleteUserProfile, editUserStatus } from '../../services/adminServices';
 
 const isYou = JSON.parse(sessionStorage.getItem("user"))?.id || "";
 const Admindashboard = () => {

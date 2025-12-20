@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { updateProfile } from "../../services/profileServices.js";
+import { updateProfile } from "../../services/profileServices";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { FaUser, FaPhone, FaLock, FaArrowLeft } from 'react-icons/fa';

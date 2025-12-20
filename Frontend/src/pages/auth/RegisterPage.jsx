@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { register } from '../../services/authService.js';
+import { register } from '../../services/authService';
 import { useNavigate } from 'react-router-dom';
 import DukaanDigital from '../../assets/Dukaan_Digital.svg'
 import toast from 'react-hot-toast';

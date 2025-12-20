@@ -1,11 +1,10 @@
 import React, { useState, useRef } from "react";
-import { getReport } from "../../services/reportServices.js";
+import { getReport } from "../../services/reportServices";
 import ReportReceipt from "./ReportReceipt.jsx";
 import toast from "react-hot-toast";
 import { BarChart3 } from "lucide-react";
 import { toPng } from 'html-to-image';
 import { useReactToPrint } from 'react-to-print'
-import { jsPDF } from "jspdf";
 
 const Reporthomepage = () => {
   const today = new Date().toISOString().split("T")[0]; // YYYY-MM-DD

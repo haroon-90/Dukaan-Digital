@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import toast from "react-hot-toast";
-import { editUserProfile } from '../../services/adminServices.js';
+import { editUserProfile } from '../../services/adminServices';
 import { FaUser, FaEnvelope, FaPhone, FaMapMarkerAlt, FaStore, FaLock, FaArrowLeft } from 'react-icons/fa';
 
 const EditProfile = () => {
