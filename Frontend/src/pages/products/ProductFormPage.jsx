@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react';
-import { addProduct, getProductById, updateProduct } from '../../services/productServices.js';
+// import { addProduct, getProductById, updateProduct } from '../../services/productServices.js';
+import { addProduct, getProductById, updateProduct } from '../../services/productServices';
 import { useParams, useNavigate } from "react-router-dom";
 import { toast } from 'react-hot-toast';
-import { FaTag, FaBoxes, FaDollarSign, FaWeightHanging, FaCube, FaArrowLeft } from 'react-icons/fa';
+import { FaTag, FaBoxes, FaWeightHanging, FaCube, FaArrowLeft } from 'react-icons/fa';
 
 const ProductFormPage = () => {
   const { id } = useParams();
