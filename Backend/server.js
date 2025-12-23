@@ -22,7 +22,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use(cors({
-  origin: ['https://haroon-90.github.io', 'http://localhost:5173', 'https://dukaan-digital.vercel.app'],
+  origin: ['https://haroon-90.github.io', 'http://localhost:5173', 'https://dukaan-digital.vercel.app', 'https://dukaan-digital-2.vercel.app'],
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"],
   credentials: true
