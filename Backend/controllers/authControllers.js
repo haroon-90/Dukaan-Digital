@@ -62,6 +62,7 @@ const login = async (req, res) => {
                 address: user.address,
                 email: user.email,
                 role: user.role,
+                createdAt: user.createdAt
             }
         })
     }
