@@ -10,7 +10,7 @@ import bcrypt from "bcrypt";
 
 const GetAdminDashboard = async (req, res) => {
     try {
-        const shops = await User.find({},"-password");
+        const shops = await User.find({}, "-password");
         if (!shops || shops.length === 0) {
             return res.status(404).json({ msg: "Not found" });
         }
@@ -78,13 +78,13 @@ const updateshop = async (req, res) => {
 const editUserstatus = async (req, res) => {
     try {
         const userId = req.params.id;
-        const Shop = await UserStatus.findOne({userId})
-        if(!Shop){
+        const Shop = await UserStatus.findOne({ userId })
+        if (!Shop) {
             return res.status(404).json({ msg: "Shop not found" })
         }
         if (Shop.status === "active") {
             Shop.status = "suspended";
-        } else if (Shop.status === "suspended") {
+        } else if (Shop.status === "suspended" || Shop.status === "inactive") {
             Shop.status = "active";
         } else {
             return res.status(400).json({ msg: "Invalid shop status" });

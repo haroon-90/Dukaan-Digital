@@ -39,14 +39,17 @@ const login = async (req, res) => {
         if (!user) {
             return res.status(400).json({ message: 'User not found' });
         }
-        
+        const userststus = await UserStatus.findOne({ userId: user._id })
+        if (userststus.status == "suspended") {
+            return res.status(400).json({ message: 'Your Account is suspended' });
+        }
+        else if (userststus.status == "inactive") {
+            return res.status(400).json({ message: 'User not found' });
+        }
+
         const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch) {
             return res.status(400).json({ message: 'Invalid credentials' });
-        }
-        const userststus = await UserStatus.findOne({userId : user._id})
-        if(userststus.status == "suspended"){
-            return res.status(400).json({ message: 'Your Account is suspended' });
         }
 
         const token = jwt.sign({ id: user._id }, process.env.SECRET_KEY, { expiresIn: '1d' });

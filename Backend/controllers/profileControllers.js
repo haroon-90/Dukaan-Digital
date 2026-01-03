@@ -1,10 +1,11 @@
 import User from "../models/User.js";
-import Product from "../models/Product.js";
-import Sale from "../models/Sales.js";
-import Purchase from "../models/Purchase.js";
-import Udhaar from "../models/Udhaar.js";
-import Expense from "../models/Expense.js";
-import Report from "../models/Report.js";
+import UserStatus from "../models/UserStatus.js";
+// import Product from "../models/Product.js";
+// import Sale from "../models/Sales.js";
+// import Purchase from "../models/Purchase.js";
+// import Udhaar from "../models/Udhaar.js";
+// import Expense from "../models/Expense.js";
+// import Report from "../models/Report.js";
 import bcrypt from 'bcrypt'
 
 const GetProfile = async (req, res) => {
@@ -70,21 +71,21 @@ const updateProfile = async (req, res) => {
 const deleteUser = async (req, res) => {
     try {
         const userId = req.user;
+        // console.log(userId)
 
-        const user = await User.findById(userId);
-        if (!user) {
+        const userstatus = await UserStatus.findOne({ userId });
+        // console.log(userstatus)
+        if (!userstatus) {
             return res.status(404).json({ msg: "User not found" })
         }
-        const delUser = await User.findByIdAndDelete(userId);
-        if (!delUser) {
-            return res.status(404).json({ msg: "User not found" })
-        }
-        await Product.deleteMany({ userId });
-        await Sale.deleteMany({ userId });
-        await Purchase.deleteMany({ userId });
-        await Udhaar.deleteMany({ userId });
-        await Expense.deleteMany({ userId });
-        await Report.deleteMany({ userId });
+        const updatedUserStatus = await userstatus.updateOne({ status: 'inactive' }, { new: true });
+        // console.log(updatedUserStatus)
+        // await Product.deleteMany({ userId });
+        // await Sale.deleteMany({ userId });
+        // await Purchase.deleteMany({ userId });
+        // await Udhaar.deleteMany({ userId });
+        // await Expense.deleteMany({ userId });
+        // await Report.deleteMany({ userId });
         res.status(200).json({ msg: "User deleted successfully" })
     } catch (err) {
         res.status(500).json({ message: 'Server error', error: err.message });
